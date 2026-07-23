@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Assessment Result | InternShield AI</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+    <main class="dashboard-section">
+        <div class="container">
+            <nav class="dashboard-nav">
+                <a href="{{ url_for('dashboard') }}"
+                   class="brand-link">
+                    InternShield <span>AI</span>
+                </a>
+
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('analyze') }}"
+                       class="btn btn-primary">
+                        New analysis
+                    </a>
+
+                    <a href="{{ url_for('dashboard') }}"
+                       class="btn btn-outline-light">
+                        Dashboard
+                    </a>
+                </div>
+            </nav>
+
+            <section class="result-header">
+                <div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <span class="project-badge">
+                            Assessment result
+                        </span>
+
+                        <span class="badge text-bg-secondary">
+                            Input:
+                            {{ analysis.input_type | upper }}
+                        </span>
+                    </div>
+
+                    <h1>
+                        {{ analysis.role_title or
+                           'Internship Opportunity' }}
+                    </h1>
+
+                    <p>
+                        {{ analysis.company_name or
+                           'Company not provided' }}
+                    </p>
+                </div>
+
+                <div class="status-pill {{ status.class }}">
+                    {{ status.label }}
+                </div>
+            </section>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <article class="score-card">
+                        <span>Verification score</span>
+
+                        <strong>
+                            {{ analysis.verification_score }}
+                            <small>/100</small>
+                        </strong>
+
+                        <p>
+                            Higher means fewer predefined
+                            warning indicators were detected.
+                        </p>
+                    </article>
+                </div>
+
+                <div class="col-md-4">
+                    <article class="score-card">
+                        <span>Value score</span>
+
+                        <strong>
+                            {{ analysis.value_score }}
+                            <small>/100</small>
+                        </strong>
+
+                        <p>
+                            Estimates compensation and learning
+                            value from the supplied details.
+                        </p>
+                    </article>
+                </div>
+
+                <div class="col-md-4">
+                    <article class="score-card">
+                        <span>Effective hourly stipend</span>
+
+                        <strong>
+                            {% if analysis.effective_hourly_stipend
+                                  is not none %}
+                                ₹{{
+                                    analysis.effective_hourly_stipend
+                                }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </strong>
+
+                        <p>
+                            Calculated using approximately 4.33
+                            working weeks per month.
+                        </p>
+                    </article>
+                </div>
+            </div>
+
+            <section class="result-card mb-4">
+                <h2>Assessment</h2>
+
+                <p>{{ status.message }}</p>
+
+                <div class="disclaimer-box">
+                    This assessment does not prove that an
+                    internship is legitimate or fraudulent. It
+                    highlights information that should be
+                    independently verified.
+                </div>
+            </section>
+
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <section class="result-card h-100">
+                        <h2>Detected indicators</h2>
+
+                        {% if analysis.detected_flags %}
+                            <div class="flag-list">
+                                {% for flag in
+                                   analysis.detected_flags %}
+                                    <article class="flag-item">
+                                        <span class="severity-badge
+                                            severity-{{ flag.severity }}">
+                                            {{ flag.severity }}
+                                        </span>
+
+                                        <h3>{{ flag.title }}</h3>
+
+                                        <p>
+                                            Matched:
+                                            “{{ flag.matched_phrase }}”
+                                        </p>
+                                    </article>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p>
+                                No predefined warning phrases
+                                were detected in the submitted
+                                description.
+                            </p>
+                        {% endif %}
+                    </section>
+                </div>
+
+                <div class="col-lg-6">
+                    <section class="result-card h-100">
+                        <h2>Recommended checks</h2>
+
+                        <ol class="recommendation-list">
+                            {% for recommendation in
+                               analysis.recommendations %}
+                                <li>{{ recommendation }}</li>
+                            {% endfor %}
+                        </ol>
+                    </section>
+                </div>
+            </div>
+
+            <section class="result-card mt-4">
+                <details>
+                    <summary class="fw-bold fs-5">
+                        View analyzed text
+                    </summary>
+
+                    <p class="mt-3">
+                        Review this text to confirm that the PDF
+                        or screenshot was extracted correctly.
+                    </p>
+
+                    <pre
+                        class="p-3 rounded text-light"
+                        style="
+                            white-space: pre-wrap;
+                            overflow-wrap: anywhere;
+                            background: #07111f;
+                            font-family: Arial, sans-serif;
+                            line-height: 1.6;
+                        "
+                    >{{ analysis.original_text }}</pre>
+                </details>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

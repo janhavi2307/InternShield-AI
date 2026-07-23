@@ -1,0 +1,11 @@
+venv/
+.env
+__pycache__/
+*.pyc
+uploads/
+test_documents/
+.flask_session/
+flask_session/
+.vscode/
+.pytest_cache/
+*.log
