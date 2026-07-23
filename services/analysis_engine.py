@@ -10,7 +10,13 @@ RED_FLAG_RULES = [
             "security deposit",
             "pay to join",
             "application fee",
+            "processing fee",
+            "onboarding fee",
+            "certificate fee",
             "refundable fee",
+            "scan the qr code",
+            "send payment",
+            "make the payment",
         ],
         "title": "Payment requested",
         "severity": "high",
@@ -40,9 +46,13 @@ RED_FLAG_RULES = [
         "phrases": [
             "join immediately",
             "limited slots",
+            "limited opportunity",
             "respond immediately",
             "urgent joining",
             "offer expires today",
+            "pay today",
+            "within two hours",
+            "within 24 hours",
         ],
         "title": "Urgency pressure",
         "severity": "medium",
@@ -58,6 +68,11 @@ RED_FLAG_RULES = [
             "aadhaar card",
             "pan card",
             "credit card details",
+            "debit card details",
+            "card number",
+            "cvv",
+            "upi pin",
+            "internet banking password",
             "share your otp",
         ],
         "title": "Sensitive information requested",
@@ -73,6 +88,8 @@ RED_FLAG_RULES = [
             "telegram only",
             "whatsapp only",
             "contact on telegram",
+            "message on telegram",
+            "communicate only through whatsapp",
         ],
         "title": "Informal communication channel",
         "severity": "medium",
@@ -87,6 +104,7 @@ RED_FLAG_RULES = [
             "unpaid assignment",
             "unpaid task",
             "complete this project before selection",
+            "complete production work before selection",
         ],
         "title": "Unpaid pre-selection work",
         "severity": "medium",
@@ -127,14 +145,44 @@ POSITIVE_EVIDENCE_RULES = [
         "phrases": [
             "clear responsibilities",
             "roles and responsibilities",
+            "written responsibilities",
+            "job description",
         ],
         "points": 5,
+    },
+    {
+        "phrases": [
+            "company website",
+            "official website",
+        ],
+        "points": 4,
     },
 ]
 
 
+FREE_EMAIL_DOMAINS = {
+    "gmail.com",
+    "googlemail.com",
+    "yahoo.com",
+    "yahoo.co.in",
+    "outlook.com",
+    "hotmail.com",
+    "live.com",
+    "icloud.com",
+    "proton.me",
+    "protonmail.com",
+    "rediffmail.com",
+}
+
+
 def normalize_text(text: str) -> str:
-    text = text.lower()
+    text = str(text or "").lower()
+    text = (
+        text.replace("’", "'")
+        .replace("‘", "'")
+        .replace("“", '"')
+        .replace("”", '"')
+    )
     text = re.sub(r"\s+", " ", text)
     return text.strip()
 
@@ -178,19 +226,20 @@ def phrase_is_negated(
     sentence = text[sentence_start:sentence_end]
     local_phrase_start = phrase_start - sentence_start
 
-    text_before = sentence[
-        max(0, local_phrase_start - 120):
-        local_phrase_start
-    ]
+    text_before = sentence[max(0, local_phrase_start - 100):local_phrase_start]
 
     text_after = sentence[
         local_phrase_start + len(phrase):
         local_phrase_start + len(phrase) + 80
     ]
 
+    # Only treat a nearby negation as applying to the phrase. A broad
+    # sentence-level check can hide a genuine warning in text such as:
+    # "No interview is required, but pay a registration fee."
     negation_before_pattern = (
-        r"\b(no|not|never|without)\b"
-        r"[^.!?;]{0,100}$"
+        r"\b(no|not|never|without|isn't|aren't|wasn't|weren't|"
+        r"doesn't|don't|won't)\b"
+        r"(?:\W+\w+){0,6}\W*$"
     )
 
     negation_after_pattern = (
@@ -200,11 +249,14 @@ def phrase_is_negated(
         r"\b(required|needed|charged|requested)\b"
     )
 
-    if re.search(
-        negation_before_pattern,
-        text_before,
-    ):
-        return True
+    before_match = re.search(negation_before_pattern, text_before)
+
+    if before_match:
+        negated_segment = text_before[before_match.start():]
+
+        # A contrast word ends the scope of the earlier negation.
+        if not re.search(r"\b(but|however|yet|although)\b", negated_segment):
+            return True
 
     if re.search(
         negation_after_pattern,
@@ -240,6 +292,32 @@ def find_non_negated_match(
         search_position = phrase_start + len(phrase)
 
 
+def contains_non_negated_phrase(text: str, phrases: list[str]) -> bool:
+    """Return True when at least one phrase appears outside negation."""
+    return any(find_non_negated_match(text, phrase) for phrase in phrases)
+
+
+def contains_official_email(text: str) -> bool:
+    """
+    Detect a company-style email address while excluding common free
+    mailbox providers. This is supporting evidence, not proof that a
+    company or recruiter is legitimate.
+    """
+    addresses = re.findall(
+        r"\b[a-z0-9._%+-]+@([a-z0-9.-]+\.[a-z]{2,})\b",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    return any(domain.lower() not in FREE_EMAIL_DOMAINS for domain in addresses)
+
+
+def add_unique(items: list, value) -> None:
+    """Append a value only when it has not already been added."""
+    if value not in items:
+        items.append(value)
+
+
 def calculate_hourly_stipend(
     stipend_monthly: Optional[float],
     hours_per_day: Optional[float],
@@ -272,6 +350,8 @@ def analyze_internship(
 
     detected_flags = []
     recommendations = []
+    verification_factors = []
+    value_factors = []
     positive_evidence_count = 0
     high_severity_count = 0
 
@@ -292,6 +372,12 @@ def analyze_internship(
             continue
 
         verification_score -= rule["deduction"]
+        verification_factors.append({
+            "type": "deduction",
+            "label": rule["title"],
+            "points": -rule["deduction"],
+            "evidence": matched_phrase,
+        })
 
         if rule["severity"] == "high":
             high_severity_count += 1
@@ -302,30 +388,37 @@ def analyze_internship(
             "matched_phrase": matched_phrase,
         })
 
-        recommendations.append(rule["recommendation"])
+        add_unique(recommendations, rule["recommendation"])
 
     for rule in POSITIVE_EVIDENCE_RULES:
-        matched = any(
-            phrase in normalized_text
-            for phrase in rule["phrases"]
+        matched_phrase = next(
+            (
+                phrase
+                for phrase in rule["phrases"]
+                if find_non_negated_match(normalized_text, phrase)
+            ),
+            None,
         )
 
-        if matched:
+        if matched_phrase:
             verification_score += rule["points"]
             positive_evidence_count += 1
+            verification_factors.append({
+                "type": "evidence",
+                "label": "Positive verification evidence",
+                "points": rule["points"],
+                "evidence": matched_phrase,
+            })
 
-    official_email_pattern = (
-        r"\b[a-z0-9._%+-]+@"
-        r"(?!gmail\.com|yahoo\.com|outlook\.com|hotmail\.com)"
-        r"[a-z0-9.-]+\.[a-z]{2,}\b"
-    )
-
-    if re.search(
-        official_email_pattern,
-        normalized_text,
-    ):
+    if contains_official_email(normalized_text):
         verification_score += 8
         positive_evidence_count += 1
+        verification_factors.append({
+            "type": "evidence",
+            "label": "Company-style email address supplied",
+            "points": 8,
+            "evidence": "Non-free email domain",
+        })
 
     hourly_stipend = calculate_hourly_stipend(
         stipend_monthly,
@@ -335,42 +428,95 @@ def analyze_internship(
 
     if stipend_monthly is None:
         value_score -= 10
-        recommendations.append(
+        value_factors.append({
+            "type": "deduction",
+            "label": "Stipend not specified",
+            "points": -10,
+        })
+        add_unique(
+            recommendations,
             "Ask the recruiter to clearly state whether the "
-            "internship is paid or unpaid."
+            "internship is paid or unpaid.",
         )
 
     elif stipend_monthly <= 0:
         value_score -= 20
-        recommendations.append(
+        value_factors.append({
+            "type": "deduction",
+            "label": "Unpaid internship",
+            "points": -20,
+        })
+        add_unique(
+            recommendations,
             "Evaluate whether the unpaid workload is justified "
-            "by structured mentorship and meaningful learning."
+            "by structured mentorship and meaningful learning.",
         )
 
     else:
         value_score += 10
+        value_factors.append({
+            "type": "evidence",
+            "label": "Paid internship",
+            "points": 10,
+        })
 
     if hourly_stipend is not None:
         if hourly_stipend >= 75:
             value_score += 20
+            value_factors.append({
+                "type": "evidence",
+                "label": "Strong effective hourly stipend",
+                "points": 20,
+            })
 
         elif hourly_stipend >= 40:
             value_score += 10
+            value_factors.append({
+                "type": "evidence",
+                "label": "Moderate effective hourly stipend",
+                "points": 10,
+            })
 
         elif hourly_stipend < 20:
             value_score -= 15
+            value_factors.append({
+                "type": "deduction",
+                "label": "Low effective hourly stipend",
+                "points": -15,
+            })
 
-    if (
-        "mentor" in normalized_text
-        or "mentorship" in normalized_text
+    if contains_non_negated_phrase(
+        normalized_text,
+        ["assigned mentor", "dedicated mentor", "mentorship"],
     ):
         value_score += 10
+        value_factors.append({
+            "type": "evidence",
+            "label": "Structured mentorship mentioned",
+            "points": 10,
+        })
 
-    if "offer letter" in normalized_text:
+    if contains_non_negated_phrase(
+        normalized_text,
+        ["formal offer letter", "official offer letter", "offer letter"],
+    ):
         value_score += 10
+        value_factors.append({
+            "type": "evidence",
+            "label": "Offer letter mentioned",
+            "points": 10,
+        })
 
-    if "certificate" in normalized_text:
+    if contains_non_negated_phrase(
+        normalized_text,
+        ["completion certificate", "experience certificate", "certificate"],
+    ):
         value_score += 5
+        value_factors.append({
+            "type": "evidence",
+            "label": "Certificate mentioned",
+            "points": 5,
+        })
 
     verification_score = max(
         0,
@@ -395,10 +541,11 @@ def analyze_internship(
         assessment_status = "verification_required"
 
     if positive_evidence_count < 2:
-        recommendations.append(
+        add_unique(
+            recommendations,
             "Request independently verifiable evidence such as "
             "an official company email, formal offer letter and "
-            "documented selection process."
+            "documented selection process.",
         )
 
     if not recommendations:
@@ -413,7 +560,7 @@ def analyze_internship(
         "effective_hourly_stipend": hourly_stipend,
         "assessment_status": assessment_status,
         "detected_flags": detected_flags,
-        "recommendations": list(
-            dict.fromkeys(recommendations)
-        ),
+        "recommendations": recommendations,
+        "verification_factors": verification_factors,
+        "value_factors": value_factors,
     }
