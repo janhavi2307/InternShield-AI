@@ -125,7 +125,7 @@
             </div>
 
             <section class="result-card mb-4">
-                <h2>Assessment</h2>
+                <h2>Internship assessment</h2>
 
                 <p>{{ status.message }}</p>
 
@@ -136,6 +136,135 @@
                     independently verified.
                 </div>
             </section>
+
+            {% if analysis.compatibility_score is not none %}
+                <section class="result-card mb-4">
+                    <div class="d-flex flex-wrap
+                                justify-content-between
+                                align-items-center gap-3 mb-4">
+                        <div>
+                            <span class="project-badge">
+                                Academic compatibility
+                            </span>
+
+                            <h2 class="mt-3 mb-1">
+                                College Schedule Assessment
+                            </h2>
+                        </div>
+
+                        {% if analysis.compatibility_status
+                              == 'manageable' %}
+                            <span class="status-pill
+                                         status-reasonable">
+                                Manageable
+                            </span>
+
+                        {% elif analysis.compatibility_status
+                                == 'conflict_risk' %}
+                            <span class="status-pill
+                                         status-suspicious">
+                                Conflict Risk
+                            </span>
+
+                        {% else %}
+                            <span class="status-pill
+                                         status-verification">
+                                Demanding
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <article class="score-card">
+                                <span>
+                                    Compatibility score
+                                </span>
+
+                                <strong>
+                                    {{
+                                        analysis.compatibility_score
+                                    }}
+                                    <small>/100</small>
+                                </strong>
+                            </article>
+                        </div>
+
+                        <div class="col-md-4">
+                            <article class="score-card">
+                                <span>
+                                    Internship workload
+                                </span>
+
+                                <strong>
+                                    {% if analysis.weekly_workload
+                                          is not none %}
+                                        {{
+                                            analysis.weekly_workload
+                                        }}
+                                        <small>hours/week</small>
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </strong>
+                            </article>
+                        </div>
+
+                        <div class="col-md-4">
+                            <article class="score-card">
+                                <span>
+                                    Student availability
+                                </span>
+
+                                <strong>
+                                    {% if
+                                        analysis.available_hours_per_week
+                                        is not none %}
+                                        {{
+                                            analysis.available_hours_per_week
+                                        }}
+                                        <small>hours/week</small>
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </strong>
+                            </article>
+                        </div>
+                    </div>
+
+                    <h3 class="fs-5 mb-3">
+                        Compatibility explanation
+                    </h3>
+
+                    <ul class="recommendation-list">
+                        {% for reason in
+                           analysis.compatibility_reasons %}
+                            <li>{{ reason }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    {% if analysis.exam_period %}
+                        <span class="badge text-bg-warning me-2">
+                            Examination overlap
+                        </span>
+                    {% endif %}
+
+                    {% if analysis.class_schedule_conflict %}
+                        <span class="badge text-bg-danger me-2">
+                            Lecture conflict
+                        </span>
+                    {% endif %}
+
+                    <span class="badge text-bg-secondary">
+                        Schedule:
+                        {{
+                            analysis.schedule_type
+                            | replace('_', ' ')
+                            | title
+                        }}
+                    </span>
+                </section>
+            {% endif %}
 
             <div class="row g-4">
                 <div class="col-lg-6">
@@ -192,8 +321,9 @@
                     </summary>
 
                     <p class="mt-3">
-                        Review this text to confirm that the PDF
-                        or screenshot was extracted correctly.
+                        Review this text to confirm that the PDF,
+                        screenshot or message was extracted
+                        correctly.
                     </p>
 
                     <pre

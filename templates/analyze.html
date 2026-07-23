@@ -40,8 +40,8 @@
                 <h1>Analyze an internship</h1>
 
                 <p class="auth-subtitle">
-                    Paste a message, upload a PDF or analyze
-                    a recruiter screenshot.
+                    Evaluate legitimacy, value and compatibility
+                    with your academic schedule.
                 </p>
 
                 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -54,6 +54,10 @@
 
                 <form method="POST"
                       enctype="multipart/form-data">
+
+                    <h2 class="fs-4 mb-3">
+                        1. Internship information
+                    </h2>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -137,7 +141,7 @@
                         — OR PASTE TEXT —
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <label class="form-label"
                                for="original_text">
                             Internship description, recruiter
@@ -148,13 +152,8 @@
                             class="form-control"
                             id="original_text"
                             name="original_text"
-                            rows="8"
+                            rows="7"
                         ></textarea>
-
-                        <small class="form-hint">
-                            When a file is uploaded, this content
-                            is treated as additional information.
-                        </small>
                     </div>
 
                     <div class="row">
@@ -224,9 +223,99 @@
                         </div>
                     </div>
 
+                    <hr class="my-4 border-secondary">
+
+                    <h2 class="fs-4 mb-2">
+                        2. Academic compatibility
+                    </h2>
+
+                    <p class="auth-subtitle">
+                        Tell us whether the internship can fit
+                        around your college responsibilities.
+                    </p>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"
+                                   for="available_hours_per_week">
+                                Hours you can realistically give
+                                per week
+                            </label>
+
+                            <input
+                                class="form-control"
+                                id="available_hours_per_week"
+                                name="available_hours_per_week"
+                                type="number"
+                                min="0"
+                                max="168"
+                                step="0.5"
+                            >
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"
+                                   for="schedule_type">
+                                Internship schedule
+                            </label>
+
+                            <select
+                                class="form-control"
+                                id="schedule_type"
+                                name="schedule_type"
+                            >
+                                <option value="not_specified">
+                                    Not specified
+                                </option>
+
+                                <option value="flexible">
+                                    Flexible hours
+                                </option>
+
+                                <option value="fixed">
+                                    Fixed hours
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="result-card mb-4">
+                        <div class="form-check mb-3">
+                            <input
+                                class="form-check-input"
+                                id="exam_period"
+                                name="exam_period"
+                                type="checkbox"
+                            >
+
+                            <label class="form-check-label"
+                                   for="exam_period">
+                                This internship overlaps with my
+                                examination or major assessment
+                                period
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                id="class_schedule_conflict"
+                                name="class_schedule_conflict"
+                                type="checkbox"
+                            >
+
+                            <label class="form-check-label"
+                                   for="class_schedule_conflict">
+                                The working hours directly
+                                conflict with my lectures or
+                                practical sessions
+                            </label>
+                        </div>
+                    </div>
+
                     <button class="btn btn-primary btn-lg"
                             type="submit">
-                        Run assessment
+                        Run complete assessment
                     </button>
                 </form>
             </section>

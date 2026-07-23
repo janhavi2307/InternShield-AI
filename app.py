@@ -15,6 +15,7 @@ from flask import (
 from flask_session import Session
 
 from services.analysis_engine import analyze_internship
+from services.compatibility_engine import calculate_compatibility
 from services.document_extractor import (
     DocumentExtractionError,
     extract_pdf_text,
@@ -393,6 +394,11 @@ def analyze():
                 "",
             ).strip()
 
+            available_hours_text = request.form.get(
+                "available_hours_per_week",
+                "",
+            ).strip()
+
             stipend_monthly = (
                 float(stipend_text)
                 if stipend_text
@@ -417,13 +423,41 @@ def analyze():
                 else None
             )
 
+            available_hours_per_week = (
+                float(available_hours_text)
+                if available_hours_text
+                else None
+            )
+
         except ValueError:
             flash(
                 "Enter valid numbers for stipend, working "
-                "hours, days and duration.",
+                "hours, days, duration and available time.",
                 "danger",
             )
             return redirect(url_for("analyze"))
+
+        schedule_type = request.form.get(
+            "schedule_type",
+            "not_specified",
+        )
+
+        valid_schedule_types = {
+            "flexible",
+            "fixed",
+            "not_specified",
+        }
+
+        if schedule_type not in valid_schedule_types:
+            schedule_type = "not_specified"
+
+        exam_period = (
+            request.form.get("exam_period") == "on"
+        )
+
+        class_schedule_conflict = (
+            request.form.get("class_schedule_conflict") == "on"
+        )
 
         if stipend_monthly is not None and stipend_monthly < 0:
             flash("Stipend cannot be negative.", "danger")
@@ -454,11 +488,34 @@ def analyze():
             )
             return redirect(url_for("analyze"))
 
-        result = analyze_internship(
+        if available_hours_per_week is not None and not (
+            0 <= available_hours_per_week <= 168
+        ):
+            flash(
+                "Available weekly hours must be between "
+                "0 and 168.",
+                "danger",
+            )
+            return redirect(url_for("analyze"))
+
+        assessment_result = analyze_internship(
             text=original_text,
             stipend_monthly=stipend_monthly,
             hours_per_day=hours_per_day,
             days_per_week=days_per_week,
+        )
+
+        compatibility_result = calculate_compatibility(
+            hours_per_day=hours_per_day,
+            days_per_week=days_per_week,
+            available_hours_per_week=(
+                available_hours_per_week
+            ),
+            schedule_type=schedule_type,
+            exam_period=exam_period,
+            class_schedule_conflict=(
+                class_schedule_conflict
+            ),
         )
 
         analysis_data = {
@@ -471,18 +528,44 @@ def analyze():
             "hours_per_day": hours_per_day,
             "days_per_week": days_per_week,
             "duration_months": duration_months,
-            "effective_hourly_stipend": result[
+            "effective_hourly_stipend": assessment_result[
                 "effective_hourly_stipend"
             ],
-            "verification_score": result[
+            "verification_score": assessment_result[
                 "verification_score"
             ],
-            "value_score": result["value_score"],
-            "assessment_status": result[
+            "value_score": assessment_result[
+                "value_score"
+            ],
+            "assessment_status": assessment_result[
                 "assessment_status"
             ],
-            "detected_flags": result["detected_flags"],
-            "recommendations": result["recommendations"],
+            "detected_flags": assessment_result[
+                "detected_flags"
+            ],
+            "recommendations": assessment_result[
+                "recommendations"
+            ],
+            "available_hours_per_week": (
+                available_hours_per_week
+            ),
+            "schedule_type": schedule_type,
+            "exam_period": exam_period,
+            "class_schedule_conflict": (
+                class_schedule_conflict
+            ),
+            "weekly_workload": compatibility_result[
+                "weekly_workload"
+            ],
+            "compatibility_score": compatibility_result[
+                "compatibility_score"
+            ],
+            "compatibility_status": compatibility_result[
+                "compatibility_status"
+            ],
+            "compatibility_reasons": compatibility_result[
+                "compatibility_reasons"
+            ],
         }
 
         try:
