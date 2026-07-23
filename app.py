@@ -550,6 +550,14 @@ def analyze():
             "recommendations": assessment_result[
                 "recommendations"
             ],
+            "verification_factors": assessment_result.get(
+                "verification_factors",
+                [],
+            ),
+            "value_factors": assessment_result.get(
+                "value_factors",
+                [],
+            ),
             "available_hours_per_week": (
                 available_hours_per_week
             ),

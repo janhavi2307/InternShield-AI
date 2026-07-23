@@ -661,6 +661,124 @@
         }
 
         /* -------------------------------------------------------
+           Explainable score breakdown
+        ------------------------------------------------------- */
+
+        .explanation-card {
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(128, 103, 255, 0.08),
+                    rgba(24, 26, 45, 0.82)
+                );
+        }
+
+        .explanation-intro {
+            margin: -7px 0 20px;
+
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            line-height: 1.6;
+        }
+
+        .factor-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .factor-column {
+            min-width: 0;
+            padding: 18px;
+
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: rgba(7, 9, 20, 0.43);
+        }
+
+        .factor-heading {
+            margin-bottom: 13px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+
+            font-family: "Manrope", sans-serif;
+            font-size: 0.86rem;
+        }
+
+        .factor-final-score {
+            color: var(--text-muted);
+            font-family: "DM Sans", sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+
+        .factor-list {
+            display: grid;
+            gap: 9px;
+        }
+
+        .factor-item {
+            padding: 12px;
+
+            display: grid;
+            grid-template-columns: 48px minmax(0, 1fr);
+            gap: 11px;
+            align-items: start;
+
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        .factor-points {
+            min-height: 30px;
+            padding: 5px 7px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 9px;
+            font-family: "Manrope", sans-serif;
+            font-size: 0.74rem;
+            font-weight: 800;
+        }
+
+        .factor-points.positive {
+            color: #74e6c9;
+            background: var(--success-background);
+        }
+
+        .factor-points.negative {
+            color: #ff9bab;
+            background: var(--danger-background);
+        }
+
+        .factor-label {
+            margin-bottom: 3px;
+
+            color: var(--text-soft);
+            font-size: 0.76rem;
+            font-weight: 700;
+            line-height: 1.45;
+        }
+
+        .factor-evidence {
+            color: var(--text-muted);
+            font-size: 0.69rem;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .factor-empty {
+            color: var(--text-muted);
+            font-size: 0.73rem;
+            line-height: 1.55;
+        }
+
+        /* -------------------------------------------------------
            General cards
         ------------------------------------------------------- */
 
@@ -1121,7 +1239,8 @@
 
         @media (max-width: 900px) {
             .score-grid,
-            .compatibility-grid {
+            .compatibility-grid,
+            .factor-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -1291,6 +1410,16 @@
     {% set compatibility_status =
         record.get("compatibility_status")
         or "demanding"
+    %}
+
+    {% set verification_factors =
+        record.get("verification_factors", [])
+        or []
+    %}
+
+    {% set value_factors =
+        record.get("value_factors", [])
+        or []
     %}
 
     <div class="page">
@@ -1559,6 +1688,171 @@
                         weeks per month.
                     </p>
                 </article>
+            </section>
+
+            <section class="content-card explanation-card">
+                <h2 class="card-title">
+                    <span class="title-icon">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M4 19V10M10 19V5M16 19V13M3 19H21"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M18 7L20 9L23 5"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </span>
+
+                    How your scores were calculated
+                </h2>
+
+                <p class="explanation-intro">
+                    These evidence-based adjustments explain which
+                    submitted details influenced the final scores.
+                    They support transparency but do not independently
+                    prove that the opportunity is legitimate.
+                </p>
+
+                <div class="factor-grid">
+                    <article class="factor-column">
+                        <h3 class="factor-heading">
+                            <span>Verification factors</span>
+
+                            <span class="factor-final-score">
+                                Final:
+                                {{
+                                    record.get(
+                                        "verification_score",
+                                        "N/A"
+                                    )
+                                }}/100
+                            </span>
+                        </h3>
+
+                        {% if verification_factors %}
+                            <div class="factor-list">
+                                {% for factor in verification_factors %}
+                                    {% if factor is mapping %}
+                                        {% set points =
+                                            factor.get("points", 0)
+                                        %}
+
+                                        <div class="factor-item">
+                                            <span
+                                                class="factor-points {% if points|float >= 0 %}positive{% else %}negative{% endif %}"
+                                            >
+                                                {% if points|float > 0 %}+{% endif %}{{
+                                                    points
+                                                }}
+                                            </span>
+
+                                            <div>
+                                                <p class="factor-label">
+                                                    {{
+                                                        factor.get(
+                                                            "label",
+                                                            "Score factor"
+                                                        )
+                                                    }}
+                                                </p>
+
+                                                {% if factor.get("evidence") %}
+                                                    <p class="factor-evidence">
+                                                        Evidence:
+                                                        “{{
+                                                            factor.get(
+                                                                "evidence"
+                                                            )
+                                                        }}”
+                                                    </p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="factor-empty">
+                                A detailed verification breakdown is
+                                unavailable for this older assessment.
+                            </p>
+                        {% endif %}
+                    </article>
+
+                    <article class="factor-column">
+                        <h3 class="factor-heading">
+                            <span>Opportunity value factors</span>
+
+                            <span class="factor-final-score">
+                                Final:
+                                {{
+                                    record.get(
+                                        "value_score",
+                                        "N/A"
+                                    )
+                                }}/100
+                            </span>
+                        </h3>
+
+                        {% if value_factors %}
+                            <div class="factor-list">
+                                {% for factor in value_factors %}
+                                    {% if factor is mapping %}
+                                        {% set points =
+                                            factor.get("points", 0)
+                                        %}
+
+                                        <div class="factor-item">
+                                            <span
+                                                class="factor-points {% if points|float >= 0 %}positive{% else %}negative{% endif %}"
+                                            >
+                                                {% if points|float > 0 %}+{% endif %}{{
+                                                    points
+                                                }}
+                                            </span>
+
+                                            <div>
+                                                <p class="factor-label">
+                                                    {{
+                                                        factor.get(
+                                                            "label",
+                                                            "Score factor"
+                                                        )
+                                                    }}
+                                                </p>
+
+                                                {% if factor.get("evidence") %}
+                                                    <p class="factor-evidence">
+                                                        Evidence:
+                                                        “{{
+                                                            factor.get(
+                                                                "evidence"
+                                                            )
+                                                        }}”
+                                                    </p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="factor-empty">
+                                A detailed value breakdown is
+                                unavailable for this older assessment.
+                            </p>
+                        {% endif %}
+                    </article>
+                </div>
             </section>
 
             <section class="content-card">
