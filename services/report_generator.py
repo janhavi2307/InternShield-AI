@@ -184,6 +184,26 @@ def get_compatibility_reasons(analysis):
     return as_list(analysis.get("compatibility_reasons"))
 
 
+def get_verification_factors(analysis):
+    return as_list(analysis.get("verification_factors"))
+
+
+def get_value_factors(analysis):
+    return as_list(analysis.get("value_factors"))
+
+
+def format_points(value):
+    try:
+        points = float(value)
+    except (TypeError, ValueError):
+        return "0"
+
+    if points.is_integer():
+        points = int(points)
+
+    return f"+{points}" if points > 0 else str(points)
+
+
 # -------------------------------------------------------------------
 # Page decoration
 # -------------------------------------------------------------------
@@ -429,6 +449,8 @@ def generate_assessment_report(analysis, student_name="Student"):
 
     detected_flags = get_detected_flags(analysis)
     recommendations = get_recommendations(analysis)
+    verification_factors = get_verification_factors(analysis)
+    value_factors = get_value_factors(analysis)
 
     # ----------------------------------------------------------------
     # Report title
@@ -563,6 +585,167 @@ def generate_assessment_report(analysis, student_name="Student"):
     story.append(Spacer(1, 4 * mm))
 
     # ----------------------------------------------------------------
+    # Explainable score breakdown
+    # ----------------------------------------------------------------
+
+    if verification_factors or value_factors:
+        story.append(
+            Paragraph(
+                "How the scores were calculated",
+                section_style,
+            )
+        )
+
+        story.append(
+            Paragraph(
+                (
+                    "The following evidence-based adjustments explain "
+                    "which submitted details influenced the final scores."
+                ),
+                small_style,
+            )
+        )
+
+        story.append(Spacer(1, 1.5 * mm))
+
+        def build_factor_table(title, factors, final_score):
+            rows = [
+                [
+                    Paragraph(
+                        f"<b>{safe_text(title)}</b>",
+                        table_label_style,
+                    ),
+                    Paragraph(
+                        f"<b>Final score: {safe_text(final_score)}/100</b>",
+                        small_style,
+                    ),
+                ]
+            ]
+
+            valid_factors = [
+                factor
+                for factor in factors
+                if isinstance(factor, dict)
+            ]
+
+            if not valid_factors:
+                rows.append(
+                    [
+                        Paragraph("N/A", score_label_style),
+                        Paragraph(
+                            (
+                                "A detailed breakdown is unavailable "
+                                "for this assessment."
+                            ),
+                            small_style,
+                        ),
+                    ]
+                )
+            else:
+                for factor in valid_factors:
+                    points = factor.get("points", 0)
+                    label = factor.get("label") or "Score factor"
+                    evidence = factor.get("evidence")
+
+                    explanation = safe_text(label)
+
+                    if evidence:
+                        explanation += (
+                            "<br/><font color='#607982'>Evidence: "
+                            f"{safe_text(evidence)}</font>"
+                        )
+
+                    rows.append(
+                        [
+                            Paragraph(
+                                f"<b>{safe_text(format_points(points))}</b>",
+                                score_label_style,
+                            ),
+                            Paragraph(explanation, small_style),
+                        ]
+                    )
+
+            factor_table = Table(
+                rows,
+                colWidths=[25 * mm, 130 * mm],
+                repeatRows=1,
+            )
+
+            factor_styles = [
+                ("BOX", (0, 0), (-1, -1), 0.5, BORDER),
+                ("INNERGRID", (0, 0), (-1, -1), 0.35, BORDER),
+                ("BACKGROUND", (0, 0), (-1, 0), GREY_BG),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("ALIGN", (1, 0), (1, 0), "RIGHT"),
+                ("LEFTPADDING", (0, 0), (-1, -1), 3 * mm),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 3 * mm),
+                ("TOPPADDING", (0, 0), (-1, -1), 2 * mm),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 2 * mm),
+            ]
+
+            for row_index, factor in enumerate(
+                valid_factors,
+                start=1,
+            ):
+                try:
+                    points = float(factor.get("points", 0))
+                except (TypeError, ValueError):
+                    points = 0
+
+                if points >= 0:
+                    point_colour = GREEN
+                    point_background = GREEN_BG
+                else:
+                    point_colour = RED
+                    point_background = RED_BG
+
+                factor_styles.extend(
+                    [
+                        (
+                            "TEXTCOLOR",
+                            (0, row_index),
+                            (0, row_index),
+                            point_colour,
+                        ),
+                        (
+                            "BACKGROUND",
+                            (0, row_index),
+                            (0, row_index),
+                            point_background,
+                        ),
+                        (
+                            "ALIGN",
+                            (0, row_index),
+                            (0, row_index),
+                            "CENTER",
+                        ),
+                    ]
+                )
+
+            factor_table.setStyle(TableStyle(factor_styles))
+            return factor_table
+
+        story.append(
+            build_factor_table(
+                "Verification factors",
+                verification_factors,
+                verification_score,
+            )
+        )
+
+        story.append(Spacer(1, 2.5 * mm))
+
+        story.append(
+            build_factor_table(
+                "Opportunity value factors",
+                value_factors,
+                value_score,
+            )
+        )
+
+        story.append(Spacer(1, 4 * mm))
+
+    # ----------------------------------------------------------------
     # Academic compatibility
     # ----------------------------------------------------------------
 
@@ -600,9 +783,6 @@ def generate_assessment_report(analysis, student_name="Student"):
                 ]
             )
         )
-
-        story.append(compatibility_heading)
-        story.append(Spacer(1, 2 * mm))
 
         compatibility_data = [
             [
@@ -647,7 +827,15 @@ def generate_assessment_report(analysis, student_name="Student"):
             )
         )
 
-        story.append(compatibility_table)
+        story.append(
+            KeepTogether(
+                [
+                    compatibility_heading,
+                    Spacer(1, 2 * mm),
+                    compatibility_table,
+                ]
+            )
+        )
 
         if compatibility_reasons:
             story.append(Spacer(1, 2.5 * mm))
