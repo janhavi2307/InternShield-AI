@@ -225,6 +225,143 @@ def login():
     return render_template("login.html")
 
 
+@app.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+    if session.get("user_id"):
+        return redirect(url_for("dashboard"))
+
+    if request.method == "POST":
+        email = request.form.get("email", "").strip().lower()
+
+        if not email or "@" not in email:
+            flash(
+                "Enter a valid email address.",
+                "danger",
+            )
+            return redirect(url_for("forgot_password"))
+
+        try:
+            supabase = get_supabase_client()
+
+            reset_url = url_for(
+                "reset_password",
+                _external=True,
+            )
+
+            supabase.auth.reset_password_for_email(
+                email,
+                {
+                    "redirect_to": reset_url,
+                },
+            )
+
+        except Exception:
+            # Keep the response generic so the page does not reveal
+            # whether a particular email address is registered.
+            pass
+
+        flash(
+            "If an account exists for that email, a password "
+            "reset link has been sent. Check your inbox and "
+            "spam folder.",
+            "success",
+        )
+        return redirect(url_for("forgot_password"))
+
+    return render_template("forgot_password.html")
+
+
+@app.route("/reset-password", methods=["GET", "POST"])
+def reset_password():
+    if request.method == "POST":
+        password = request.form.get("password", "")
+        confirm_password = request.form.get(
+            "confirm_password",
+            "",
+        )
+        access_token = request.form.get(
+            "access_token",
+            "",
+        ).strip()
+        refresh_token = request.form.get(
+            "refresh_token",
+            "",
+        ).strip()
+
+        if not access_token or not refresh_token:
+            flash(
+                "The recovery link is missing, invalid or "
+                "expired. Request a new password-reset email.",
+                "danger",
+            )
+            return redirect(url_for("forgot_password"))
+
+        if len(password) < 8:
+            flash(
+                "Password must contain at least 8 characters.",
+                "danger",
+            )
+            return render_template(
+                "reset_password.html",
+                recovery_error=False,
+                access_token=access_token,
+                refresh_token=refresh_token,
+            )
+
+        if password != confirm_password:
+            flash("Passwords do not match.", "danger")
+            return render_template(
+                "reset_password.html",
+                recovery_error=False,
+                access_token=access_token,
+                refresh_token=refresh_token,
+            )
+
+        try:
+            supabase = get_supabase_client()
+
+            auth_response = supabase.auth.set_session(
+                access_token,
+                refresh_token,
+            )
+
+            if not auth_response.session:
+                raise ValueError("Recovery session unavailable")
+
+            supabase.auth.update_user({
+                "password": password,
+            })
+
+            try:
+                supabase.auth.sign_out()
+            except Exception:
+                pass
+
+            session.clear()
+
+            flash(
+                "Your password has been updated. Log in using "
+                "your new password.",
+                "success",
+            )
+            return redirect(url_for("login"))
+
+        except Exception:
+            flash(
+                "The recovery link is invalid or expired. "
+                "Request a new password-reset email.",
+                "danger",
+            )
+            return redirect(url_for("forgot_password"))
+
+    return render_template(
+        "reset_password.html",
+        recovery_error=False,
+        access_token="",
+        refresh_token="",
+    )
+
+
 @app.route("/dashboard")
 @login_required
 def dashboard():

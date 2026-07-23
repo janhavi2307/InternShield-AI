@@ -651,6 +651,35 @@
             height: 18px;
         }
 
+        .forgot-password-row {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .forgot-password-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--primary-light);
+            font-size: 0.80rem;
+            font-weight: 700;
+
+            transition:
+                color 0.25s ease,
+                transform 0.25s ease;
+        }
+
+        .forgot-password-link:hover {
+            color: var(--secondary);
+            transform: translateX(2px);
+        }
+
+        .forgot-password-link svg {
+            width: 14px;
+            height: 14px;
+        }
+
         .submit-button {
             width: 100%;
             height: 53px;
@@ -1185,6 +1214,29 @@
                                         />
                                     </svg>
                                 </button>
+                            </div>
+
+                            <div class="forgot-password-row">
+                                <a
+                                    class="forgot-password-link"
+                                    href="{{ url_for('forgot_password') }}"
+                                >
+                                    Forgot your password?
+
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            d="M5 12H19M13 6L19 12L13 18"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        />
+                                    </svg>
+                                </a>
                             </div>
                         </div>
 
