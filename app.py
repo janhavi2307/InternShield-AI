@@ -9,6 +9,7 @@ from flask import (
     redirect,
     render_template,
     request,
+    send_file,
     session,
     url_for,
 )
@@ -23,6 +24,9 @@ from services.document_extractor import (
 from services.image_extractor import (
     ImageExtractionError,
     extract_image_text,
+)
+from services.report_generator import (
+    generate_assessment_report,
 )
 from supabase_client import get_supabase_client
 
@@ -671,6 +675,59 @@ def analysis_result(analysis_id):
         status=status,
     )
 
+@app.route("/analysis/<analysis_id>/report")
+@login_required
+def download_analysis_report(analysis_id):
+    try:
+        supabase = get_authenticated_supabase()
+
+        response = (
+            supabase
+            .table("internship_analyses")
+            .select("*")
+            .eq("id", analysis_id)
+            .eq("user_id", session["user_id"])
+            .single()
+            .execute()
+        )
+
+        analysis = response.data
+
+        if not analysis:
+            flash("Analysis not found.", "danger")
+            return redirect(url_for("dashboard"))
+
+        report_buffer = generate_assessment_report(
+            analysis=analysis,
+            student_name=session.get(
+                "full_name",
+                "Student",
+            ),
+        )
+
+        filename = (
+            "InternShield_Assessment_"
+            f"{analysis_id[:8]}.pdf"
+        )
+
+        return send_file(
+            report_buffer,
+            mimetype="application/pdf",
+            as_attachment=True,
+            download_name=filename,
+        )
+
+    except Exception:
+        flash(
+            "The PDF report could not be generated.",
+            "danger",
+        )
+        return redirect(
+            url_for(
+                "analysis_result",
+                analysis_id=analysis_id,
+            )
+        )
 
 @app.route("/logout")
 @login_required

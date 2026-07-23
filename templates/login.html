@@ -2,85 +2,1302 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Login | InternShield AI</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Sign in securely to InternShield AI."
+    >
+
+    <title>Sign In | InternShield AI</title>
 
     <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
     >
 
     <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
     >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        :root {
+            --background: #080912;
+            --surface: rgba(22, 24, 42, 0.84);
+            --surface-soft: rgba(255, 255, 255, 0.035);
+            --border: rgba(255, 255, 255, 0.10);
+            --border-focus: rgba(142, 119, 255, 0.75);
+
+            --text: #f8f8ff;
+            --text-soft: #b7b8ca;
+            --text-muted: #85879b;
+
+            --primary: #8067ff;
+            --primary-light: #aa99ff;
+            --secondary: #2dd4bf;
+            --accent: #ff7a59;
+
+            --danger: #ff687c;
+            --danger-background: rgba(255, 104, 124, 0.11);
+            --success: #36d6b8;
+            --success-background: rgba(54, 214, 184, 0.11);
+            --warning: #ffc45f;
+            --warning-background: rgba(255, 196, 95, 0.11);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+
+            color: var(--text);
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(128, 103, 255, 0.20),
+                    transparent 31%
+                ),
+                radial-gradient(
+                    circle at 93% 76%,
+                    rgba(45, 212, 191, 0.13),
+                    transparent 29%
+                ),
+                var(--background);
+
+            font-family: "DM Sans", sans-serif;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        .page {
+            position: relative;
+            min-height: 100vh;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .grid-background {
+            position: fixed;
+            inset: 0;
+            z-index: -5;
+            pointer-events: none;
+
+            background-image:
+                linear-gradient(
+                    rgba(255, 255, 255, 0.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0.025) 1px,
+                    transparent 1px
+                );
+
+            background-size: 55px 55px;
+            opacity: 0.28;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent 90%
+                );
+        }
+
+        .orb {
+            position: fixed;
+            z-index: -4;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(2px);
+        }
+
+        .orb-one {
+            width: 320px;
+            height: 320px;
+            top: 15%;
+            left: -170px;
+            background: rgba(128, 103, 255, 0.16);
+            animation: floatOne 12s ease-in-out infinite;
+        }
+
+        .orb-two {
+            width: 280px;
+            height: 280px;
+            right: -150px;
+            bottom: 5%;
+            background: rgba(45, 212, 191, 0.12);
+            animation: floatTwo 14s ease-in-out infinite;
+        }
+
+        .topbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+
+            width: 100%;
+            padding: 24px 5%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            animation: fadeDown 0.65s ease both;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 11px;
+
+            font-family: "Manrope", sans-serif;
+            font-size: 1.17rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .brand-mark {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            overflow: hidden;
+
+            display: grid;
+            place-items: center;
+
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #6650db
+                );
+
+            box-shadow:
+                0 12px 28px rgba(128, 103, 255, 0.28);
+        }
+
+        .brand-mark::after {
+            content: "";
+            position: absolute;
+            width: 25px;
+            height: 60px;
+            top: -20px;
+            left: -12px;
+
+            transform: rotate(35deg);
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .brand-mark svg {
+            position: relative;
+            z-index: 2;
+            width: 22px;
+            height: 22px;
+        }
+
+        .brand-accent {
+            color: var(--primary-light);
+        }
+
+        .home-link {
+            min-height: 43px;
+            padding: 0 16px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            color: var(--text-soft);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.035);
+
+            font-size: 0.88rem;
+            font-weight: 700;
+
+            transition:
+                transform 0.25s ease,
+                color 0.25s ease,
+                border-color 0.25s ease,
+                background-color 0.25s ease;
+        }
+
+        .home-link:hover {
+            color: var(--text);
+            border-color: rgba(128, 103, 255, 0.48);
+            background: rgba(128, 103, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .home-link svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        .auth-layout {
+            width: min(1180px, 90%);
+            min-height: 100vh;
+            margin: 0 auto;
+            padding: 110px 0 65px;
+
+            display: grid;
+            grid-template-columns:
+                minmax(0, 1fr)
+                minmax(400px, 0.76fr);
+
+            align-items: center;
+            gap: 85px;
+        }
+
+        .auth-introduction {
+            max-width: 660px;
+            animation: fadeUp 0.75s 0.08s ease both;
+        }
+
+        .eyebrow {
+            width: fit-content;
+            margin-bottom: 23px;
+            padding: 8px 13px;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+
+            color: #d8d0ff;
+            border: 1px solid rgba(128, 103, 255, 0.34);
+            border-radius: 999px;
+            background: rgba(128, 103, 255, 0.09);
+
+            font-size: 0.77rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .eyebrow-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--secondary);
+
+            box-shadow:
+                0 0 0 5px rgba(45, 212, 191, 0.10);
+
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .auth-introduction h1 {
+            max-width: 620px;
+            margin-bottom: 22px;
+
+            font-family: "Manrope", sans-serif;
+            font-size: clamp(3rem, 5.5vw, 5.1rem);
+            line-height: 1.01;
+            letter-spacing: -0.065em;
+        }
+
+        .gradient-text {
+            color: transparent;
+
+            background:
+                linear-gradient(
+                    100deg,
+                    var(--primary-light),
+                    #7de8d9,
+                    var(--accent)
+                );
+
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+
+        .auth-introduction > p {
+            max-width: 590px;
+            margin-bottom: 35px;
+
+            color: var(--text-soft);
+            font-size: 1.05rem;
+            line-height: 1.75;
+        }
+
+        .feature-list {
+            display: grid;
+            gap: 13px;
+        }
+
+        .feature-item {
+            max-width: 500px;
+            padding: 13px 15px;
+
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            color: var(--text-soft);
+            border: 1px solid transparent;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.027);
+
+            font-size: 0.88rem;
+
+            transition:
+                border-color 0.25s ease,
+                transform 0.25s ease,
+                background-color 0.25s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateX(5px);
+            border-color: var(--border);
+            background: rgba(255, 255, 255, 0.043);
+        }
+
+        .feature-icon {
+            width: 34px;
+            height: 34px;
+            flex-shrink: 0;
+
+            display: grid;
+            place-items: center;
+
+            color: var(--primary-light);
+            border-radius: 10px;
+            background: rgba(128, 103, 255, 0.11);
+        }
+
+        .feature-icon.teal {
+            color: var(--secondary);
+            background: rgba(45, 212, 191, 0.10);
+        }
+
+        .feature-icon.coral {
+            color: var(--accent);
+            background: rgba(255, 122, 89, 0.10);
+        }
+
+        .feature-icon svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        .form-column {
+            position: relative;
+            animation: fadeUp 0.78s 0.2s ease both;
+        }
+
+        .form-glow {
+            position: absolute;
+            inset: 9% 5%;
+            z-index: -1;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(128, 103, 255, 0.25),
+                    rgba(45, 212, 191, 0.12)
+                );
+
+            filter: blur(70px);
+            animation: glow 5s ease-in-out infinite;
+        }
+
+        .auth-card {
+            position: relative;
+            overflow: hidden;
+            padding: 34px;
+
+            border: 1px solid var(--border);
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(27, 29, 49, 0.94),
+                    rgba(15, 17, 31, 0.90)
+                );
+
+            box-shadow:
+                0 35px 90px rgba(0, 0, 0, 0.42);
+
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+        }
+
+        .auth-card::before {
+            content: "";
+            position: absolute;
+            width: 170px;
+            height: 170px;
+            top: -100px;
+            right: -80px;
+
+            border-radius: 50%;
+            background: rgba(128, 103, 255, 0.16);
+        }
+
+        .card-heading {
+            position: relative;
+            margin-bottom: 27px;
+        }
+
+        .card-heading span {
+            display: block;
+            margin-bottom: 9px;
+
+            color: var(--primary-light);
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+        }
+
+        .card-heading h2 {
+            margin-bottom: 8px;
+
+            font-family: "Manrope", sans-serif;
+            font-size: 1.9rem;
+            letter-spacing: -0.045em;
+        }
+
+        .card-heading p {
+            color: var(--text-muted);
+            font-size: 0.91rem;
+            line-height: 1.55;
+        }
+
+        .flash-message {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 13px 15px;
+
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+
+            border: 1px solid;
+            border-radius: 13px;
+
+            font-size: 0.86rem;
+            line-height: 1.5;
+        }
+
+        .flash-message svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .flash-message.error,
+        .flash-message.danger {
+            color: #ffb5bf;
+            border-color: rgba(255, 104, 124, 0.32);
+            background: var(--danger-background);
+        }
+
+        .flash-message.success {
+            color: #91efdc;
+            border-color: rgba(54, 214, 184, 0.30);
+            background: var(--success-background);
+        }
+
+        .flash-message.warning {
+            color: #ffdc9c;
+            border-color: rgba(255, 196, 95, 0.31);
+            background: var(--warning-background);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            margin-bottom: 8px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+
+            color: var(--text-soft);
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+
+            width: 18px;
+            height: 18px;
+
+            color: var(--text-muted);
+            pointer-events: none;
+
+            transition: color 0.25s ease;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 52px;
+            padding: 0 48px 0 45px;
+
+            color: var(--text);
+            border: 1px solid var(--border);
+            outline: none;
+            border-radius: 13px;
+            background: rgba(7, 9, 20, 0.62);
+
+            font-size: 0.92rem;
+
+            transition:
+                border-color 0.25s ease,
+                background-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .form-input::placeholder {
+            color: #67697c;
+        }
+
+        .form-input:hover {
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+
+        .form-input:focus {
+            border-color: var(--border-focus);
+            background: rgba(10, 11, 24, 0.87);
+
+            box-shadow:
+                0 0 0 4px rgba(128, 103, 255, 0.10);
+        }
+
+        .form-input:focus + .input-icon {
+            color: var(--primary-light);
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 11px;
+            transform: translateY(-50%);
+
+            width: 37px;
+            height: 37px;
+            padding: 0;
+
+            display: grid;
+            place-items: center;
+
+            color: var(--text-muted);
+            border: none;
+            border-radius: 9px;
+            background: transparent;
+            cursor: pointer;
+
+            transition:
+                color 0.25s ease,
+                background-color 0.25s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.055);
+        }
+
+        .password-toggle svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .submit-button {
+            width: 100%;
+            height: 53px;
+            margin-top: 5px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+
+            color: white;
+            border: none;
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #6751dd
+                );
+
+            box-shadow:
+                0 15px 34px rgba(128, 103, 255, 0.26);
+
+            font-size: 0.94rem;
+            font-weight: 800;
+            cursor: pointer;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 19px 43px rgba(128, 103, 255, 0.38);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        .submit-button svg {
+            width: 18px;
+            height: 18px;
+
+            transition: transform 0.25s ease;
+        }
+
+        .submit-button:hover svg {
+            transform: translateX(3px);
+        }
+
+        .form-footer {
+            margin-top: 23px;
+            padding-top: 21px;
+
+            text-align: center;
+
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+
+            font-size: 0.86rem;
+        }
+
+        .form-footer a {
+            color: var(--primary-light);
+            font-weight: 800;
+
+            transition: color 0.25s ease;
+        }
+
+        .form-footer a:hover {
+            color: var(--secondary);
+        }
+
+        .security-note {
+            margin-top: 17px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+
+            color: #707286;
+            font-size: 0.73rem;
+        }
+
+        .security-note svg {
+            width: 14px;
+            height: 14px;
+            color: var(--secondary);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow:
+                    0 0 0 5px rgba(45, 212, 191, 0.10);
+            }
+
+            50% {
+                transform: scale(1.13);
+                box-shadow:
+                    0 0 0 8px rgba(45, 212, 191, 0.04);
+            }
+        }
+
+        @keyframes glow {
+            0%,
+            100% {
+                opacity: 0.6;
+                transform: scale(0.94);
+            }
+
+            50% {
+                opacity: 0.95;
+                transform: scale(1.04);
+            }
+        }
+
+        @keyframes floatOne {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(48px, 32px);
+            }
+        }
+
+        @keyframes floatTwo {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(-42px, -30px);
+            }
+        }
+
+        @media (max-width: 950px) {
+            .auth-layout {
+                grid-template-columns: 1fr;
+                gap: 55px;
+                padding-top: 130px;
+            }
+
+            .auth-introduction {
+                max-width: 720px;
+            }
+
+            .form-column {
+                width: min(520px, 100%);
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .topbar {
+                padding: 16px 4%;
+            }
+
+            .brand-name {
+                display: none;
+            }
+
+            .home-link {
+                min-height: 40px;
+                padding: 0 12px;
+                font-size: 0.8rem;
+            }
+
+            .auth-layout {
+                width: 92%;
+                padding: 105px 0 40px;
+            }
+
+            .auth-introduction {
+                display: none;
+            }
+
+            .auth-card {
+                padding: 25px 20px;
+                border-radius: 20px;
+            }
+
+            .card-heading h2 {
+                font-size: 1.65rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <main class="auth-section">
-        <div class="auth-card">
-            <a href="{{ url_for('home') }}" class="brand-link">
-                InternShield <span>AI</span>
+    <div class="page">
+        <div class="grid-background"></div>
+        <div class="orb orb-one"></div>
+        <div class="orb orb-two"></div>
+
+        <header class="topbar">
+            <a
+                href="/"
+                class="brand"
+                aria-label="InternShield AI homepage"
+            >
+                <span class="brand-mark">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M12 3L19 6V11C19 15.6 16.2 19.5 12 21C7.8 19.5 5 15.6 5 11V6L12 3Z"
+                            stroke="white"
+                            stroke-width="1.8"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M9 12L11 14L15.5 9.5"
+                            stroke="white"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
+                </span>
+
+                <span class="brand-name">
+                    InternShield
+                    <span class="brand-accent">AI</span>
+                </span>
             </a>
 
-            <h1>Welcome back</h1>
+            <a
+                href="/"
+                class="home-link"
+            >
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path
+                        d="M15 18L9 12L15 6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
 
-            <p class="auth-subtitle">
-                Log in to continue evaluating opportunities.
-            </p>
+                Back home
+            </a>
+        </header>
 
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        {{ message }}
+        <main class="auth-layout">
+            <section class="auth-introduction">
+                <div class="eyebrow">
+                    <span class="eyebrow-dot"></span>
+                    Secure student workspace
+                </div>
+
+                <h1>
+                    Welcome back to
+                    <span class="gradient-text">
+                        smarter decisions.
+                    </span>
+                </h1>
+
+                <p>
+                    Sign in to review saved assessments, analyze new
+                    opportunities and understand how an internship fits
+                    your safety, value and academic requirements.
+                </p>
+
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path
+                                    d="M12 3L19 6V11C19 15.6 16.2 19.5 12 21C7.8 19.5 5 15.6 5 11V6L12 3Z"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                />
+                            </svg>
+                        </div>
+
+                        Explainable internship verification scoring
                     </div>
-                {% endfor %}
-            {% endwith %}
 
-            <form method="POST">
-                <div class="mb-3">
-                    <label class="form-label" for="email">
-                        Email address
-                    </label>
+                    <div class="feature-item">
+                        <div class="feature-icon teal">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path
+                                    d="M5 19V10M12 19V5M19 19V13"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                />
+                            </svg>
+                        </div>
 
-                    <input
-                        class="form-control"
-                        id="email"
-                        name="email"
-                        type="email"
-                        autocomplete="email"
-                        required
-                    >
+                        Compensation and effective hourly value analysis
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon coral">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <rect
+                                    x="3"
+                                    y="5"
+                                    width="18"
+                                    height="16"
+                                    rx="3"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                />
+
+                                <path
+                                    d="M7 3V7M17 3V7M3 10H21"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linecap="round"
+                                />
+                            </svg>
+                        </div>
+
+                        Academic schedule and workload compatibility
+                    </div>
                 </div>
+            </section>
 
-                <div class="mb-4">
-                    <label class="form-label" for="password">
-                        Password
-                    </label>
+            <section class="form-column">
+                <div class="form-glow"></div>
 
-                    <input
-                        class="form-control"
-                        id="password"
-                        name="password"
-                        type="password"
-                        autocomplete="current-password"
-                        required
+                <div class="auth-card">
+                    <div class="card-heading">
+                        <span>Account access</span>
+                        <h2>Sign in</h2>
+
+                        <p>
+                            Enter your registered credentials to continue.
+                        </p>
+                    </div>
+
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="flash-message {{ category }}">
+                                    <svg viewBox="0 0 24 24" fill="none">
+                                        {% if category == "success" %}
+                                            <path
+                                                d="M5 12L10 17L19 7"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                        {% else %}
+                                            <circle
+                                                cx="12"
+                                                cy="12"
+                                                r="9"
+                                                stroke="currentColor"
+                                                stroke-width="1.8"
+                                            />
+
+                                            <path
+                                                d="M12 7V13M12 17H12.01"
+                                                stroke="currentColor"
+                                                stroke-width="1.8"
+                                                stroke-linecap="round"
+                                            />
+                                        {% endif %}
+                                    </svg>
+
+                                    <span>{{ message }}</span>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('login') }}"
+                        autocomplete="on"
                     >
+                        <div class="form-group">
+                            <label
+                                for="email"
+                                class="form-label"
+                            >
+                                Email address
+                            </label>
+
+                            <div class="input-wrapper">
+                                <input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    class="form-input"
+                                    placeholder="you@example.com"
+                                    value="{{ request.form.get('email', '') }}"
+                                    autocomplete="email"
+                                    required
+                                >
+
+                                <svg
+                                    class="input-icon"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                >
+                                    <rect
+                                        x="3"
+                                        y="5"
+                                        width="18"
+                                        height="14"
+                                        rx="3"
+                                        stroke="currentColor"
+                                        stroke-width="1.7"
+                                    />
+
+                                    <path
+                                        d="M4 7L12 13L20 7"
+                                        stroke="currentColor"
+                                        stroke-width="1.7"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label
+                                for="password"
+                                class="form-label"
+                            >
+                                Password
+                            </label>
+
+                            <div class="input-wrapper">
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    class="form-input"
+                                    placeholder="Enter your password"
+                                    autocomplete="current-password"
+                                    required
+                                >
+
+                                <svg
+                                    class="input-icon"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                >
+                                    <rect
+                                        x="5"
+                                        y="10"
+                                        width="14"
+                                        height="10"
+                                        rx="3"
+                                        stroke="currentColor"
+                                        stroke-width="1.7"
+                                    />
+
+                                    <path
+                                        d="M8 10V7C8 4.8 9.8 3 12 3C14.2 3 16 4.8 16 7V10"
+                                        stroke="currentColor"
+                                        stroke-width="1.7"
+                                        stroke-linecap="round"
+                                    />
+                                </svg>
+
+                                <button
+                                    type="button"
+                                    class="password-toggle"
+                                    id="passwordToggle"
+                                    aria-label="Show password"
+                                >
+                                    <svg
+                                        id="eyeIcon"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                    >
+                                        <path
+                                            d="M2.5 12C4.7 8.5 7.9 6.5 12 6.5C16.1 6.5 19.3 8.5 21.5 12C19.3 15.5 16.1 17.5 12 17.5C7.9 17.5 4.7 15.5 2.5 12Z"
+                                            stroke="currentColor"
+                                            stroke-width="1.7"
+                                        />
+
+                                        <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="2.5"
+                                            stroke="currentColor"
+                                            stroke-width="1.7"
+                                        />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="submit-button"
+                        >
+                            Sign in securely
+
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path
+                                    d="M5 12H19M13 6L19 12L13 18"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                        </button>
+                    </form>
+
+                    <div class="form-footer">
+                        Don’t have an account?
+
+                        <a href="{{ url_for('signup') }}">
+                            Create one
+                        </a>
+                    </div>
+
+                    <div class="security-note">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <rect
+                                x="5"
+                                y="10"
+                                width="14"
+                                height="10"
+                                rx="3"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            />
+
+                            <path
+                                d="M8 10V7C8 4.8 9.8 3 12 3C14.2 3 16 4.8 16 7V10"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                            />
+                        </svg>
+
+                        Authentication protected by Supabase
+                    </div>
                 </div>
+            </section>
+        </main>
+    </div>
 
-                <button class="btn btn-primary w-100" type="submit">
-                    Log in
-                </button>
-            </form>
+    <script>
+        const passwordInput = document.getElementById("password");
+        const passwordToggle = document.getElementById("passwordToggle");
+        const eyeIcon = document.getElementById("eyeIcon");
 
-            <p class="auth-switch">
-                Don’t have an account?
-                <a href="{{ url_for('signup') }}">
-                    Create one
-                </a>
-            </p>
-        </div>
-    </main>
+        passwordToggle.addEventListener("click", function () {
+            const passwordIsHidden =
+                passwordInput.type === "password";
+
+            passwordInput.type =
+                passwordIsHidden ? "text" : "password";
+
+            passwordToggle.setAttribute(
+                "aria-label",
+                passwordIsHidden
+                    ? "Hide password"
+                    : "Show password"
+            );
+
+            if (passwordIsHidden) {
+                eyeIcon.innerHTML = `
+                    <path
+                        d="M3 3L21 21"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                        stroke-linecap="round"
+                    />
+                    <path
+                        d="M10.6 6.7C11.1 6.6 11.5 6.5 12 6.5C16.1 6.5 19.3 8.5 21.5 12C20.7 13.3 19.7 14.3 18.6 15.2"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                        stroke-linecap="round"
+                    />
+                    <path
+                        d="M14.4 17.1C13.6 17.4 12.8 17.5 12 17.5C7.9 17.5 4.7 15.5 2.5 12C3.5 10.4 4.7 9.2 6.1 8.3"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                        stroke-linecap="round"
+                    />
+                `;
+            } else {
+                eyeIcon.innerHTML = `
+                    <path
+                        d="M2.5 12C4.7 8.5 7.9 6.5 12 6.5C16.1 6.5 19.3 8.5 21.5 12C19.3 15.5 16.1 17.5 12 17.5C7.9 17.5 4.7 15.5 2.5 12Z"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                    />
+                    <circle
+                        cx="12"
+                        cy="12"
+                        r="2.5"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                    />
+                `;
+            }
+        });
+    </script>
 </body>
 </html>

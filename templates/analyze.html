@@ -2,324 +2,1936 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Analyze Internship | InternShield AI</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Analyze an internship with InternShield AI."
+    >
+
+    <title>New Assessment | InternShield AI</title>
 
     <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
     >
 
     <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
     >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        :root {
+            --background: #080912;
+            --surface: rgba(24, 26, 45, 0.82);
+            --surface-soft: rgba(255, 255, 255, 0.035);
+            --input: rgba(7, 9, 20, 0.64);
+
+            --border: rgba(255, 255, 255, 0.09);
+            --border-hover: rgba(128, 103, 255, 0.46);
+            --border-focus: rgba(142, 119, 255, 0.72);
+
+            --text: #f8f8ff;
+            --text-soft: #b7b8ca;
+            --text-muted: #85879a;
+
+            --primary: #8067ff;
+            --primary-light: #aa99ff;
+            --secondary: #2dd4bf;
+            --accent: #ff7a59;
+
+            --success: #36d6a9;
+            --success-background: rgba(54, 214, 169, 0.11);
+
+            --warning: #ffc45f;
+            --warning-background: rgba(255, 196, 95, 0.11);
+
+            --danger: #ff687c;
+            --danger-background: rgba(255, 104, 124, 0.11);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 10% 5%,
+                    rgba(128, 103, 255, 0.16),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 95% 50%,
+                    rgba(45, 212, 191, 0.09),
+                    transparent 26%
+                ),
+                var(--background);
+
+            font-family: "DM Sans", sans-serif;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        .page {
+            position: relative;
+            min-height: 100vh;
+            isolation: isolate;
+        }
+
+        .grid-background {
+            position: fixed;
+            inset: 0;
+            z-index: -5;
+            pointer-events: none;
+
+            opacity: 0.24;
+
+            background-image:
+                linear-gradient(
+                    rgba(255, 255, 255, 0.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(255, 255, 255, 0.025) 1px,
+                    transparent 1px
+                );
+
+            background-size: 55px 55px;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent 92%
+                );
+        }
+
+        .orb {
+            position: fixed;
+            z-index: -4;
+
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .orb-one {
+            width: 320px;
+            height: 320px;
+            top: 15%;
+            left: -180px;
+            background: rgba(128, 103, 255, 0.14);
+
+            animation:
+                floatOne 12s ease-in-out infinite;
+        }
+
+        .orb-two {
+            width: 280px;
+            height: 280px;
+            right: -150px;
+            bottom: 6%;
+            background: rgba(45, 212, 191, 0.10);
+
+            animation:
+                floatTwo 14s ease-in-out infinite;
+        }
+
+        /* Header */
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+
+            min-height: 76px;
+            padding: 0 5%;
+
+            display: flex;
+            align-items: center;
+
+            border-bottom: 1px solid var(--border);
+            background: rgba(8, 9, 18, 0.80);
+
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+
+            animation: fadeDown 0.6s ease both;
+        }
+
+        .navbar {
+            width: min(1180px, 100%);
+            margin: 0 auto;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 25px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            font-family: "Manrope", sans-serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .brand-mark {
+            position: relative;
+
+            width: 40px;
+            height: 40px;
+            overflow: hidden;
+
+            display: grid;
+            place-items: center;
+
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #6650db
+                );
+
+            box-shadow:
+                0 12px 28px rgba(128, 103, 255, 0.28);
+        }
+
+        .brand-mark::after {
+            content: "";
+
+            position: absolute;
+            width: 25px;
+            height: 60px;
+            top: -20px;
+            left: -12px;
+
+            transform: rotate(35deg);
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .brand-mark svg {
+            position: relative;
+            z-index: 2;
+
+            width: 22px;
+            height: 22px;
+        }
+
+        .brand-accent {
+            color: var(--primary-light);
+        }
+
+        .dashboard-link {
+            min-height: 43px;
+            padding: 0 16px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            color: var(--text-soft);
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: var(--surface-soft);
+
+            font-size: 0.82rem;
+            font-weight: 800;
+
+            transition:
+                color 0.25s ease,
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                background-color 0.25s ease;
+        }
+
+        .dashboard-link:hover {
+            color: white;
+            transform: translateY(-2px);
+            border-color: var(--border-hover);
+            background: rgba(128, 103, 255, 0.08);
+        }
+
+        .dashboard-link svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        /* Main content */
+
+        .main-container {
+            width: min(1180px, 92%);
+            margin: 0 auto;
+            padding: 47px 0 65px;
+        }
+
+        .page-heading {
+            margin-bottom: 30px;
+
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: end;
+            gap: 30px;
+
+            animation: fadeUp 0.65s 0.06s ease both;
+        }
+
+        .eyebrow {
+            width: fit-content;
+            margin-bottom: 16px;
+            padding: 7px 11px;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            color: #d7d0ff;
+            border: 1px solid rgba(128, 103, 255, 0.27);
+            border-radius: 999px;
+            background: rgba(128, 103, 255, 0.09);
+
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .eyebrow-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+            background: var(--secondary);
+
+            box-shadow:
+                0 0 0 4px rgba(45, 212, 191, 0.10);
+        }
+
+        .page-heading h1 {
+            margin-bottom: 11px;
+
+            font-family: "Manrope", sans-serif;
+            font-size: clamp(2.25rem, 5vw, 3.8rem);
+            line-height: 1.06;
+            letter-spacing: -0.06em;
+        }
+
+        .page-heading p {
+            max-width: 710px;
+
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .privacy-badge {
+            padding: 12px 15px;
+
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            color: #8ee9d7;
+            border: 1px solid rgba(45, 212, 191, 0.21);
+            border-radius: 13px;
+            background: rgba(45, 212, 191, 0.07);
+
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .privacy-badge svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        /* Flash messages */
+
+        .flash-message {
+            margin-bottom: 22px;
+            padding: 14px 17px;
+
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+
+            border: 1px solid;
+            border-radius: 13px;
+
+            font-size: 0.86rem;
+            line-height: 1.5;
+
+            animation: fadeUp 0.55s ease both;
+        }
+
+        .flash-message svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .flash-message.success {
+            color: #91efdc;
+            border-color: rgba(54, 214, 184, 0.30);
+            background: var(--success-background);
+        }
+
+        .flash-message.error,
+        .flash-message.danger {
+            color: #ffb5bf;
+            border-color: rgba(255, 104, 124, 0.32);
+            background: var(--danger-background);
+        }
+
+        .flash-message.warning {
+            color: #ffdc9c;
+            border-color: rgba(255, 196, 95, 0.31);
+            background: var(--warning-background);
+        }
+
+        /* Progress */
+
+        .progress-card {
+            margin-bottom: 21px;
+            padding: 18px 21px;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 11px;
+
+            border: 1px solid var(--border);
+            border-radius: 17px;
+            background: rgba(24, 26, 45, 0.60);
+
+            animation: fadeUp 0.65s 0.11s ease both;
+        }
+
+        .progress-step {
+            padding: 11px;
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            color: var(--text-muted);
+            border-radius: 11px;
+
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .progress-step.active {
+            color: #d9d2ff;
+            background: rgba(128, 103, 255, 0.09);
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+
+            display: grid;
+            place-items: center;
+
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: rgba(255, 255, 255, 0.025);
+
+            font-family: "Manrope", sans-serif;
+            font-size: 0.73rem;
+            font-weight: 800;
+        }
+
+        .progress-step.active .step-number {
+            color: white;
+            border-color: transparent;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #6751dd
+                );
+        }
+
+        /* Form sections */
+
+        .assessment-form {
+            display: grid;
+            gap: 21px;
+        }
+
+        .form-section {
+            padding: 28px;
+
+            border: 1px solid var(--border);
+            border-radius: 21px;
+            background: var(--surface);
+
+            box-shadow:
+                0 22px 60px rgba(0, 0, 0, 0.20);
+
+            animation: fadeUp 0.65s ease both;
+        }
+
+        .form-section:nth-child(1) {
+            animation-delay: 0.15s;
+        }
+
+        .form-section:nth-child(2) {
+            animation-delay: 0.22s;
+        }
+
+        .section-heading {
+            margin-bottom: 25px;
+
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .section-number {
+            width: 39px;
+            height: 39px;
+            flex-shrink: 0;
+
+            display: grid;
+            place-items: center;
+
+            color: #ddd7ff;
+            border: 1px solid rgba(128, 103, 255, 0.25);
+            border-radius: 12px;
+            background: rgba(128, 103, 255, 0.10);
+
+            font-family: "Manrope", sans-serif;
+            font-size: 0.87rem;
+            font-weight: 800;
+        }
+
+        .section-heading h2 {
+            margin-bottom: 5px;
+
+            font-family: "Manrope", sans-serif;
+            font-size: 1.17rem;
+            letter-spacing: -0.03em;
+        }
+
+        .section-heading p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .four-column-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .academic-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .form-group {
+            min-width: 0;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+
+            color: var(--text-soft);
+            font-size: 0.81rem;
+            font-weight: 700;
+        }
+
+        .required {
+            color: var(--accent);
+        }
+
+        .form-help {
+            margin-top: 7px;
+
+            color: #707286;
+            font-size: 0.7rem;
+            line-height: 1.5;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+
+            color: var(--text);
+            border: 1px solid var(--border);
+            outline: none;
+            border-radius: 12px;
+            background: var(--input);
+
+            font-size: 0.87rem;
+
+            transition:
+                border-color 0.25s ease,
+                background-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .form-input,
+        .form-select {
+            height: 50px;
+            padding: 0 14px;
+        }
+
+        .form-textarea {
+            min-height: 190px;
+            padding: 14px;
+
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: #646678;
+        }
+
+        .form-input:hover,
+        .form-select:hover,
+        .form-textarea:hover {
+            border-color: rgba(255, 255, 255, 0.17);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--border-focus);
+            background: rgba(10, 11, 24, 0.86);
+
+            box-shadow:
+                0 0 0 4px rgba(128, 103, 255, 0.10);
+        }
+
+        .form-select {
+            color-scheme: dark;
+            cursor: pointer;
+        }
+
+        /* Upload boxes */
+
+        .upload-grid {
+            margin: 20px 0;
+
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .upload-box {
+            position: relative;
+            overflow: hidden;
+
+            min-height: 150px;
+            padding: 21px;
+
+            display: flex;
+            align-items: center;
+            gap: 16px;
+
+            border: 1px dashed rgba(128, 103, 255, 0.32);
+            border-radius: 16px;
+            background: rgba(128, 103, 255, 0.045);
+
+            cursor: pointer;
+
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                background-color 0.25s ease;
+        }
+
+        .upload-box:hover,
+        .upload-box.selected {
+            transform: translateY(-3px);
+            border-color: rgba(128, 103, 255, 0.70);
+            background: rgba(128, 103, 255, 0.09);
+        }
+
+        .upload-box.image {
+            border-color: rgba(45, 212, 191, 0.26);
+            background: rgba(45, 212, 191, 0.035);
+        }
+
+        .upload-box.image:hover,
+        .upload-box.image.selected {
+            border-color: rgba(45, 212, 191, 0.65);
+            background: rgba(45, 212, 191, 0.075);
+        }
+
+        .upload-icon {
+            width: 49px;
+            height: 49px;
+            flex-shrink: 0;
+
+            display: grid;
+            place-items: center;
+
+            color: var(--primary-light);
+            border-radius: 14px;
+            background: rgba(128, 103, 255, 0.12);
+        }
+
+        .upload-box.image .upload-icon {
+            color: var(--secondary);
+            background: rgba(45, 212, 191, 0.10);
+        }
+
+        .upload-icon svg {
+            width: 23px;
+            height: 23px;
+        }
+
+        .upload-content {
+            min-width: 0;
+        }
+
+        .upload-content strong {
+            display: block;
+            margin-bottom: 6px;
+
+            color: var(--text-soft);
+            font-size: 0.84rem;
+        }
+
+        .upload-content span {
+            display: block;
+
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            line-height: 1.45;
+        }
+
+        .file-name {
+            max-width: 100%;
+            overflow: hidden;
+            margin-top: 6px;
+
+            color: var(--primary-light) !important;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .upload-box.image .file-name {
+            color: var(--secondary) !important;
+        }
+
+        .file-input {
+            position: absolute;
+
+            width: 1px;
+            height: 1px;
+
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .divider {
+            margin: 5px 0 19px;
+
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            color: #66687a;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+
+            height: 1px;
+            flex: 1;
+
+            background: var(--border);
+        }
+
+        /* Checkboxes */
+
+        .checkbox-panel {
+            grid-column: 1 / -1;
+
+            padding: 18px;
+
+            display: grid;
+            gap: 13px;
+
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+
+            color: var(--text-soft);
+            cursor: pointer;
+
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+
+        .checkbox-option input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            margin-top: 1px;
+
+            display: grid;
+            place-items: center;
+
+            color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.20);
+            border-radius: 6px;
+            background: rgba(7, 9, 20, 0.70);
+
+            transition:
+                color 0.2s ease,
+                border-color 0.2s ease,
+                background-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .custom-checkbox svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .checkbox-option input:checked + .custom-checkbox {
+            color: white;
+            border-color: var(--primary);
+            background: var(--primary);
+
+            box-shadow:
+                0 0 0 4px rgba(128, 103, 255, 0.10);
+        }
+
+        /* Submit */
+
+        .submit-section {
+            padding: 24px 28px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 25px;
+
+            border: 1px solid var(--border);
+            border-radius: 19px;
+
+            background:
+                linear-gradient(
+                    120deg,
+                    rgba(128, 103, 255, 0.10),
+                    rgba(45, 212, 191, 0.045)
+                );
+
+            animation: fadeUp 0.65s 0.30s ease both;
+        }
+
+        .submit-copy h3 {
+            margin-bottom: 5px;
+
+            font-family: "Manrope", sans-serif;
+            font-size: 1rem;
+        }
+
+        .submit-copy p {
+            max-width: 650px;
+
+            color: var(--text-muted);
+            font-size: 0.76rem;
+            line-height: 1.55;
+        }
+
+        .submit-button {
+            min-width: 230px;
+            min-height: 53px;
+            padding: 0 21px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+
+            color: white;
+            border: none;
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #6751dd
+                );
+
+            box-shadow:
+                0 15px 34px rgba(128, 103, 255, 0.27);
+
+            font-size: 0.87rem;
+            font-weight: 800;
+            cursor: pointer;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                opacity 0.25s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 20px 43px rgba(128, 103, 255, 0.39);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.60;
+            cursor: wait;
+            transform: none;
+        }
+
+        .submit-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+
+            display: none;
+
+            border: 2px solid rgba(255, 255, 255, 0.32);
+            border-top-color: white;
+            border-radius: 50%;
+
+            animation: spin 0.8s linear infinite;
+        }
+
+        .submit-button.loading .spinner {
+            display: block;
+        }
+
+        .submit-button.loading .button-icon {
+            display: none;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 900px) {
+            .four-column-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .upload-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-heading {
+                grid-template-columns: 1fr;
+            }
+
+            .privacy-badge {
+                width: fit-content;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .header {
+                padding: 0 4%;
+            }
+
+            .brand > span:last-child {
+                display: none;
+            }
+
+            .dashboard-link span {
+                display: none;
+            }
+
+            .dashboard-link {
+                width: 43px;
+                padding: 0;
+            }
+
+            .main-container {
+                width: 92%;
+                padding-top: 32px;
+            }
+
+            .progress-card {
+                padding: 13px;
+                grid-template-columns: 1fr;
+            }
+
+            .progress-step:not(.active) {
+                display: none;
+            }
+
+            .form-section {
+                padding: 22px 18px;
+            }
+
+            .form-grid,
+            .four-column-grid,
+            .academic-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .upload-box {
+                min-height: 130px;
+                padding: 17px;
+            }
+
+            .submit-section {
+                padding: 21px 18px;
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .submit-button {
+                width: 100%;
+                min-width: 0;
+            }
+        }
+
+        /* Animations */
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(22px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatOne {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(45px, 30px);
+            }
+        }
+
+        @keyframes floatTwo {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(-40px, -30px);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <main class="dashboard-section">
-        <div class="container">
-            <nav class="dashboard-nav">
-                <a href="{{ url_for('dashboard') }}"
-                   class="brand-link">
-                    InternShield <span>AI</span>
+    <div class="page">
+        <div class="grid-background"></div>
+        <div class="orb orb-one"></div>
+        <div class="orb orb-two"></div>
+
+        <header class="header">
+            <nav class="navbar">
+                <a
+                    href="/dashboard"
+                    class="brand"
+                >
+                    <span class="brand-mark">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M12 3L19 6V11C19 15.6 16.2 19.5 12 21C7.8 19.5 5 15.6 5 11V6L12 3Z"
+                                stroke="white"
+                                stroke-width="1.8"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M9 12L11 14L15.5 9.5"
+                                stroke="white"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </span>
+
+                    <span>
+                        InternShield
+                        <span class="brand-accent">AI</span>
+                    </span>
                 </a>
 
-                <a href="{{ url_for('dashboard') }}"
-                   class="btn btn-outline-light">
-                    Dashboard
+                <a
+                    href="/dashboard"
+                    class="dashboard-link"
+                >
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M15 18L9 12L15 6"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
+
+                    <span>Dashboard</span>
                 </a>
             </nav>
+        </header>
 
-            <section class="analysis-form-card">
-                <span class="project-badge">
-                    Explainable assessment
-                </span>
+        <main class="main-container">
+            <section class="page-heading">
+                <div>
+                    <div class="eyebrow">
+                        <span class="eyebrow-dot"></span>
+                        Explainable opportunity assessment
+                    </div>
 
-                <h1>Analyze an internship</h1>
+                    <h1>Analyze an internship</h1>
 
-                <p class="auth-subtitle">
-                    Evaluate legitimacy, value and compatibility
-                    with your academic schedule.
-                </p>
+                    <p>
+                        Add the details exactly as provided by the recruiter.
+                        InternShield evaluates verification indicators,
+                        opportunity value and compatibility with your
+                        academic schedule.
+                    </p>
+                </div>
 
-                {% with messages = get_flashed_messages(with_categories=true) %}
+                <div class="privacy-badge">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <rect
+                            x="5"
+                            y="10"
+                            width="14"
+                            height="10"
+                            rx="3"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        />
+
+                        <path
+                            d="M8 10V7C8 4.8 9.8 3 12 3C14.2 3 16 4.8 16 7V10"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                        />
+                    </svg>
+
+                    Private student assessment
+                </div>
+            </section>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
-                            {{ message }}
+                        <div class="flash-message {{ category }}">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                {% if category == "success" %}
+                                    <path
+                                        d="M5 12L10 17L19 7"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                {% else %}
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="9"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    />
+
+                                    <path
+                                        d="M12 7V13M12 17H12.01"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                    />
+                                {% endif %}
+                            </svg>
+
+                            <span>{{ message }}</span>
                         </div>
                     {% endfor %}
-                {% endwith %}
+                {% endif %}
+            {% endwith %}
 
-                <form method="POST"
-                      enctype="multipart/form-data">
+            <div class="progress-card">
+                <div class="progress-step active">
+                    <span class="step-number">01</span>
+                    Opportunity information
+                </div>
 
-                    <h2 class="fs-4 mb-3">
-                        1. Internship information
-                    </h2>
+                <div class="progress-step">
+                    <span class="step-number">02</span>
+                    Academic compatibility
+                </div>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label"
-                                   for="company_name">
+                <div class="progress-step">
+                    <span class="step-number">03</span>
+                    Explainable result
+                </div>
+            </div>
+
+            <form
+                id="assessmentForm"
+                class="assessment-form"
+                method="POST"
+                action="/analyze"
+                enctype="multipart/form-data"
+            >
+                <section class="form-section">
+                    <div class="section-heading">
+                        <div class="section-number">01</div>
+
+                        <div>
+                            <h2>Opportunity details</h2>
+
+                            <p>
+                                Enter the company, position and content
+                                supplied by the recruiter.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label
+                                for="company_name"
+                                class="form-label"
+                            >
                                 Company name
+                                <span class="required">*</span>
                             </label>
 
                             <input
-                                class="form-control"
                                 id="company_name"
                                 name="company_name"
                                 type="text"
+                                class="form-input"
+                                placeholder="Example: BrightPath Technologies"
+                                value="{{ request.form.get('company_name', '') }}"
+                                maxlength="120"
+                                required
                             >
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label"
-                                   for="role_title">
+                        <div class="form-group">
+                            <label
+                                for="role_title"
+                                class="form-label"
+                            >
                                 Internship role
+                                <span class="required">*</span>
                             </label>
 
                             <input
-                                class="form-control"
                                 id="role_title"
                                 name="role_title"
                                 type="text"
+                                class="form-input"
+                                placeholder="Example: Data Analyst Intern"
+                                value="{{ request.form.get('role_title', '') }}"
+                                maxlength="120"
+                                required
                             >
                         </div>
                     </div>
 
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <div class="result-card h-100">
-                                <label class="form-label"
-                                       for="pdf_file">
-                                    Upload PDF
-                                </label>
+                    <div class="upload-grid">
+                        <label
+                            id="pdfUploadBox"
+                            class="upload-box"
+                            for="pdf_file"
+                        >
+                            <div class="upload-icon">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path
+                                        d="M7 3H14L19 8V21H7V3Z"
+                                        stroke="currentColor"
+                                        stroke-width="1.7"
+                                        stroke-linejoin="round"
+                                    />
 
-                                <input
-                                    class="form-control"
-                                    id="pdf_file"
-                                    name="pdf_file"
-                                    type="file"
-                                    accept=".pdf,application/pdf"
-                                >
-
-                                <small class="form-hint">
-                                    Offer letter or internship
-                                    document · Maximum 5 MB
-                                </small>
+                                    <path
+                                        d="M14 3V8H19M10 13H16M10 17H15"
+                                        stroke="currentColor"
+                                        stroke-width="1.7"
+                                        stroke-linecap="round"
+                                    />
+                                </svg>
                             </div>
-                        </div>
 
-                        <div class="col-md-6">
-                            <div class="result-card h-100">
-                                <label class="form-label"
-                                       for="image_file">
-                                    Upload screenshot
-                                </label>
+                            <div class="upload-content">
+                                <strong>Upload PDF document</strong>
 
-                                <input
-                                    class="form-control"
-                                    id="image_file"
-                                    name="image_file"
-                                    type="file"
-                                    accept=".png,.jpg,.jpeg,.webp,
-                                            image/png,image/jpeg,
-                                            image/webp"
+                                <span>
+                                    Offer letter or internship document,
+                                    maximum 5 MB
+                                </span>
+
+                                <span
+                                    id="pdfFileName"
+                                    class="file-name"
                                 >
-
-                                <small class="form-hint">
-                                    PNG, JPG, JPEG or WEBP ·
-                                    Maximum 5 MB
-                                </small>
+                                    Choose a PDF file
+                                </span>
                             </div>
-                        </div>
+
+                            <input
+                                id="pdf_file"
+                                name="pdf_file"
+                                type="file"
+                                class="file-input"
+                                accept=".pdf,application/pdf"
+                            >
+                        </label>
+
+                        <label
+                            id="imageUploadBox"
+                            class="upload-box image"
+                            for="image_file"
+                        >
+                            <div class="upload-icon">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <rect
+                                        x="3"
+                                        y="4"
+                                        width="18"
+                                        height="16"
+                                        rx="3"
+                                        stroke="currentColor"
+                                        stroke-width="1.7"
+                                    />
+
+                                    <circle
+                                        cx="9"
+                                        cy="9"
+                                        r="2"
+                                        stroke="currentColor"
+                                        stroke-width="1.7"
+                                    />
+
+                                    <path
+                                        d="M5 17L10 12L13 15L16 11L20 16"
+                                        stroke="currentColor"
+                                        stroke-width="1.7"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </div>
+
+                            <div class="upload-content">
+                                <strong>Upload screenshot</strong>
+
+                                <span>
+                                    PNG, JPG, JPEG or WEBP,
+                                    maximum 5 MB
+                                </span>
+
+                                <span
+                                    id="imageFileName"
+                                    class="file-name"
+                                >
+                                    Choose an image
+                                </span>
+                            </div>
+
+                            <input
+                                id="image_file"
+                                name="image_file"
+                                type="file"
+                                class="file-input"
+                                accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp"
+                            >
+                        </label>
                     </div>
 
-                    <div class="text-center text-secondary mb-3">
-                        — OR PASTE TEXT —
+                    <div class="divider">
+                        Or paste recruiter content
                     </div>
 
-                    <div class="mb-4">
-                        <label class="form-label"
-                               for="original_text">
-                            Internship description, recruiter
-                            message or additional notes
+                    <div class="form-group">
+                        <label
+                            for="original_text"
+                            class="form-label"
+                        >
+                            Internship description, recruiter message
+                            or additional notes
                         </label>
 
                         <textarea
-                            class="form-control"
                             id="original_text"
                             name="original_text"
-                            rows="7"
-                        ></textarea>
+                            class="form-textarea"
+                            placeholder="Paste the internship description, WhatsApp message, email content or offer details here..."
+                            minlength="30"
+                            maxlength="15000"
+                        >{{ request.form.get('original_text', '') }}</textarea>
+
+                        <p class="form-help">
+                            Enter at least 30 characters. If a file is
+                            uploaded, this text is treated as additional
+                            information.
+                        </p>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label"
-                                   for="stipend_monthly">
+                    <div class="four-column-grid">
+                        <div class="form-group">
+                            <label
+                                for="stipend_monthly"
+                                class="form-label"
+                            >
                                 Monthly stipend (₹)
+                                <span class="required">*</span>
                             </label>
 
                             <input
-                                class="form-control"
                                 id="stipend_monthly"
                                 name="stipend_monthly"
                                 type="number"
+                                class="form-input"
+                                placeholder="0"
+                                value="{{ request.form.get('stipend_monthly', '') }}"
                                 min="0"
-                                step="0.01"
+                                max="10000000"
+                                step="1"
+                                required
                             >
                         </div>
 
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label"
-                                   for="hours_per_day">
+                        <div class="form-group">
+                            <label
+                                for="hours_per_day"
+                                class="form-label"
+                            >
                                 Hours per day
+                                <span class="required">*</span>
                             </label>
 
                             <input
-                                class="form-control"
                                 id="hours_per_day"
                                 name="hours_per_day"
                                 type="number"
+                                class="form-input"
+                                placeholder="4"
+                                value="{{ request.form.get('hours_per_day', '') }}"
                                 min="0.5"
                                 max="24"
                                 step="0.5"
+                                required
                             >
                         </div>
 
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label"
-                                   for="days_per_week">
+                        <div class="form-group">
+                            <label
+                                for="days_per_week"
+                                class="form-label"
+                            >
                                 Days per week
+                                <span class="required">*</span>
                             </label>
 
                             <input
-                                class="form-control"
                                 id="days_per_week"
                                 name="days_per_week"
                                 type="number"
+                                class="form-input"
+                                placeholder="5"
+                                value="{{ request.form.get('days_per_week', '') }}"
                                 min="1"
                                 max="7"
+                                step="1"
+                                required
                             >
                         </div>
 
-                        <div class="col-md-3 mb-4">
-                            <label class="form-label"
-                                   for="duration_months">
-                                Duration (months)
+                        <div class="form-group">
+                            <label
+                                for="duration_months"
+                                class="form-label"
+                            >
+                                Duration in months
+                                <span class="required">*</span>
                             </label>
 
                             <input
-                                class="form-control"
                                 id="duration_months"
                                 name="duration_months"
                                 type="number"
+                                class="form-input"
+                                placeholder="3"
+                                value="{{ request.form.get('duration_months', '') }}"
                                 min="0.5"
+                                max="36"
                                 step="0.5"
+                                required
                             >
                         </div>
                     </div>
+                </section>
 
-                    <hr class="my-4 border-secondary">
+                <section class="form-section">
+                    <div class="section-heading">
+                        <div class="section-number">02</div>
 
-                    <h2 class="fs-4 mb-2">
-                        2. Academic compatibility
-                    </h2>
+                        <div>
+                            <h2>Academic compatibility</h2>
 
-                    <p class="auth-subtitle">
-                        Tell us whether the internship can fit
-                        around your college responsibilities.
-                    </p>
+                            <p>
+                                Compare the internship workload with
+                                your realistic college availability.
+                            </p>
+                        </div>
+                    </div>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label"
-                                   for="available_hours_per_week">
-                                Hours you can realistically give
-                                per week
+                    <div class="academic-grid">
+                        <div class="form-group">
+                            <label
+                                for="available_hours_per_week"
+                                class="form-label"
+                            >
+                                Hours you can realistically give per week
+                                <span class="required">*</span>
                             </label>
 
                             <input
-                                class="form-control"
                                 id="available_hours_per_week"
                                 name="available_hours_per_week"
                                 type="number"
+                                class="form-input"
+                                placeholder="Example: 20"
+                                value="{{ request.form.get('available_hours_per_week', '') }}"
                                 min="0"
                                 max="168"
                                 step="0.5"
+                                required
                             >
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label"
-                                   for="schedule_type">
+                        <div class="form-group">
+                            <label
+                                for="schedule_type"
+                                class="form-label"
+                            >
                                 Internship schedule
+                                <span class="required">*</span>
                             </label>
 
                             <select
-                                class="form-control"
                                 id="schedule_type"
                                 name="schedule_type"
+                                class="form-select"
+                                required
                             >
-                                <option value="not_specified">
+                                <option
+                                    value="not_specified"
+                                    {% if request.form.get(
+                                        'schedule_type',
+                                        'not_specified'
+                                    ) == 'not_specified' %}
+                                        selected
+                                    {% endif %}
+                                >
                                     Not specified
                                 </option>
 
-                                <option value="flexible">
+                                <option
+                                    value="flexible"
+                                    {% if request.form.get(
+                                        'schedule_type'
+                                    ) == 'flexible' %}
+                                        selected
+                                    {% endif %}
+                                >
                                     Flexible hours
                                 </option>
 
-                                <option value="fixed">
-                                    Fixed hours
+                                <option
+                                    value="fixed"
+                                    {% if request.form.get(
+                                        'schedule_type'
+                                    ) == 'fixed' %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    Fixed working hours
                                 </option>
                             </select>
                         </div>
-                    </div>
 
-                    <div class="result-card mb-4">
-                        <div class="form-check mb-3">
-                            <input
-                                class="form-check-input"
-                                id="exam_period"
-                                name="exam_period"
-                                type="checkbox"
-                            >
+                        <div class="checkbox-panel">
+                            <label class="checkbox-option">
+                                <input
+                                    type="checkbox"
+                                    name="exam_period"
+                                    value="on"
+                                    {% if request.form.get('exam_period') == 'on' %}
+                                        checked
+                                    {% endif %}
+                                >
 
-                            <label class="form-check-label"
-                                   for="exam_period">
-                                This internship overlaps with my
-                                examination or major assessment
-                                period
+                                <span class="custom-checkbox">
+                                    <svg viewBox="0 0 24 24" fill="none">
+                                        <path
+                                            d="M5 12L10 17L19 7"
+                                            stroke="currentColor"
+                                            stroke-width="2.4"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        />
+                                    </svg>
+                                </span>
+
+                                <span>
+                                    This internship overlaps with my
+                                    examination or major academic-assessment
+                                    period.
+                                </span>
+                            </label>
+
+                            <label class="checkbox-option">
+                                <input
+                                    type="checkbox"
+                                    name="class_schedule_conflict"
+                                    value="on"
+                                    {% if request.form.get(
+                                        'class_schedule_conflict'
+                                    ) == 'on' %}
+                                        checked
+                                    {% endif %}
+                                >
+
+                                <span class="custom-checkbox">
+                                    <svg viewBox="0 0 24 24" fill="none">
+                                        <path
+                                            d="M5 12L10 17L19 7"
+                                            stroke="currentColor"
+                                            stroke-width="2.4"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        />
+                                    </svg>
+                                </span>
+
+                                <span>
+                                    The working hours directly conflict
+                                    with my lectures or practical sessions.
+                                </span>
                             </label>
                         </div>
+                    </div>
+                </section>
 
-                        <div class="form-check">
-                            <input
-                                class="form-check-input"
-                                id="class_schedule_conflict"
-                                name="class_schedule_conflict"
-                                type="checkbox"
-                            >
+                <section class="submit-section">
+                    <div class="submit-copy">
+                        <h3>Ready for assessment</h3>
 
-                            <label class="form-check-label"
-                                   for="class_schedule_conflict">
-                                The working hours directly
-                                conflict with my lectures or
-                                practical sessions
-                            </label>
-                        </div>
+                        <p>
+                            InternShield provides decision-support
+                            guidance and does not independently prove
+                            whether an internship is legitimate.
+                        </p>
                     </div>
 
-                    <button class="btn btn-primary btn-lg"
-                            type="submit">
-                        Run complete assessment
+                    <button
+                        id="submitButton"
+                        type="submit"
+                        class="submit-button"
+                    >
+                        <span class="spinner"></span>
+
+                        <svg
+                            class="button-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                        >
+                            <path
+                                d="M12 3L19 6V11C19 15.6 16.2 19.5 12 21C7.8 19.5 5 15.6 5 11V6L12 3Z"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            />
+
+                            <path
+                                d="M9 12L11 14L15.5 9.5"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+
+                        <span id="submitText">
+                            Run complete assessment
+                        </span>
                     </button>
-                </form>
-            </section>
-        </div>
-    </main>
+                </section>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        const assessmentForm =
+            document.getElementById("assessmentForm");
+
+        const submitButton =
+            document.getElementById("submitButton");
+
+        const submitText =
+            document.getElementById("submitText");
+
+        const originalText =
+            document.getElementById("original_text");
+
+        const pdfInput =
+            document.getElementById("pdf_file");
+
+        const imageInput =
+            document.getElementById("image_file");
+
+        const pdfFileName =
+            document.getElementById("pdfFileName");
+
+        const imageFileName =
+            document.getElementById("imageFileName");
+
+        const pdfUploadBox =
+            document.getElementById("pdfUploadBox");
+
+        const imageUploadBox =
+            document.getElementById("imageUploadBox");
+
+        const maximumFileSize =
+            5 * 1024 * 1024;
+
+        function resetPdf() {
+            pdfInput.value = "";
+            pdfFileName.textContent =
+                "Choose a PDF file";
+
+            pdfUploadBox.classList.remove("selected");
+        }
+
+        function resetImage() {
+            imageInput.value = "";
+            imageFileName.textContent =
+                "Choose an image";
+
+            imageUploadBox.classList.remove("selected");
+        }
+
+        pdfInput.addEventListener(
+            "change",
+            function () {
+                if (!pdfInput.files.length) {
+                    resetPdf();
+                    return;
+                }
+
+                const file = pdfInput.files[0];
+
+                if (file.size > maximumFileSize) {
+                    alert(
+                        "The selected PDF is larger than 5 MB."
+                    );
+
+                    resetPdf();
+                    return;
+                }
+
+                resetImage();
+
+                pdfFileName.textContent = file.name;
+                pdfUploadBox.classList.add("selected");
+            }
+        );
+
+        imageInput.addEventListener(
+            "change",
+            function () {
+                if (!imageInput.files.length) {
+                    resetImage();
+                    return;
+                }
+
+                const file = imageInput.files[0];
+
+                if (file.size > maximumFileSize) {
+                    alert(
+                        "The selected image is larger than 5 MB."
+                    );
+
+                    resetImage();
+                    return;
+                }
+
+                resetPdf();
+
+                imageFileName.textContent = file.name;
+                imageUploadBox.classList.add("selected");
+            }
+        );
+
+        assessmentForm.addEventListener(
+            "submit",
+            function (event) {
+                const hasText =
+                    originalText.value.trim().length > 0;
+
+                const hasPdf =
+                    pdfInput.files.length > 0;
+
+                const hasImage =
+                    imageInput.files.length > 0;
+
+                if (!hasText && !hasPdf && !hasImage) {
+                    event.preventDefault();
+
+                    alert(
+                        "Paste an internship description, upload a PDF or upload a screenshot."
+                    );
+
+                    originalText.focus();
+                    return;
+                }
+
+                if (
+                    hasText
+                    && originalText.value.trim().length < 30
+                ) {
+                    event.preventDefault();
+
+                    alert(
+                        "The internship description must contain at least 30 characters."
+                    );
+
+                    originalText.focus();
+                    return;
+                }
+
+                submitButton.disabled = true;
+                submitButton.classList.add("loading");
+
+                submitText.textContent =
+                    "Analyzing opportunity...";
+            }
+        );
+    </script>
 </body>
 </html>
