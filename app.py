@@ -29,6 +29,10 @@ from services.image_extractor import (
 from services.report_generator import (
     generate_assessment_report,
 )
+from services.website_verification import (
+    WebsiteVerificationError,
+    verify_company_website,
+)
 from supabase_client import get_supabase_client
 
 load_dotenv()
@@ -676,6 +680,48 @@ def analyze():
             company_name=company_name or None,
         )
 
+        website_result = {
+            "checked": False,
+            "status": "not_provided",
+            "message": (
+                "No company website was supplied for a live "
+                "technical check."
+            ),
+        }
+
+        if company_website:
+            try:
+                website_result = verify_company_website(
+                    company_website,
+                )
+                website_result["checked"] = True
+                website_result["status"] = "completed"
+
+            except WebsiteVerificationError as error:
+                website_result = {
+                    "checked": True,
+                    "status": "unavailable",
+                    "submitted_url": company_website,
+                    "reachable": False,
+                    "uses_https": None,
+                    "message": str(error),
+                    "checks": [
+                        {
+                            "type": "warning",
+                            "label": (
+                                "Live website check could not "
+                                "be completed"
+                            ),
+                            "detail": str(error),
+                        }
+                    ],
+                    "disclaimer": (
+                        "An unavailable technical check does not "
+                        "by itself prove that an internship is "
+                        "fraudulent."
+                    ),
+                }
+
         domain_risk_points = domain_result.get(
             "domain_risk_points",
             0,
@@ -744,6 +790,7 @@ def analyze():
             ),
             "domain_match": domain_result["domain_match"],
             "domain_verification": domain_result,
+            "website_verification": website_result,
             "stipend_monthly": stipend_monthly,
             "hours_per_day": hours_per_day,
             "days_per_week": days_per_week,

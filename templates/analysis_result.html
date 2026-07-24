@@ -924,6 +924,47 @@
             background: var(--danger-background);
         }
 
+        .domain-status.completed {
+            color: #74e6c9;
+            border-color: rgba(54, 214, 169, 0.34);
+            background: var(--success-background);
+        }
+
+        .domain-status.unavailable {
+            color: #ffd480;
+            border-color: rgba(255, 196, 95, 0.34);
+            background: var(--warning-background);
+        }
+
+        .website-card {
+            background:
+                linear-gradient(
+                    130deg,
+                    rgba(128, 103, 255, 0.08),
+                    rgba(45, 212, 191, 0.06),
+                    rgba(24, 26, 45, 0.82)
+                );
+        }
+
+        .website-title-link {
+            color: var(--text-soft);
+            text-decoration: none;
+        }
+
+        .website-title-link:hover {
+            color: #74e6c9;
+        }
+
+        .website-check-type.warning {
+            color: #ffd480;
+            background: rgba(255, 196, 95, 0.12);
+        }
+
+        .website-check-type.evidence {
+            color: #74e6c9;
+            background: rgba(54, 214, 169, 0.12);
+        }
+
         .domain-grid {
             margin-bottom: 18px;
 
@@ -2456,6 +2497,259 @@
                                     "Domain consistency is only one "
                                     "verification signal and does not "
                                     "prove legitimacy."
+                                )
+                            }}
+                        </span>
+                    </div>
+                </section>
+            {% endif %}
+
+            {% set website =
+                record.get("website_verification") or {}
+            %}
+
+            {% if
+                record.get("company_website")
+                and website.get("checked")
+            %}
+                <section class="content-card website-card">
+                    <div class="domain-heading">
+                        <div class="domain-heading-copy">
+                            <h2 class="card-title">
+                                <span class="title-icon">
+                                    <svg viewBox="0 0 24 24" fill="none">
+                                        <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="9"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                        />
+
+                                        <path
+                                            d="M3 12H21M12 3C14.3 5.5 15.5 8.5 15.5 12C15.5 15.5 14.3 18.5 12 21M12 3C9.7 5.5 8.5 8.5 8.5 12C8.5 15.5 9.7 18.5 12 21"
+                                            stroke="currentColor"
+                                            stroke-width="1.6"
+                                            stroke-linecap="round"
+                                        />
+                                    </svg>
+                                </span>
+
+                                Live Website Verification
+                            </h2>
+
+                            <p>
+                                InternShield safely contacted the
+                                supplied company website and recorded
+                                technical response signals. These
+                                signals do not prove company legitimacy.
+                            </p>
+                        </div>
+
+                        {% set website_status =
+                            website.get("status", "unavailable")
+                        %}
+
+                        <span
+                            class="domain-status {{ website_status|replace('_', '-') }}"
+                        >
+                            {% if
+                                website_status == "completed"
+                                and website.get("reachable")
+                            %}
+                                Website Responded
+                            {% elif website_status == "completed" %}
+                                Technical Warning
+                            {% else %}
+                                Check Unavailable
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="domain-grid">
+                        <div class="domain-detail">
+                            <span>Submitted website</span>
+
+                            <strong>
+                                {{
+                                    website.get(
+                                        "submitted_url",
+                                        record.get("company_website")
+                                    )
+                                }}
+                            </strong>
+                        </div>
+
+                        <div class="domain-detail">
+                            <span>Final destination</span>
+
+                            <strong>
+                                {% if website.get("final_url") %}
+                                    <a
+                                        class="website-title-link"
+                                        href="{{ website.get('final_url') }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {{ website.get("final_url") }}
+                                    </a>
+                                {% else %}
+                                    Unavailable
+                                {% endif %}
+                            </strong>
+                        </div>
+
+                        <div class="domain-detail">
+                            <span>HTTP response</span>
+
+                            <strong>
+                                {% if website.get("status_code") %}
+                                    Status
+                                    {{ website.get("status_code") }}
+                                {% else %}
+                                    No response recorded
+                                {% endif %}
+                            </strong>
+                        </div>
+
+                        <div class="domain-detail">
+                            <span>HTTPS protection</span>
+
+                            <strong>
+                                {% if website.get("uses_https") is sameas true %}
+                                    Enabled
+                                {% elif website.get("uses_https") is sameas false %}
+                                    Not enabled
+                                {% else %}
+                                    Not determined
+                                {% endif %}
+                            </strong>
+                        </div>
+
+                        <div class="domain-detail">
+                            <span>Final domain</span>
+
+                            <strong>
+                                {{
+                                    website.get(
+                                        "final_domain",
+                                        "Unavailable"
+                                    )
+                                    or "Unavailable"
+                                }}
+                            </strong>
+                        </div>
+
+                        <div class="domain-detail">
+                            <span>Redirects followed</span>
+
+                            <strong>
+                                {{ website.get("redirect_count", 0) }}
+                            </strong>
+                        </div>
+                    </div>
+
+                    {% if website.get("page_title") %}
+                        <div class="domain-comparison">
+                            <span class="domain-comparison-icon">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path
+                                        d="M5 5H19V19H5V5ZM8 9H16M8 13H14"
+                                        stroke="currentColor"
+                                        stroke-width="1.7"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </span>
+
+                            <span>
+                                Page title:
+                                <strong>
+                                    {{ website.get("page_title") }}
+                                </strong>
+                            </span>
+                        </div>
+                    {% endif %}
+
+                    <article class="domain-panel">
+                        <h3>Technical website checks</h3>
+
+                        {% if website.get("checks") %}
+                            <div class="domain-factor-list">
+                                {% for check in website.get("checks") %}
+                                    {% if check is mapping %}
+                                        {% set check_type =
+                                            check.get(
+                                                "type",
+                                                "information"
+                                            )
+                                        %}
+
+                                        <div class="domain-factor">
+                                            <div
+                                                class="domain-factor-header"
+                                            >
+                                                <span
+                                                    class="domain-factor-type website-check-type {{ check_type }}"
+                                                >
+                                                    {{ check_type }}
+                                                </span>
+
+                                                <span
+                                                    class="domain-factor-label"
+                                                >
+                                                    {{
+                                                        check.get(
+                                                            "label",
+                                                            "Website check"
+                                                        )
+                                                    }}
+                                                </span>
+                                            </div>
+
+                                            {% if check.get("detail") %}
+                                                <p
+                                                    class="domain-factor-evidence"
+                                                >
+                                                    {{
+                                                        check.get(
+                                                            "detail"
+                                                        )
+                                                    }}
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="factor-empty">
+                                No technical website checks were
+                                recorded.
+                            </p>
+                        {% endif %}
+                    </article>
+
+                    <div class="disclaimer domain-disclaimer">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M12 9V13M12 17H12.01M10.3 4.7L2.7 18C2.3 18.7 2.8 19.5 3.6 19.5H20.4C21.2 19.5 21.7 18.7 21.3 18L13.7 4.7C13.3 4 12.7 4 12 4C11.3 4 10.7 4 10.3 4.7Z"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+
+                        <span>
+                            {{
+                                website.get(
+                                    "disclaimer",
+                                    "Website reachability and HTTPS are "
+                                    "technical signals only. They do "
+                                    "not prove that a company or "
+                                    "internship is legitimate."
                                 )
                             }}
                         </span>
