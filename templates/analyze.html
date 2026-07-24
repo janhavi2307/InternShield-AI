@@ -591,6 +591,84 @@
             grid-column: 1 / -1;
         }
 
+        .verification-panel {
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+            padding: 20px;
+
+            border: 1px solid rgba(45, 212, 191, 0.18);
+            border-radius: 16px;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(45, 212, 191, 0.055),
+                    rgba(128, 103, 255, 0.055)
+                );
+        }
+
+        .verification-panel::after {
+            content: "";
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            top: -75px;
+            right: -55px;
+            border-radius: 50%;
+            background: rgba(45, 212, 191, 0.10);
+            pointer-events: none;
+        }
+
+        .verification-heading {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 17px;
+
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+        }
+
+        .verification-icon {
+            width: 35px;
+            height: 35px;
+            flex-shrink: 0;
+
+            display: grid;
+            place-items: center;
+
+            color: var(--secondary);
+            border: 1px solid rgba(45, 212, 191, 0.20);
+            border-radius: 11px;
+            background: rgba(45, 212, 191, 0.09);
+        }
+
+        .verification-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .verification-heading strong {
+            display: block;
+            margin-bottom: 3px;
+            color: var(--text-soft);
+            font-family: "Manrope", sans-serif;
+            font-size: 0.88rem;
+        }
+
+        .verification-heading span {
+            color: var(--text-muted);
+            font-size: 0.73rem;
+            line-height: 1.5;
+        }
+
+        .optional-label {
+            margin-left: 5px;
+            color: var(--text-muted);
+            font-size: 0.68rem;
+            font-weight: 600;
+        }
+
         .form-label {
             display: block;
             margin-bottom: 8px;
@@ -1350,6 +1428,101 @@
                                 maxlength="120"
                                 required
                             >
+                        </div>
+                    </div>
+
+                    <div class="verification-panel">
+                        <div class="verification-heading">
+                            <div class="verification-icon">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path
+                                        d="M12 3L19 6V11C19 15.6 16.2 19.5 12 21C7.8 19.5 5 15.6 5 11V6L12 3Z"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linejoin="round"
+                                    />
+
+                                    <path
+                                        d="M8.5 12L10.8 14.3L15.8 9.3"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </div>
+
+                            <div>
+                                <strong>
+                                    Recruiter and company verification
+                                </strong>
+
+                                <span>
+                                    InternShield compares the recruiter’s
+                                    email domain with the supplied company
+                                    website. These details improve the
+                                    assessment but remain optional.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label
+                                    for="recruiter_email"
+                                    class="form-label"
+                                >
+                                    Recruiter email
+                                    <span class="optional-label">
+                                        Optional
+                                    </span>
+                                </label>
+
+                                <input
+                                    id="recruiter_email"
+                                    name="recruiter_email"
+                                    type="email"
+                                    class="form-input"
+                                    placeholder="Example: careers@company.com"
+                                    value="{{ request.form.get('recruiter_email', '') }}"
+                                    autocomplete="email"
+                                    maxlength="254"
+                                >
+
+                                <p class="form-help">
+                                    Prefer the address used by the recruiter,
+                                    especially if it appears on the offer.
+                                </p>
+                            </div>
+
+                            <div class="form-group">
+                                <label
+                                    for="company_website"
+                                    class="form-label"
+                                >
+                                    Company website
+                                    <span class="optional-label">
+                                        Optional
+                                    </span>
+                                </label>
+
+                                <input
+                                    id="company_website"
+                                    name="company_website"
+                                    type="text"
+                                    inputmode="url"
+                                    class="form-input"
+                                    placeholder="Example: https://company.com"
+                                    value="{{ request.form.get('company_website', '') }}"
+                                    autocomplete="url"
+                                    maxlength="500"
+                                >
+
+                                <p class="form-help">
+                                    Enter the official website supplied by
+                                    the recruiter or found independently.
+                                </p>
+                            </div>
                         </div>
                     </div>
 

@@ -856,6 +856,260 @@
         }
 
         /* -------------------------------------------------------
+           Recruiter and company domain verification
+        ------------------------------------------------------- */
+
+        .domain-card {
+            background:
+                linear-gradient(
+                    130deg,
+                    rgba(45, 212, 191, 0.07),
+                    rgba(128, 103, 255, 0.07),
+                    rgba(24, 26, 45, 0.82)
+                );
+        }
+
+        .domain-heading {
+            margin-bottom: 20px;
+
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .domain-heading-copy {
+            min-width: 0;
+        }
+
+        .domain-heading-copy .card-title {
+            margin-bottom: 7px;
+        }
+
+        .domain-heading-copy p {
+            max-width: 760px;
+            color: var(--text-muted);
+            font-size: 0.77rem;
+            line-height: 1.6;
+        }
+
+        .domain-status {
+            flex-shrink: 0;
+            padding: 9px 13px;
+
+            border: 1px solid;
+            border-radius: 999px;
+
+            font-size: 0.69rem;
+            font-weight: 800;
+            text-transform: capitalize;
+        }
+
+        .domain-status.consistent {
+            color: #74e6c9;
+            border-color: rgba(54, 214, 169, 0.34);
+            background: var(--success-background);
+        }
+
+        .domain-status.verification-required,
+        .domain-status.insufficient-information {
+            color: #ffd480;
+            border-color: rgba(255, 196, 95, 0.34);
+            background: var(--warning-background);
+        }
+
+        .domain-status.high-concern {
+            color: #ff9bab;
+            border-color: rgba(255, 104, 124, 0.34);
+            background: var(--danger-background);
+        }
+
+        .domain-grid {
+            margin-bottom: 18px;
+
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .domain-detail {
+            min-width: 0;
+            padding: 15px;
+
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: rgba(7, 9, 20, 0.42);
+        }
+
+        .domain-detail span {
+            display: block;
+            margin-bottom: 7px;
+
+            color: var(--text-muted);
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .domain-detail strong {
+            display: block;
+
+            color: var(--text-soft);
+            font-size: 0.79rem;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .domain-comparison {
+            margin-bottom: 18px;
+            padding: 15px 17px;
+
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: rgba(255, 255, 255, 0.025);
+
+            color: var(--text-soft);
+            font-size: 0.78rem;
+            line-height: 1.55;
+        }
+
+        .domain-comparison-icon {
+            width: 31px;
+            height: 31px;
+            flex-shrink: 0;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 9px;
+            background: rgba(128, 103, 255, 0.10);
+            color: var(--primary-light);
+        }
+
+        .domain-comparison-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .domain-subgrid {
+            margin-bottom: 18px;
+
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .domain-panel {
+            min-width: 0;
+            padding: 17px;
+
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(7, 9, 20, 0.37);
+        }
+
+        .domain-panel h3 {
+            margin-bottom: 12px;
+
+            font-family: "Manrope", sans-serif;
+            font-size: 0.82rem;
+        }
+
+        .domain-factor-list {
+            display: grid;
+            gap: 9px;
+        }
+
+        .domain-factor {
+            padding: 11px;
+
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        .domain-factor-header {
+            margin-bottom: 4px;
+
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .domain-factor-type {
+            padding: 4px 7px;
+
+            border-radius: 999px;
+            font-size: 0.58rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .domain-factor-type.evidence {
+            color: #74e6c9;
+            background: var(--success-background);
+        }
+
+        .domain-factor-type.warning {
+            color: #ff9bab;
+            background: var(--danger-background);
+        }
+
+        .domain-factor-label {
+            color: var(--text-soft);
+            font-size: 0.73rem;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .domain-factor-evidence {
+            color: var(--text-muted);
+            font-size: 0.67rem;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .domain-recommendations {
+            display: grid;
+            gap: 10px;
+        }
+
+        .domain-recommendation {
+            display: grid;
+            grid-template-columns: 25px minmax(0, 1fr);
+            gap: 9px;
+
+            color: var(--text-soft);
+            font-size: 0.72rem;
+            line-height: 1.55;
+        }
+
+        .domain-recommendation span:first-child {
+            width: 25px;
+            height: 25px;
+
+            display: grid;
+            place-items: center;
+
+            color: var(--primary-light);
+            border-radius: 8px;
+            background: rgba(128, 103, 255, 0.10);
+
+            font-size: 0.62rem;
+            font-weight: 800;
+        }
+
+        .domain-disclaimer {
+            margin-top: 0;
+            border-left-color: var(--secondary);
+        }
+
+        /* -------------------------------------------------------
            Compatibility
         ------------------------------------------------------- */
 
@@ -1240,7 +1494,9 @@
         @media (max-width: 900px) {
             .score-grid,
             .compatibility-grid,
-            .factor-grid {
+            .factor-grid,
+            .domain-grid,
+            .domain-subgrid {
                 grid-template-columns: 1fr;
             }
 
@@ -1293,6 +1549,10 @@
 
             .compatibility-heading {
                 align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .domain-heading {
                 flex-direction: column;
             }
 
@@ -1914,6 +2174,294 @@
                     </span>
                 </div>
             </section>
+
+            {% set domain =
+                record.get("domain_verification") or {}
+            %}
+
+            {% if
+                record.get("recruiter_email")
+                or record.get("company_website")
+            %}
+                <section class="content-card domain-card">
+                    <div class="domain-heading">
+                        <div class="domain-heading-copy">
+                            <h2 class="card-title">
+                                <span class="title-icon">
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                    >
+                                        <path
+                                            d="M12 3L19 6V11C19 15.6 16.2 19.5 12 21C7.8 19.5 5 15.6 5 11V6L12 3Z"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                            stroke-linejoin="round"
+                                        />
+
+                                        <path
+                                            d="M8.5 12L10.8 14.3L15.8 9.3"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        />
+                                    </svg>
+                                </span>
+
+                                Recruiter &amp; Company Verification
+                            </h2>
+
+                            <p>
+                                The recruiter email domain is compared
+                                with the company website domain. This is
+                                an explainable verification signal, not
+                                proof of legitimacy.
+                            </p>
+                        </div>
+
+                        {% set domain_status =
+                            domain.get(
+                                "domain_status",
+                                "insufficient_information"
+                            )
+                        %}
+
+                        <span
+                            class="domain-status {{ domain_status|replace('_', '-') }}"
+                        >
+                            {% if domain_status == "consistent" %}
+                                Domains Consistent
+                            {% elif domain_status == "high_concern" %}
+                                High Concern
+                            {% elif domain_status == "verification_required" %}
+                                Verification Required
+                            {% else %}
+                                More Information Needed
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="domain-grid">
+                        <div class="domain-detail">
+                            <span>Recruiter email</span>
+
+                            <strong>
+                                {{
+                                    record.get(
+                                        "recruiter_email",
+                                        "Not supplied"
+                                    )
+                                    or "Not supplied"
+                                }}
+                            </strong>
+                        </div>
+
+                        <div class="domain-detail">
+                            <span>Company website</span>
+
+                            <strong>
+                                {{
+                                    record.get(
+                                        "company_website",
+                                        "Not supplied"
+                                    )
+                                    or "Not supplied"
+                                }}
+                            </strong>
+                        </div>
+
+                        <div class="domain-detail">
+                            <span>Recruiter email domain</span>
+
+                            <strong>
+                                {{
+                                    record.get(
+                                        "recruiter_email_domain",
+                                        "Unavailable"
+                                    )
+                                    or "Unavailable"
+                                }}
+                            </strong>
+                        </div>
+
+                        <div class="domain-detail">
+                            <span>Company website domain</span>
+
+                            <strong>
+                                {{
+                                    record.get(
+                                        "company_website_domain",
+                                        "Unavailable"
+                                    )
+                                    or "Unavailable"
+                                }}
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="domain-comparison">
+                        <span class="domain-comparison-icon">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                {% if record.get("domain_match") is sameas true %}
+                                    <path
+                                        d="M5 12L10 17L19 7"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                {% else %}
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="9"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                    />
+
+                                    <path
+                                        d="M12 7V13M12 17H12.01"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                    />
+                                {% endif %}
+                            </svg>
+                        </span>
+
+                        <span>
+                            {% if record.get("domain_match") is sameas true %}
+                                The recruiter email and company website
+                                use the same registered domain.
+                            {% elif record.get("domain_match") is sameas false %}
+                                The recruiter email and company website
+                                domains do not match. Independently
+                                confirm the recruiter’s identity.
+                            {% else %}
+                                Both a valid recruiter email and company
+                                website are needed for domain comparison.
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="domain-subgrid">
+                        <article class="domain-panel">
+                            <h3>Domain verification factors</h3>
+
+                            {% if domain.get("factors") %}
+                                <div class="domain-factor-list">
+                                    {% for factor in domain.get("factors") %}
+                                        {% if factor is mapping %}
+                                            {% set factor_type =
+                                                factor.get(
+                                                    "type",
+                                                    "information"
+                                                )
+                                            %}
+
+                                            <div class="domain-factor">
+                                                <div
+                                                    class="domain-factor-header"
+                                                >
+                                                    <span
+                                                        class="domain-factor-type {{ factor_type }}"
+                                                    >
+                                                        {{
+                                                            factor_type
+                                                            | replace(
+                                                                "_",
+                                                                " "
+                                                            )
+                                                        }}
+                                                    </span>
+
+                                                    <span
+                                                        class="domain-factor-label"
+                                                    >
+                                                        {{
+                                                            factor.get(
+                                                                "label",
+                                                                "Domain factor"
+                                                            )
+                                                        }}
+                                                    </span>
+                                                </div>
+
+                                                {% if factor.get("evidence") %}
+                                                    <p
+                                                        class="domain-factor-evidence"
+                                                    >
+                                                        {{
+                                                            factor.get(
+                                                                "evidence"
+                                                            )
+                                                        }}
+                                                    </p>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p class="factor-empty">
+                                    No domain factors are available.
+                                </p>
+                            {% endif %}
+                        </article>
+
+                        <article class="domain-panel">
+                            <h3>Domain-specific checks</h3>
+
+                            {% if domain.get("recommendations") %}
+                                <div class="domain-recommendations">
+                                    {% for recommendation in
+                                        domain.get("recommendations")
+                                    %}
+                                        <div
+                                            class="domain-recommendation"
+                                        >
+                                            <span>{{ loop.index }}</span>
+                                            <span>
+                                                {{ recommendation }}
+                                            </span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p class="factor-empty">
+                                    Continue independently verifying the
+                                    recruiter and company before
+                                    accepting.
+                                </p>
+                            {% endif %}
+                        </article>
+                    </div>
+
+                    <div class="disclaimer domain-disclaimer">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M12 9V13M12 17H12.01M10.3 4.7L2.7 18C2.3 18.7 2.8 19.5 3.6 19.5H20.4C21.2 19.5 21.7 18.7 21.3 18L13.7 4.7C13.3 4 12.7 4 12 4C11.3 4 10.7 4 10.3 4.7Z"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+
+                        <span>
+                            {{
+                                domain.get(
+                                    "disclaimer",
+                                    "Domain consistency is only one "
+                                    "verification signal and does not "
+                                    "prove legitimacy."
+                                )
+                            }}
+                        </span>
+                    </div>
+                </section>
+            {% endif %}
 
             {% if record.get("compatibility_score") is not none %}
                 <section class="compatibility-card">

@@ -17,6 +17,7 @@ from flask_session import Session
 
 from services.analysis_engine import analyze_internship
 from services.compatibility_engine import calculate_compatibility
+from services.domain_verification import analyze_recruiter_domain
 from services.document_extractor import (
     DocumentExtractionError,
     extract_pdf_text,
@@ -430,6 +431,16 @@ def analyze():
             "",
         ).strip()
 
+        recruiter_email = request.form.get(
+            "recruiter_email",
+            "",
+        ).strip().lower()
+
+        company_website = request.form.get(
+            "company_website",
+            "",
+        ).strip()
+
         manual_text = request.form.get(
             "original_text",
             "",
@@ -659,12 +670,80 @@ def analyze():
             ),
         )
 
+        domain_result = analyze_recruiter_domain(
+            recruiter_email=recruiter_email or None,
+            company_website=company_website or None,
+            company_name=company_name or None,
+        )
+
+        domain_risk_points = domain_result.get(
+            "domain_risk_points",
+            0,
+        )
+
+        combined_verification_score = max(
+            0,
+            assessment_result["verification_score"]
+            - domain_risk_points,
+        )
+
+        combined_assessment_status = assessment_result[
+            "assessment_status"
+        ]
+
+        if (
+            combined_assessment_status
+            == "appears_reasonable"
+            and domain_result["domain_status"]
+            in {
+                "verification_required",
+                "high_concern",
+            }
+        ):
+            combined_assessment_status = "verification_required"
+
+        combined_recommendations = list(dict.fromkeys(
+            assessment_result["recommendations"]
+            + domain_result["recommendations"]
+        ))
+
+        domain_verification_factors = [
+            factor
+            for factor in domain_result["factors"]
+            if factor.get("type") in {
+                "warning",
+                "evidence",
+            }
+        ]
+
+        combined_verification_factors = (
+            assessment_result.get(
+                "verification_factors",
+                [],
+            )
+            + domain_verification_factors
+        )
+
         analysis_data = {
             "user_id": session["user_id"],
             "input_type": input_type,
             "original_text": original_text,
             "company_name": company_name or None,
             "role_title": role_title or None,
+            "recruiter_email": (
+                domain_result["recruiter_email"]
+            ),
+            "company_website": (
+                domain_result["company_website"]
+            ),
+            "recruiter_email_domain": (
+                domain_result["recruiter_email_domain"]
+            ),
+            "company_website_domain": (
+                domain_result["company_website_domain"]
+            ),
+            "domain_match": domain_result["domain_match"],
+            "domain_verification": domain_result,
             "stipend_monthly": stipend_monthly,
             "hours_per_day": hours_per_day,
             "days_per_week": days_per_week,
@@ -672,24 +751,17 @@ def analyze():
             "effective_hourly_stipend": assessment_result[
                 "effective_hourly_stipend"
             ],
-            "verification_score": assessment_result[
-                "verification_score"
-            ],
+            "verification_score": combined_verification_score,
             "value_score": assessment_result[
                 "value_score"
             ],
-            "assessment_status": assessment_result[
-                "assessment_status"
-            ],
+            "assessment_status": combined_assessment_status,
             "detected_flags": assessment_result[
                 "detected_flags"
             ],
-            "recommendations": assessment_result[
-                "recommendations"
-            ],
-            "verification_factors": assessment_result.get(
-                "verification_factors",
-                [],
+            "recommendations": combined_recommendations,
+            "verification_factors": (
+                combined_verification_factors
             ),
             "value_factors": assessment_result.get(
                 "value_factors",
