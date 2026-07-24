@@ -16,6 +16,7 @@ from flask import (
 from flask_session import Session
 
 from services.analysis_engine import analyze_internship
+from services.comparison_engine import compare_internships
 from services.compatibility_engine import calculate_compatibility
 from services.domain_verification import analyze_recruiter_domain
 from services.document_extractor import (
@@ -418,6 +419,108 @@ def dashboard():
         email=session.get("user_email"),
         analyses=analyses,
         statistics=statistics,
+    )
+
+
+@app.route("/compare", methods=["GET", "POST"])
+@login_required
+def compare():
+    analyses = []
+
+    try:
+        supabase = get_authenticated_supabase()
+
+        response = (
+            supabase
+            .table("internship_analyses")
+            .select(
+                "id, company_name, role_title, "
+                "verification_score, value_score, "
+                "compatibility_score, "
+                "effective_hourly_stipend, "
+                "assessment_status, compatibility_status, "
+                "detected_flags, created_at"
+            )
+            .eq("user_id", session["user_id"])
+            .order("created_at", desc=True)
+            .execute()
+        )
+
+        analyses = response.data or []
+
+    except Exception:
+        flash(
+            "Your saved assessments could not be loaded.",
+            "danger",
+        )
+        return redirect(url_for("dashboard"))
+
+    if request.method == "POST":
+        first_analysis_id = request.form.get(
+            "first_analysis_id",
+            "",
+        ).strip()
+
+        second_analysis_id = request.form.get(
+            "second_analysis_id",
+            "",
+        ).strip()
+
+        if not first_analysis_id or not second_analysis_id:
+            flash(
+                "Select two assessments to compare.",
+                "danger",
+            )
+            return render_template(
+                "compare.html",
+                analyses=analyses,
+            )
+
+        if first_analysis_id == second_analysis_id:
+            flash(
+                "Select two different assessments.",
+                "danger",
+            )
+            return render_template(
+                "compare.html",
+                analyses=analyses,
+            )
+
+        analyses_by_id = {
+            item["id"]: item
+            for item in analyses
+        }
+
+        first_analysis = analyses_by_id.get(
+            first_analysis_id
+        )
+        second_analysis = analyses_by_id.get(
+            second_analysis_id
+        )
+
+        if not first_analysis or not second_analysis:
+            flash(
+                "One of the selected assessments could not "
+                "be found.",
+                "danger",
+            )
+            return redirect(url_for("compare"))
+
+        comparison = compare_internships(
+            first_analysis,
+            second_analysis,
+        )
+
+        return render_template(
+            "compare_result.html",
+            first_analysis=first_analysis,
+            second_analysis=second_analysis,
+            comparison=comparison,
+        )
+
+    return render_template(
+        "compare.html",
+        analyses=analyses,
     )
 
 

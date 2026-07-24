@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Internships | InternShield AI</title>
+    <style>
+        :root {
+            --bg: #070914;
+            --panel: #151728;
+            --panel-2: #0d1020;
+            --border: rgba(160, 145, 255, .18);
+            --purple: #7657f6;
+            --purple-2: #9d87ff;
+            --teal: #31d7c4;
+            --text: #f6f4ff;
+            --muted: #9696aa;
+            --danger: #ff7b91;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 0 65%, rgba(26, 195, 181, .12), transparent 25%),
+                radial-gradient(circle at 100% 20%, rgba(118, 87, 246, .18), transparent 30%),
+                var(--bg);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        }
+        a { color: inherit; text-decoration: none; }
+        .topbar {
+            height: 116px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 max(5vw, 28px);
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            background: rgba(7, 9, 20, .88);
+            backdrop-filter: blur(18px);
+        }
+        .brand { display: flex; align-items: center; gap: 14px; font-size: 21px; font-weight: 800; }
+        .logo {
+            width: 46px; height: 46px; display: grid; place-items: center;
+            border-radius: 14px; background: linear-gradient(135deg, #8f73ff, #6342e7);
+            box-shadow: 0 10px 30px rgba(118, 87, 246, .35);
+        }
+        .back {
+            padding: 13px 20px; border: 1px solid rgba(255,255,255,.12);
+            border-radius: 13px; color: #c9c7d6; font-weight: 700;
+        }
+        main { width: min(1180px, calc(100% - 36px)); margin: 52px auto 80px; }
+        .eyebrow {
+            display: inline-flex; gap: 8px; align-items: center; padding: 8px 13px;
+            border: 1px solid rgba(118,87,246,.42); border-radius: 99px;
+            color: #c5baff; background: rgba(118,87,246,.12);
+            font-size: 12px; font-weight: 800; letter-spacing: .08em;
+        }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 12px var(--teal); }
+        h1 { margin: 22px 0 12px; font-size: clamp(38px, 6vw, 68px); line-height: 1; letter-spacing: -.05em; }
+        .lead { max-width: 740px; color: var(--muted); font-size: 17px; line-height: 1.7; }
+        .flash {
+            margin: 26px 0; padding: 16px 18px; border: 1px solid rgba(255,123,145,.4);
+            border-radius: 13px; color: #ffafbd; background: rgba(255,70,100,.1);
+        }
+        .card {
+            margin-top: 34px; padding: 34px; border: 1px solid var(--border);
+            border-radius: 25px; background: rgba(21,23,40,.92);
+            box-shadow: 0 25px 80px rgba(0,0,0,.24);
+        }
+        .card h2 { margin: 0 0 8px; font-size: 25px; }
+        .hint { color: var(--muted); margin: 0 0 30px; }
+        .selectors { display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 20px; }
+        label { display: block; color: #d4d1e2; font-size: 14px; font-weight: 800; margin-bottom: 10px; }
+        select {
+            width: 100%; min-height: 58px; padding: 0 18px; border-radius: 14px;
+            border: 1px solid rgba(160,145,255,.24); color: var(--text);
+            background: var(--panel-2); font: inherit; outline: none;
+        }
+        select:focus { border-color: var(--purple-2); box-shadow: 0 0 0 4px rgba(118,87,246,.12); }
+        option { background: #111326; }
+        .versus {
+            width: 48px; height: 48px; display: grid; place-items: center;
+            border-radius: 50%; color: var(--purple-2); background: rgba(118,87,246,.15);
+            font-size: 12px; font-weight: 900; margin-bottom: 5px;
+        }
+        .submit {
+            width: 100%; margin-top: 28px; min-height: 58px; border: 0; border-radius: 14px;
+            color: white; background: linear-gradient(135deg, #8265ff, #6542e6);
+            font: inherit; font-weight: 800; cursor: pointer;
+            box-shadow: 0 15px 35px rgba(101,66,230,.28);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+        .submit:hover { transform: translateY(-2px); box-shadow: 0 20px 42px rgba(101,66,230,.4); }
+        .empty {
+            text-align: center; padding: 50px 24px; border: 1px dashed rgba(160,145,255,.25);
+            border-radius: 18px; color: var(--muted);
+        }
+        .empty strong { display: block; color: var(--text); font-size: 22px; margin-bottom: 8px; }
+        .empty a { display: inline-block; margin-top: 18px; padding: 13px 20px; border-radius: 12px; background: var(--purple); color: white; font-weight: 800; }
+        .privacy { margin-top: 18px; color: #77778d; font-size: 13px; text-align: center; }
+        @media (max-width: 760px) {
+            .topbar { height: 88px; padding: 0 18px; }
+            main { margin-top: 34px; }
+            .card { padding: 22px; }
+            .selectors { grid-template-columns: 1fr; }
+            .versus { margin: -4px auto; }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('dashboard') }}">
+            <span class="logo">♢</span>
+            <span>InternShield <span style="color:#a693ff">AI</span></span>
+        </a>
+        <a class="back" href="{{ url_for('dashboard') }}">← Dashboard</a>
+    </header>
+
+    <main>
+        <span class="eyebrow"><span class="dot"></span> DECISION SUPPORT</span>
+        <h1>Compare internships</h1>
+        <p class="lead">
+            Select two saved assessments to compare their verification,
+            opportunity value, compensation, warning indicators and fit
+            with your academic schedule.
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <section class="card">
+            {% if analyses|length < 2 %}
+                <div class="empty">
+                    <strong>Two assessments are required</strong>
+                    You currently have {{ analyses|length }} saved assessment{% if analyses|length != 1 %}s{% endif %}.
+                    Analyze another opportunity before comparing.
+                    <br>
+                    <a href="{{ url_for('analyze') }}">Create an assessment</a>
+                </div>
+            {% else %}
+                <h2>Choose two opportunities</h2>
+                <p class="hint">Only assessments saved to your account are shown.</p>
+
+                <form method="POST" action="{{ url_for('compare') }}">
+                    <div class="selectors">
+                        <div>
+                            <label for="first_analysis_id">First internship</label>
+                            <select id="first_analysis_id" name="first_analysis_id" required>
+                                <option value="">Select an assessment</option>
+                                {% for item in analyses %}
+                                    <option value="{{ item.id }}">
+                                        {{ item.role_title or 'Internship' }} — {{ item.company_name or 'Company not provided' }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="versus">VS</div>
+
+                        <div>
+                            <label for="second_analysis_id">Second internship</label>
+                            <select id="second_analysis_id" name="second_analysis_id" required>
+                                <option value="">Select an assessment</option>
+                                {% for item in analyses %}
+                                    <option value="{{ item.id }}">
+                                        {{ item.role_title or 'Internship' }} — {{ item.company_name or 'Company not provided' }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <button class="submit" type="submit">Compare selected internships →</button>
+                </form>
+                <p class="privacy">Your assessments remain private and are filtered by your authenticated account.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <script>
+        const first = document.getElementById("first_analysis_id");
+        const second = document.getElementById("second_analysis_id");
+        function preventDuplicate() {
+            if (!first || !second) return;
+            [...second.options].forEach(option => {
+                option.disabled = option.value !== "" && option.value === first.value;
+            });
+            [...first.options].forEach(option => {
+                option.disabled = option.value !== "" && option.value === second.value;
+            });
+        }
+        first?.addEventListener("change", preventDuplicate);
+        second?.addEventListener("change", preventDuplicate);
+    </script>
+</body>
+</html>
