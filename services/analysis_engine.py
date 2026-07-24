@@ -18,6 +18,27 @@ RED_FLAG_RULES = [
             "send payment",
             "make the payment",
         ],
+        "patterns": [
+            (
+                r"\bregistration(?:\s+(?:and|or)\s+"
+                r"[a-z0-9-]+){1,3}\s+(?:fee|charge|deposit)\b"
+            ),
+            (
+                r"\b(?:registration|training|application|processing|"
+                r"onboarding|certificate|document(?:\s+verification)?|"
+                r"verification|security)\s+(?:fee|charge|deposit)\b"
+            ),
+            (
+                r"\b(?:pay|transfer|send)\b[^.!?;]{0,70}"
+                r"(?:₹\s?\d|rs\.?\s?\d|inr\s?\d|\b\d{3,}\b)"
+            ),
+            (
+                r"\b(?:pay|make\s+(?:a|the)\s+payment|"
+                r"complete\s+(?:a|the)\s+payment)\b"
+                r"[^.!?;]{0,80}\b(?:confirm|secure|reserve)\b"
+                r"[^.!?;]{0,35}\b(?:position|seat|slot|offer)\b"
+            ),
+        ],
         "title": "Payment requested",
         "severity": "high",
         "deduction": 30,
@@ -292,6 +313,30 @@ def find_non_negated_match(
         search_position = phrase_start + len(phrase)
 
 
+def find_non_negated_pattern(
+    text: str,
+    pattern: str,
+) -> Optional[str]:
+    """
+    Return the first regex match that is not negated.
+
+    Regex patterns allow the engine to recognise natural variations
+    such as "registration and security fee" without maintaining every
+    possible exact phrase.
+    """
+    for match in re.finditer(pattern, text, flags=re.IGNORECASE):
+        matched_text = match.group(0).strip()
+
+        if not phrase_is_negated(
+            text,
+            matched_text,
+            match.start(),
+        ):
+            return matched_text
+
+    return None
+
+
 def contains_non_negated_phrase(text: str, phrases: list[str]) -> bool:
     """Return True when at least one phrase appears outside negation."""
     return any(find_non_negated_match(text, phrase) for phrase in phrases)
@@ -367,6 +412,17 @@ def analyze_internship(
             if match:
                 matched_phrase = match
                 break
+
+        if not matched_phrase:
+            for pattern in rule.get("patterns", []):
+                match = find_non_negated_pattern(
+                    normalized_text,
+                    pattern,
+                )
+
+                if match:
+                    matched_phrase = match
+                    break
 
         if not matched_phrase:
             continue
