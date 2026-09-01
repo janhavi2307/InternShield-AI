@@ -1,0 +1,3091 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        My Profile | InternShield AI
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        :root {
+            --bg: #080912;
+            --sidebar: rgba(13, 14, 26, .98);
+            --surface: rgba(24, 26, 45, .84);
+            --surface-2: rgba(15, 17, 32, .78);
+            --soft: rgba(255, 255, 255, .035);
+
+            --border: rgba(255, 255, 255, .09);
+            --border-strong: rgba(128, 103, 255, .32);
+
+            --text: #f8f8ff;
+            --muted: #8d90a6;
+            --soft-text: #c1c3d1;
+
+            --primary: #8067ff;
+            --primary-light: #ab9bff;
+            --cyan: #34d9c2;
+            --danger: #ff7286;
+
+            --success-bg: rgba(52, 217, 194, .09);
+            --danger-bg: rgba(255, 114, 134, .08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 88% 4%,
+                    rgba(128, 103, 255, .15),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 98% 88%,
+                    rgba(52, 217, 194, .055),
+                    transparent 24%
+                ),
+                var(--bg);
+
+            font-family:
+                "DM Sans",
+                sans-serif;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        .shell {
+            min-height: 100vh;
+
+            display: grid;
+            grid-template-columns:
+                255px minmax(0, 1fr);
+        }
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            z-index: 30;
+
+            width: 255px;
+            height: 100vh;
+
+            padding: 25px 18px;
+
+            display: flex;
+            flex-direction: column;
+
+            border-right:
+                1px solid var(--border);
+
+            background: var(--sidebar);
+
+            backdrop-filter: blur(20px);
+        }
+
+        .brand {
+            margin-bottom: 38px;
+            padding: 0 7px;
+
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1.14rem;
+            font-weight: 800;
+            letter-spacing: -.04em;
+        }
+
+        .brand-mark {
+            position: relative;
+
+            width: 40px;
+            height: 40px;
+
+            overflow: hidden;
+
+            display: grid;
+            place-items: center;
+
+            flex-shrink: 0;
+
+            border:
+                1px solid rgba(255, 255, 255, .13);
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #6650db
+                );
+
+            box-shadow:
+                0 12px 28px
+                rgba(128, 103, 255, .28);
+        }
+
+        .brand-mark::after {
+            content: "";
+
+            position: absolute;
+
+            width: 25px;
+            height: 60px;
+
+            top: -20px;
+            left: -12px;
+
+            transform: rotate(35deg);
+
+            background:
+                rgba(255, 255, 255, .22);
+        }
+
+        .brand-mark svg {
+            position: relative;
+            z-index: 2;
+
+            width: 22px;
+            height: 22px;
+        }
+
+        .brand-accent {
+            color: var(--primary-light);
+        }
+
+        .nav-label {
+            margin: 0 10px 10px;
+
+            color: #646678;
+
+            font-size: .67rem;
+            font-weight: 800;
+
+            letter-spacing: .10em;
+            text-transform: uppercase;
+        }
+
+        .nav {
+            display: grid;
+            gap: 7px;
+        }
+
+        .nav-link {
+            min-height: 47px;
+
+            padding: 0 13px;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            color: var(--muted);
+
+            border:
+                1px solid transparent;
+
+            border-radius: 12px;
+
+            font-size: .88rem;
+            font-weight: 700;
+
+            transition:
+                color .2s ease,
+                background .2s ease,
+                border-color .2s ease,
+                transform .2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text);
+
+            border-color: var(--border);
+
+            background:
+                rgba(255, 255, 255, .035);
+
+            transform: translateX(3px);
+        }
+
+        .nav-icon {
+            width: 34px;
+            height: 34px;
+
+            display: grid;
+            place-items: center;
+
+            flex-shrink: 0;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255, 255, 255, .035);
+        }
+
+        .nav-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+        }
+
+        .account-card {
+            margin-bottom: 11px;
+            padding: 12px;
+
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 14px;
+
+            background:
+                rgba(255, 255, 255, .025);
+
+            transition:
+                border-color .2s ease,
+                background .2s ease,
+                transform .2s ease;
+        }
+
+        .account-card:hover {
+            transform: translateY(-1px);
+
+            border-color: var(--border-strong);
+
+            background:
+                rgba(128, 103, 255, .06);
+        }
+
+        .account-card.active {
+            border-color:
+                rgba(128, 103, 255, .34);
+
+            background:
+                rgba(128, 103, 255, .08);
+        }
+
+        .account-avatar {
+            width: 40px;
+            height: 40px;
+
+            overflow: hidden;
+
+            display: grid;
+            place-items: center;
+
+            flex-shrink: 0;
+
+            border-radius: 11px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #f27d86
+                );
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-weight: 800;
+        }
+
+        .account-avatar img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        .account-copy {
+            min-width: 0;
+        }
+
+        .account-copy strong,
+        .account-copy span {
+            display: block;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .account-copy strong {
+            margin-bottom: 3px;
+
+            color: var(--soft-text);
+
+            font-size: .78rem;
+        }
+
+        .account-copy span {
+            color: var(--muted);
+
+            font-size: .66rem;
+        }
+
+        .logout {
+            min-height: 43px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #ffabb7;
+
+            border:
+                1px solid rgba(255, 114, 134, .18);
+
+            border-radius: 11px;
+
+            background:
+                rgba(255, 114, 134, .055);
+
+            font-size: .81rem;
+            font-weight: 800;
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .main {
+            grid-column: 2;
+            min-width: 0;
+        }
+
+        .topbar {
+            min-height: 82px;
+
+            padding: 0 4%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+
+            border-bottom:
+                1px solid var(--border);
+
+            background:
+                rgba(8, 9, 18, .68);
+
+            backdrop-filter: blur(18px);
+        }
+
+        .topbar-title span {
+            display: block;
+
+            margin-bottom: 3px;
+
+            color: var(--muted);
+
+            font-size: .73rem;
+        }
+
+        .topbar-title strong {
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1.1rem;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            min-height: 43px;
+
+            padding: 0 15px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 11px;
+
+            color: var(--soft-text);
+
+            background:
+                rgba(255, 255, 255, .025);
+
+            font-size: .77rem;
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition:
+                transform .18s ease,
+                border-color .18s ease,
+                background .18s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+
+            border-color: var(--border-strong);
+
+            background:
+                rgba(128, 103, 255, .055);
+        }
+
+        .btn.primary {
+            color: white;
+
+            border-color: transparent;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #6752df
+                );
+
+            box-shadow:
+                0 12px 28px
+                rgba(128, 103, 255, .20);
+        }
+
+        .content {
+            width:
+                min(1180px, 92%);
+
+            margin: 0 auto;
+
+            padding: 36px 0 60px;
+        }
+
+        .flash {
+            margin-bottom: 16px;
+
+            padding: 14px 16px;
+
+            border: 1px solid;
+            border-radius: 13px;
+
+            font-size: .81rem;
+        }
+
+        .flash.success {
+            color: #94ead1;
+
+            border-color:
+                rgba(52, 217, 194, .28);
+
+            background: var(--success-bg);
+        }
+
+        .flash.warning {
+            color: #ffe0a5;
+
+            border-color:
+                rgba(255, 196, 95, .28);
+
+            background:
+                rgba(255, 196, 95, .08);
+        }
+
+        .flash.danger,
+        .flash.error {
+            color: #ffb6c1;
+
+            border-color:
+                rgba(255, 114, 134, .28);
+
+            background: var(--danger-bg);
+        }
+
+        /* =====================================================
+           PROFILE VIEW
+        ===================================================== */
+
+        .profile-hero {
+            position: relative;
+
+            overflow: hidden;
+
+            margin-bottom: 18px;
+            padding: 29px;
+
+            display: grid;
+            grid-template-columns:
+                auto minmax(0, 1fr) auto;
+
+            align-items: center;
+            gap: 22px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    125deg,
+                    rgba(31, 33, 56, .94),
+                    rgba(17, 19, 35, .88)
+                );
+
+            box-shadow:
+                0 24px 65px rgba(0, 0, 0, .20);
+        }
+
+        .profile-hero::after {
+            content: "";
+
+            position: absolute;
+
+            width: 310px;
+            height: 310px;
+
+            top: -195px;
+            right: -60px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(128, 103, 255, .20);
+        }
+
+        .hero-avatar {
+            position: relative;
+            z-index: 2;
+
+            width: 92px;
+            height: 92px;
+
+            overflow: hidden;
+
+            display: grid;
+            place-items: center;
+
+            border:
+                2px solid rgba(255, 255, 255, .13);
+
+            border-radius: 25px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #f07f89
+                );
+
+            box-shadow:
+                0 16px 36px rgba(128, 103, 255, .25);
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .hero-avatar img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        .hero-copy {
+            position: relative;
+            z-index: 2;
+            min-width: 0;
+        }
+
+        .hero-eyebrow {
+            margin-bottom: 8px;
+
+            color: var(--primary-light);
+
+            font-size: .67rem;
+            font-weight: 850;
+
+            letter-spacing: .09em;
+            text-transform: uppercase;
+        }
+
+        .hero-copy h1 {
+            margin-bottom: 7px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size:
+                clamp(1.9rem, 4vw, 2.8rem);
+
+            letter-spacing: -.05em;
+        }
+
+        .hero-copy p {
+            color: var(--muted);
+
+            font-size: .83rem;
+        }
+
+        .hero-badge {
+            position: relative;
+            z-index: 2;
+
+            padding: 9px 12px;
+
+            border:
+                1px solid rgba(52, 217, 194, .23);
+
+            border-radius: 999px;
+
+            color: #7be5d5;
+
+            background:
+                rgba(52, 217, 194, .07);
+
+            font-size: .68rem;
+            font-weight: 800;
+        }
+
+        .stats {
+            margin-bottom: 18px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 13px;
+        }
+
+        .stat {
+            padding: 18px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 16px;
+
+            background: var(--surface);
+        }
+
+        .stat span {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: .69rem;
+            font-weight: 750;
+        }
+
+        .stat strong {
+            display: block;
+
+            margin-top: 7px;
+
+            color: var(--primary-light);
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1.7rem;
+        }
+
+        .profile-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 16px;
+        }
+
+        .info-card {
+            padding: 22px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 19px;
+
+            background: var(--surface);
+        }
+
+        .info-card h2 {
+            margin-bottom: 5px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1rem;
+        }
+
+        .info-card > p {
+            margin-bottom: 18px;
+
+            color: var(--muted);
+
+            font-size: .72rem;
+            line-height: 1.55;
+        }
+
+        .info-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .info-row {
+            min-height: 62px;
+
+            padding: 13px 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 12px;
+
+            background:
+                rgba(255, 255, 255, .018);
+        }
+
+        .info-row span {
+            color: var(--muted);
+
+            font-size: .69rem;
+        }
+
+        .info-row strong {
+            max-width: 62%;
+
+            color: var(--soft-text);
+
+            font-size: .78rem;
+            font-weight: 750;
+
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .empty-value {
+            color: #73768b !important;
+            font-weight: 600 !important;
+        }
+
+        /* =====================================================
+           EDIT MODE
+        ===================================================== */
+
+        .edit-layout {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.55fr)
+                minmax(280px, .65fr);
+
+            gap: 17px;
+        }
+
+        .edit-card,
+        .photo-card {
+            border:
+                1px solid var(--border);
+
+            border-radius: 20px;
+
+            background: var(--surface);
+
+            overflow: hidden;
+        }
+
+        .card-heading {
+            padding: 20px 22px;
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+        .card-heading h2 {
+            margin-bottom: 5px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1rem;
+        }
+
+        .card-heading p {
+            color: var(--muted);
+
+            font-size: .73rem;
+            line-height: 1.55;
+        }
+
+        .form-section {
+            padding: 21px 22px;
+        }
+
+        .form-section + .form-section {
+            border-top:
+                1px solid var(--border);
+        }
+
+        .section-title {
+            margin-bottom: 14px;
+
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            color: var(--soft-text);
+
+            font-size: .76rem;
+            font-weight: 800;
+        }
+
+        .section-title::before {
+            content: "";
+
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: var(--cyan);
+
+            box-shadow:
+                0 0 0 4px rgba(52, 217, 194, .07);
+        }
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 14px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        .field label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: var(--soft-text);
+
+            font-size: .72rem;
+            font-weight: 750;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            min-height: 47px;
+
+            padding: 0 13px;
+
+            color: var(--text);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 12px;
+
+            outline: none;
+
+            background:
+                rgba(5, 7, 17, .55);
+        }
+
+        .field input:focus,
+        .field select:focus {
+            border-color:
+                rgba(128, 103, 255, .48);
+
+            box-shadow:
+                0 0 0 4px rgba(128, 103, 255, .08);
+        }
+
+        .field input[readonly] {
+            color: var(--muted);
+            cursor: not-allowed;
+        }
+
+        .field-help {
+            margin-top: 6px;
+
+            color: #707388;
+
+            font-size: .65rem;
+            line-height: 1.45;
+        }
+
+        option {
+            background: #111426;
+        }
+
+        .form-footer {
+            padding: 17px 22px;
+
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+
+            border-top:
+                1px solid var(--border);
+
+            background:
+                rgba(255, 255, 255, .012);
+        }
+
+        .photo-card {
+            padding: 22px;
+
+            align-self: start;
+        }
+
+        .photo-card h2 {
+            margin-bottom: 5px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1rem;
+        }
+
+        .photo-card > p {
+            color: var(--muted);
+
+            font-size: .72rem;
+            line-height: 1.55;
+        }
+
+        .photo-preview {
+            width: 148px;
+            height: 148px;
+
+            margin: 22px auto 17px;
+
+            overflow: hidden;
+
+            display: grid;
+            place-items: center;
+
+            border:
+                2px solid rgba(255, 255, 255, .11);
+
+            border-radius: 34px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #f07f89
+                );
+
+            box-shadow:
+                0 18px 40px rgba(128, 103, 255, .22);
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 2.8rem;
+            font-weight: 800;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        .file-picker {
+            display: block;
+
+            padding: 13px;
+
+            border:
+                1px dashed rgba(128, 103, 255, .34);
+
+            border-radius: 13px;
+
+            background:
+                rgba(128, 103, 255, .045);
+
+            text-align: center;
+        }
+
+        .file-picker input {
+            width: 100%;
+
+            color: var(--muted);
+
+            font-size: .72rem;
+        }
+
+        .photo-help {
+            margin-top: 9px;
+
+            color: #707388;
+
+            font-size: .65rem;
+            line-height: 1.5;
+
+            text-align: center;
+        }
+
+        .remove-photo {
+            margin-top: 13px;
+
+            display: flex;
+            justify-content: center;
+        }
+
+        .remove-photo label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            color: #ff9aaa;
+
+            font-size: .7rem;
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1020px) {
+            .edit-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 850px) {
+            .shell {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+
+                width: 100%;
+                height: auto;
+
+                border-right: 0;
+                border-bottom:
+                    1px solid var(--border);
+            }
+
+            .sidebar-footer {
+                display: none;
+            }
+
+            .brand {
+                margin-bottom: 16px;
+            }
+
+            .nav-label {
+                display: none;
+            }
+
+            .nav {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            .main {
+                grid-column: 1;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .profile-hero {
+                grid-template-columns:
+                    auto minmax(0, 1fr);
+
+                padding: 22px;
+            }
+
+            .hero-badge {
+                grid-column: 1 / -1;
+
+                width: fit-content;
+            }
+
+            .profile-grid,
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+            .topbar {
+                padding: 0 4%;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .content {
+                width: 92%;
+            }
+
+            .top-actions .secondary-action {
+                display: none;
+            }
+
+            .hero-avatar {
+                width: 76px;
+                height: 76px;
+
+                border-radius: 21px;
+            }
+
+            .hero-copy h1 {
+                font-size: 1.55rem;
+            }
+
+            .info-row {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .info-row strong {
+                max-width: 100%;
+                text-align: left;
+            }
+        }
+
+        /* =====================================================
+           PROFESSIONAL PROFILE PRESENTATION
+        ===================================================== */
+
+        .pro-profile-hero {
+            position: relative;
+            overflow: hidden;
+
+            margin-bottom: 18px;
+            padding: 34px;
+
+            display: grid;
+            grid-template-columns: auto minmax(0,1fr) auto;
+            align-items: center;
+            gap: 24px;
+
+            border: 1px solid rgba(255,255,255,.095);
+            border-radius: 24px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(29,31,54,.97),
+                    rgba(13,16,31,.94)
+                );
+
+            box-shadow: 0 28px 70px rgba(0,0,0,.24);
+        }
+
+        .pro-profile-hero::after {
+            content: "";
+            position: absolute;
+
+            width: 350px;
+            height: 350px;
+
+            top: -230px;
+            right: -75px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(128,103,255,.32),
+                    rgba(128,103,255,.08) 55%,
+                    transparent 72%
+                );
+        }
+
+        .pro-avatar-shell {
+            position: relative;
+            z-index: 2;
+
+            width: 104px;
+            height: 104px;
+
+            padding: 4px;
+
+            border-radius: 29px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #aa9aff,
+                    #44d9c4,
+                    #f28490
+                );
+
+            box-shadow: 0 18px 42px rgba(0,0,0,.28);
+        }
+
+        .pro-avatar {
+            width: 100%;
+            height: 100%;
+
+            overflow: hidden;
+
+            display: grid;
+            place-items: center;
+
+            border: 4px solid #15182a;
+            border-radius: 25px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #f07f89
+                );
+
+            color: white;
+
+            font-family: "Manrope", sans-serif;
+            font-size: 2.15rem;
+            font-weight: 800;
+        }
+
+        .pro-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-status {
+            position: absolute;
+            right: 0;
+            bottom: 5px;
+
+            width: 22px;
+            height: 22px;
+
+            border: 4px solid #15182a;
+            border-radius: 50%;
+
+            background: var(--cyan);
+
+            box-shadow: 0 0 0 2px rgba(52,217,194,.12);
+        }
+
+        .pro-hero-copy {
+            position: relative;
+            z-index: 2;
+            min-width: 0;
+        }
+
+        .pro-eyebrow {
+            margin-bottom: 8px;
+
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            color: #b8abff;
+
+            font-size: .67rem;
+            font-weight: 850;
+            letter-spacing: .10em;
+            text-transform: uppercase;
+        }
+
+        .pro-eyebrow::before {
+            content: "";
+
+            width: 20px;
+            height: 2px;
+
+            border-radius: 99px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--primary-light),
+                    var(--cyan)
+                );
+        }
+
+        .pro-hero-copy h1 {
+            margin-bottom: 7px;
+
+            font-family: "Manrope", sans-serif;
+
+            font-size: clamp(2rem,4vw,3rem);
+            line-height: 1.08;
+            letter-spacing: -.055em;
+        }
+
+        .pro-email {
+            color: var(--muted);
+            font-size: .84rem;
+        }
+
+        .hero-meta {
+            margin-top: 16px;
+
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .hero-chip {
+            min-height: 32px;
+            padding: 0 11px;
+
+            display: inline-flex;
+            align-items: center;
+
+            border: 1px solid rgba(255,255,255,.085);
+            border-radius: 999px;
+
+            color: #c9cad8;
+
+            background: rgba(255,255,255,.028);
+
+            font-size: .69rem;
+            font-weight: 700;
+        }
+
+        .pro-hero-side {
+            position: relative;
+            z-index: 2;
+
+            min-width: 175px;
+
+            display: grid;
+            justify-items: end;
+            gap: 11px;
+        }
+
+        .account-state {
+            padding: 9px 12px;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            border: 1px solid rgba(52,217,194,.22);
+            border-radius: 999px;
+
+            color: #85e7d8;
+
+            background: rgba(52,217,194,.07);
+
+            font-size: .68rem;
+            font-weight: 800;
+        }
+
+        .account-state::before {
+            content: "";
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: var(--cyan);
+
+            box-shadow: 0 0 10px rgba(52,217,194,.6);
+        }
+
+        .hero-edit-link {
+            color: #aea2ff;
+            font-size: .7rem;
+            font-weight: 750;
+        }
+
+        .profile-metrics {
+            margin-bottom: 18px;
+
+            display: grid;
+            grid-template-columns: repeat(4,minmax(0,1fr));
+            gap: 13px;
+        }
+
+        .metric-card {
+            min-height: 116px;
+
+            padding: 18px 19px;
+
+            border: 1px solid var(--border);
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(24,26,45,.94),
+                    rgba(16,18,34,.9)
+                );
+
+            transition:
+                transform .18s ease,
+                border-color .18s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(128,103,255,.28);
+        }
+
+        .metric-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .metric-head span {
+            color: var(--muted);
+            font-size: .68rem;
+            font-weight: 750;
+        }
+
+        .metric-head b {
+            width: 31px;
+            height: 31px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 10px;
+
+            color: #b7abff;
+
+            background: rgba(128,103,255,.10);
+
+            font-size: .8rem;
+        }
+
+        .metric-card > strong {
+            display: block;
+
+            margin-top: 9px;
+
+            color: #b7a9ff;
+
+            font-family: "Manrope",sans-serif;
+            font-size: 1.8rem;
+            line-height: 1;
+        }
+
+        .metric-card small {
+            display: block;
+            margin-top: 6px;
+
+            color: #686c80;
+            font-size: .61rem;
+        }
+
+        .professional-overview {
+            display: grid;
+            grid-template-columns:
+                minmax(0,1.55fr)
+                minmax(330px,.82fr);
+
+            gap: 16px;
+        }
+
+        .profile-panel,
+        .preference-panel,
+        .account-panel {
+            border: 1px solid var(--border);
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(24,26,45,.9),
+                    rgba(17,19,35,.84)
+                );
+        }
+
+        .profile-panel {
+            overflow: hidden;
+        }
+
+        .panel-heading {
+            padding: 21px 22px 18px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-kicker {
+            margin-bottom: 6px;
+
+            color: #9285e0;
+
+            font-size: .62rem;
+            font-weight: 850;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .panel-heading h2,
+        .preference-panel h2,
+        .account-panel h2 {
+            margin-bottom: 5px;
+
+            font-family: "Manrope",sans-serif;
+            font-size: 1.02rem;
+        }
+
+        .panel-heading p,
+        .preference-panel > p,
+        .account-panel > p {
+            color: var(--muted);
+            font-size: .71rem;
+            line-height: 1.55;
+        }
+
+        .panel-heading p {
+            max-width: 560px;
+        }
+
+        .panel-edit {
+            flex-shrink: 0;
+
+            min-height: 36px;
+            padding: 0 11px;
+
+            display: inline-flex;
+            align-items: center;
+
+            border: 1px solid rgba(128,103,255,.22);
+            border-radius: 10px;
+
+            color: #b4a8ff;
+
+            background: rgba(128,103,255,.055);
+
+            font-size: .67rem;
+            font-weight: 800;
+        }
+
+        .detail-grid {
+            padding: 17px;
+
+            display: grid;
+            grid-template-columns: repeat(2,minmax(0,1fr));
+            gap: 11px;
+        }
+
+        .detail-tile {
+            min-height: 94px;
+
+            padding: 15px;
+
+            display: grid;
+            grid-template-columns: 40px minmax(0,1fr);
+            align-items: center;
+            gap: 12px;
+
+            border: 1px solid rgba(255,255,255,.075);
+            border-radius: 14px;
+
+            background: rgba(255,255,255,.018);
+        }
+
+        .detail-tile.wide {
+            grid-column: 1 / -1;
+        }
+
+        .detail-icon {
+            width: 40px;
+            height: 40px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 11px;
+
+            color: #b8acff;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(128,103,255,.13),
+                    rgba(128,103,255,.055)
+                );
+
+            font-size: .7rem;
+            font-weight: 850;
+        }
+
+        .detail-copy span {
+            display: block;
+            margin-bottom: 5px;
+
+            color: #717589;
+            font-size: .62rem;
+            font-weight: 750;
+        }
+
+        .detail-copy strong {
+            display: block;
+
+            color: #d8d9e4;
+
+            font-size: .78rem;
+            line-height: 1.45;
+
+            overflow-wrap: anywhere;
+        }
+
+        .detail-copy strong.empty {
+            color: #72758a;
+            font-weight: 650;
+        }
+
+        .right-profile-stack {
+            display: grid;
+            gap: 16px;
+            align-content: start;
+        }
+
+        .preference-panel,
+        .account-panel {
+            padding: 21px;
+        }
+
+        .preference-list {
+            margin-top: 16px;
+
+            display: grid;
+            gap: 10px;
+        }
+
+        .preference-item {
+            padding: 13px 14px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+
+            border: 1px solid rgba(255,255,255,.075);
+            border-radius: 13px;
+
+            background: rgba(255,255,255,.018);
+        }
+
+        .preference-item span {
+            color: var(--muted);
+            font-size: .67rem;
+        }
+
+        .preference-item strong {
+            max-width: 48%;
+
+            color: #d4d5e1;
+
+            font-size: .72rem;
+            font-weight: 800;
+
+            text-align: right;
+        }
+
+        .account-panel {
+            border-color: rgba(52,217,194,.13);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(52,217,194,.035),
+                    rgba(19,22,38,.87)
+                );
+        }
+
+        .account-facts {
+            margin-top: 15px;
+
+            display: grid;
+            grid-template-columns: repeat(2,minmax(0,1fr));
+            gap: 9px;
+        }
+
+        .account-fact {
+            padding: 12px;
+
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 12px;
+
+            background: rgba(255,255,255,.018);
+        }
+
+        .account-fact span {
+            display: block;
+            margin-bottom: 5px;
+
+            color: #6f7387;
+
+            font-size: .59rem;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        .account-fact strong {
+            color: #cbccd8;
+            font-size: .71rem;
+        }
+
+        .complete-profile-note {
+            margin-top: 12px;
+            padding: 12px 13px;
+
+            border: 1px solid rgba(128,103,255,.13);
+            border-radius: 12px;
+
+            color: #a7a9ba;
+
+            background: rgba(128,103,255,.035);
+
+            font-size: .66rem;
+            line-height: 1.55;
+        }
+
+        @media (max-width: 1080px) {
+            .professional-overview {
+                grid-template-columns: 1fr;
+            }
+
+            .right-profile-stack {
+                grid-template-columns: repeat(2,minmax(0,1fr));
+            }
+        }
+
+        @media (max-width: 760px) {
+            .pro-profile-hero {
+                grid-template-columns: auto minmax(0,1fr);
+                padding: 25px;
+            }
+
+            .pro-hero-side {
+                grid-column: 1 / -1;
+                min-width: 0;
+                justify-items: start;
+            }
+
+            .profile-metrics {
+                grid-template-columns: repeat(2,minmax(0,1fr));
+            }
+
+            .detail-grid,
+            .right-profile-stack {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-tile.wide {
+                grid-column: auto;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .pro-profile-hero {
+                grid-template-columns: 1fr;
+            }
+
+            .pro-avatar-shell {
+                width: 88px;
+                height: 88px;
+                border-radius: 24px;
+            }
+
+            .pro-avatar {
+                border-radius: 20px;
+            }
+
+            .profile-metrics {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .panel-heading {
+                flex-direction: column;
+            }
+
+            .panel-edit {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+
+
+        /* =====================================================
+           FLOATING ASSISTANT BUTTON
+        ===================================================== */
+
+        .assistant-fab {
+            position: fixed;
+            right: 28px;
+            bottom: 28px;
+            z-index: 1200;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 10px 16px 10px 10px;
+
+            border: 1px solid rgba(128, 103, 255, 0.22);
+            border-radius: 999px;
+
+            color: var(--text);
+
+            background: linear-gradient(
+                135deg,
+                rgba(15, 18, 35, 0.96),
+                rgba(29, 24, 58, 0.94)
+            );
+
+            box-shadow:
+                0 18px 45px rgba(0, 0, 0, 0.28),
+                0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            transition:
+                transform 0.22s ease,
+                box-shadow 0.22s ease,
+                border-color 0.22s ease;
+        }
+
+        .assistant-fab:hover {
+            transform: translateY(-3px);
+            border-color: rgba(128, 103, 255, 0.42);
+            box-shadow:
+                0 22px 55px rgba(0, 0, 0, 0.34),
+                0 0 28px rgba(128, 103, 255, 0.22);
+        }
+
+        .assistant-fab:focus-visible {
+            outline: none;
+            box-shadow:
+                0 0 0 4px rgba(128, 103, 255, 0.18),
+                0 20px 50px rgba(0, 0, 0, 0.32);
+        }
+
+        .assistant-fab-icon {
+            position: relative;
+
+            width: 52px;
+            height: 52px;
+
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+
+            border-radius: 18px;
+
+            color: #ffffff;
+
+            background: linear-gradient(
+                135deg,
+                #8a75ff,
+                #5b55f7 58%,
+                #2fd3c3
+            );
+
+            box-shadow:
+                0 10px 25px rgba(128, 103, 255, 0.34);
+        }
+
+        .assistant-fab-icon::after {
+            content: "";
+            position: absolute;
+            inset: -8px;
+            border-radius: 24px;
+            border: 1px solid rgba(128, 103, 255, 0.14);
+            animation: assistantPulse 2.4s ease-out infinite;
+        }
+
+        .assistant-fab-icon svg {
+            width: 25px;
+            height: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .assistant-fab-label {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+
+        .assistant-fab-label strong {
+            font-size: 0.84rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+
+        .assistant-fab-label span {
+            margin-top: 3px;
+            color: var(--text-muted, var(--muted));
+            font-size: 0.68rem;
+            font-weight: 600;
+        }
+
+        @keyframes assistantPulse {
+            0% {
+                transform: scale(0.92);
+                opacity: 0.65;
+            }
+            70% {
+                transform: scale(1.08);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1.08);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .assistant-fab {
+                right: 18px;
+                bottom: 18px;
+                padding: 0;
+                width: 60px;
+                height: 60px;
+                justify-content: center;
+                border-radius: 20px;
+            }
+
+            .assistant-fab-label {
+                display: none;
+            }
+
+            .assistant-fab-icon {
+                width: 60px;
+                height: 60px;
+                border-radius: 20px;
+            }
+        }
+
+    </style>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/sidebar_shell.css') }}"
+    >
+
+</head>
+
+<body class="has-unified-sidebar">
+<div class="is-workspace-shell">
+
+    {% include "_app_sidebar.html" %}
+
+    <div
+        id="mobileOverlay"
+        class="is-mobile-overlay"
+    ></div>
+
+    <section class="is-workspace-main">
+
+{% set page_heading = "My Profile" %}
+{% include "_page_topbar.html" %}
+<div class="is-workspace-content">
+
+
+{% set current_name =
+    profile.get("full_name")
+    or "Student"
+%}
+
+{% set image_path =
+    profile.get("profile_image_path")
+    or ""
+%}
+
+<div class="shell">
+
+
+
+
+    <main class="main">
+
+
+
+
+        <div class="content">
+
+            {% with messages =
+                get_flashed_messages(
+                    with_categories=true
+                )
+            %}
+
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+            {% endwith %}
+
+
+            <section class="pro-profile-hero">
+
+                <div class="pro-avatar-shell">
+
+                    <div class="pro-avatar">
+
+                        {% if image_path %}
+                            <img
+                                src="{{ url_for('static', filename=image_path) }}"
+                                alt="{{ current_name }} profile image"
+                            >
+                        {% else %}
+                            {{ current_name[:1]|upper }}
+                        {% endif %}
+
+                    </div>
+
+                    <span class="avatar-status"></span>
+
+                </div>
+
+
+                <div class="pro-hero-copy">
+
+                    <div class="pro-eyebrow">
+                        InternShield student profile
+                    </div>
+
+                    <h1>
+                        {{ current_name }}
+                    </h1>
+
+                    <p class="pro-email">
+                        {{ email }}
+                    </p>
+
+
+                    <div class="hero-meta">
+
+                        {% if profile.get('branch') %}
+                            <span class="hero-chip">
+                                {{ profile.get('branch') }}
+                            </span>
+                        {% endif %}
+
+                        {% if profile.get('semester') %}
+                            <span class="hero-chip">
+                                Semester {{ profile.get('semester') }}
+                            </span>
+                        {% endif %}
+
+                        <span class="hero-chip">
+                            {% if profile.get('preferred_work_mode') == 'remote' %}
+                                Remote preferred
+                            {% elif profile.get('preferred_work_mode') == 'hybrid' %}
+                                Hybrid preferred
+                            {% elif profile.get('preferred_work_mode') == 'onsite' %}
+                                On-site preferred
+                            {% else %}
+                                Work mode flexible
+                            {% endif %}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="pro-hero-side">
+
+                    <span class="account-state">
+                        Active account
+                    </span>
+
+                    {% if not edit_mode %}
+                        <a
+                            href="{{ url_for('profile', edit=1) }}"
+                            class="hero-edit-link"
+                        >
+                            Manage profile →
+                        </a>
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+
+            <section class="profile-metrics">
+
+                <article class="metric-card">
+                    <div class="metric-head">
+                        <span>
+                            Assessments
+                        </span>
+                        <b>A</b>
+                    </div>
+
+                    <strong>
+                        {{ profile_statistics.assessments }}
+                    </strong>
+
+                    <small>
+                        Internship checks completed
+                    </small>
+                </article>
+
+
+                <article class="metric-card">
+                    <div class="metric-head">
+                        <span>
+                            Shortlisted
+                        </span>
+                        <b>★</b>
+                    </div>
+
+                    <strong>
+                        {{ profile_statistics.shortlisted }}
+                    </strong>
+
+                    <small>
+                        Opportunities saved
+                    </small>
+                </article>
+
+
+                <article class="metric-card">
+                    <div class="metric-head">
+                        <span>
+                            Applications
+                        </span>
+                        <b>↗</b>
+                    </div>
+
+                    <strong>
+                        {{ profile_statistics.applications }}
+                    </strong>
+
+                    <small>
+                        Roles currently tracked
+                    </small>
+                </article>
+
+
+                <article class="metric-card">
+                    <div class="metric-head">
+                        <span>
+                            Offers
+                        </span>
+                        <b>✓</b>
+                    </div>
+
+                    <strong>
+                        {{ profile_statistics.offers }}
+                    </strong>
+
+                    <small>
+                        Offer-stage applications
+                    </small>
+                </article>
+
+            </section>
+
+
+{% if not edit_mode %}
+
+                <section class="professional-overview">
+
+                    <article class="profile-panel">
+
+                        <div class="panel-heading">
+
+                            <div>
+
+                                <div class="panel-kicker">
+                                    Profile information
+                                </div>
+
+                                <h2>
+                                    Personal & academic details
+                                </h2>
+
+                                <p>
+                                    Core information InternShield can use
+                                    to personalize assessments and
+                                    student-specific recommendations.
+                                </p>
+
+                            </div>
+
+                            <a
+                                class="panel-edit"
+                                href="{{ url_for('profile', edit=1) }}"
+                            >
+                                Edit details
+                            </a>
+
+                        </div>
+
+
+                        <div class="detail-grid">
+
+                            <div class="detail-tile">
+
+                                <div class="detail-icon">
+                                    ID
+                                </div>
+
+                                <div class="detail-copy">
+
+                                    <span>
+                                        Full name
+                                    </span>
+
+                                    <strong>
+                                        {{ current_name }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="detail-tile">
+
+                                <div class="detail-icon">
+                                    @
+                                </div>
+
+                                <div class="detail-copy">
+
+                                    <span>
+                                        Account email
+                                    </span>
+
+                                    <strong>
+                                        {{ email }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="detail-tile wide">
+
+                                <div class="detail-icon">
+                                    EDU
+                                </div>
+
+                                <div class="detail-copy">
+
+                                    <span>
+                                        College / institute
+                                    </span>
+
+                                    <strong
+                                        class="{% if not profile.get('college_name') %}empty{% endif %}"
+                                    >
+                                        {{ profile.get('college_name') or 'Add your college or institute' }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="detail-tile">
+
+                                <div class="detail-icon">
+                                    BR
+                                </div>
+
+                                <div class="detail-copy">
+
+                                    <span>
+                                        Branch / department
+                                    </span>
+
+                                    <strong
+                                        class="{% if not profile.get('branch') %}empty{% endif %}"
+                                    >
+                                        {{ profile.get('branch') or 'Not added yet' }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="detail-tile">
+
+                                <div class="detail-icon">
+                                    SEM
+                                </div>
+
+                                <div class="detail-copy">
+
+                                    <span>
+                                        Current semester
+                                    </span>
+
+                                    <strong
+                                        class="{% if not profile.get('semester') %}empty{% endif %}"
+                                    >
+                                        {% if profile.get('semester') %}
+                                            Semester {{ profile.get('semester') }}
+                                        {% else %}
+                                            Not added yet
+                                        {% endif %}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+
+                    <div class="right-profile-stack">
+
+                        <article class="preference-panel">
+
+                            <div class="panel-kicker">
+                                Internship setup
+                            </div>
+
+                            <h2>
+                                Saved preferences
+                            </h2>
+
+                            <p>
+                                These values can later reduce repeated
+                                input during internship assessments.
+                            </p>
+
+
+                            <div class="preference-list">
+
+                                <div class="preference-item">
+                                    <span>
+                                        Weekly availability
+                                    </span>
+
+                                    <strong>
+                                        {% if profile.get('available_hours_per_week') is not none %}
+                                            {{ profile.get('available_hours_per_week') }} hrs
+                                        {% else %}
+                                            Not set
+                                        {% endif %}
+                                    </strong>
+                                </div>
+
+                                <div class="preference-item">
+                                    <span>
+                                        Preferred work mode
+                                    </span>
+
+                                    <strong>
+                                        {% if profile.get('preferred_work_mode') == 'remote' %}
+                                            Remote
+                                        {% elif profile.get('preferred_work_mode') == 'hybrid' %}
+                                            Hybrid
+                                        {% elif profile.get('preferred_work_mode') == 'onsite' %}
+                                            On-site
+                                        {% else %}
+                                            No preference
+                                        {% endif %}
+                                    </strong>
+                                </div>
+
+                                <div class="preference-item">
+                                    <span>
+                                        Default schedule
+                                    </span>
+
+                                    <strong>
+                                        {% if profile.get('default_schedule_type') == 'flexible' %}
+                                            Flexible
+                                        {% elif profile.get('default_schedule_type') == 'fixed' %}
+                                            Fixed
+                                        {% else %}
+                                            Not specified
+                                        {% endif %}
+                                    </strong>
+                                </div>
+
+                            </div>
+
+                        </article>
+
+
+                        <article class="account-panel">
+
+                            <div class="panel-kicker">
+                                Account activity
+                            </div>
+
+                            <h2>
+                                Profile record
+                            </h2>
+
+                            <p>
+                                Basic account history for this
+                                InternShield profile.
+                            </p>
+
+
+                            <div class="account-facts">
+
+                                <div class="account-fact">
+                                    <span>
+                                        Created
+                                    </span>
+
+                                    <strong>
+                                        {% if profile.get('created_at') %}
+                                            {{ profile.get('created_at')[:10] }}
+                                        {% else %}
+                                            Not saved
+                                        {% endif %}
+                                    </strong>
+                                </div>
+
+                                <div class="account-fact">
+                                    <span>
+                                        Updated
+                                    </span>
+
+                                    <strong>
+                                        {% if profile.get('updated_at') %}
+                                            {{ profile.get('updated_at')[:10] }}
+                                        {% else %}
+                                            Not updated
+                                        {% endif %}
+                                    </strong>
+                                </div>
+
+                            </div>
+
+
+                            {% if (
+                                not profile.get('college_name')
+                                or not profile.get('branch')
+                                or not profile.get('semester')
+                                or profile.get('available_hours_per_week') is none
+                            ) %}
+
+                                <div class="complete-profile-note">
+                                    Complete the remaining profile details
+                                    so future InternShield workflows can
+                                    reuse them automatically.
+                                </div>
+
+                            {% else %}
+
+                                <div class="complete-profile-note">
+                                    Your core academic and internship
+                                    preference details are ready for future
+                                    InternShield workflows.
+                                </div>
+
+                            {% endif %}
+
+                        </article>
+
+                    </div>
+
+                </section>
+
+            {% else %}
+
+                <form
+                    method="post"
+                    action="{{ url_for('profile') }}"
+                    enctype="multipart/form-data"
+                >
+
+                    <div class="edit-layout">
+
+                        <section class="edit-card">
+
+                            <div class="card-heading">
+
+                                <h2>
+                                    Edit profile
+                                </h2>
+
+                                <p>
+                                    Change only the details you want
+                                    InternShield to remember and reuse.
+                                </p>
+
+                            </div>
+
+
+                            <div class="form-section">
+
+                                <div class="section-title">
+                                    Personal information
+                                </div>
+
+
+                                <div class="form-grid">
+
+                                    <div class="field">
+
+                                        <label for="full_name">
+                                            Full name
+                                        </label>
+
+                                        <input
+                                            id="full_name"
+                                            name="full_name"
+                                            maxlength="120"
+                                            value="{{ profile.get('full_name', '') }}"
+                                            required
+                                        >
+
+                                    </div>
+
+
+                                    <div class="field">
+
+                                        <label for="account_email">
+                                            Account email
+                                        </label>
+
+                                        <input
+                                            id="account_email"
+                                            value="{{ email }}"
+                                            readonly
+                                        >
+
+                                        <p class="field-help">
+                                            Login email is managed by
+                                            authentication.
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-section">
+
+                                <div class="section-title">
+                                    Academic information
+                                </div>
+
+
+                                <div class="form-grid">
+
+                                    <div class="field full">
+
+                                        <label for="college_name">
+                                            College / institute
+                                        </label>
+
+                                        <input
+                                            id="college_name"
+                                            name="college_name"
+                                            maxlength="180"
+                                            value="{{ profile.get('college_name', '') or '' }}"
+                                            placeholder="Enter your college or institute"
+                                        >
+
+                                    </div>
+
+
+                                    <div class="field">
+
+                                        <label for="branch">
+                                            Branch / department
+                                        </label>
+
+                                        <input
+                                            id="branch"
+                                            name="branch"
+                                            maxlength="120"
+                                            value="{{ profile.get('branch', '') or '' }}"
+                                            placeholder="e.g. Information Technology"
+                                        >
+
+                                    </div>
+
+
+                                    <div class="field">
+
+                                        <label for="semester">
+                                            Current semester
+                                        </label>
+
+                                        <select
+                                            id="semester"
+                                            name="semester"
+                                        >
+
+                                            <option value="">
+                                                Not specified
+                                            </option>
+
+                                            {% for number in range(1, 13) %}
+                                                <option
+                                                    value="{{ number }}"
+                                                    {% if profile.get('semester')|string == number|string %}
+                                                        selected
+                                                    {% endif %}
+                                                >
+                                                    Semester {{ number }}
+                                                </option>
+                                            {% endfor %}
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-section">
+
+                                <div class="section-title">
+                                    Internship preferences
+                                </div>
+
+
+                                <div class="form-grid">
+
+                                    <div class="field">
+
+                                        <label for="available_hours_per_week">
+                                            Available hours per week
+                                        </label>
+
+                                        <input
+                                            id="available_hours_per_week"
+                                            name="available_hours_per_week"
+                                            type="number"
+                                            min="0"
+                                            max="168"
+                                            step="0.5"
+                                            value="{{ profile.get('available_hours_per_week', '') if profile.get('available_hours_per_week') is not none else '' }}"
+                                            placeholder="e.g. 25"
+                                        >
+
+                                    </div>
+
+
+                                    <div class="field">
+
+                                        <label for="preferred_work_mode">
+                                            Preferred work mode
+                                        </label>
+
+                                        <select
+                                            id="preferred_work_mode"
+                                            name="preferred_work_mode"
+                                        >
+
+                                            <option
+                                                value="no_preference"
+                                                {% if profile.get('preferred_work_mode') == 'no_preference' %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                No preference
+                                            </option>
+
+                                            <option
+                                                value="remote"
+                                                {% if profile.get('preferred_work_mode') == 'remote' %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                Remote
+                                            </option>
+
+                                            <option
+                                                value="hybrid"
+                                                {% if profile.get('preferred_work_mode') == 'hybrid' %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                Hybrid
+                                            </option>
+
+                                            <option
+                                                value="onsite"
+                                                {% if profile.get('preferred_work_mode') == 'onsite' %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                On-site
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+
+                                    <div class="field">
+
+                                        <label for="default_schedule_type">
+                                            Default schedule type
+                                        </label>
+
+                                        <select
+                                            id="default_schedule_type"
+                                            name="default_schedule_type"
+                                        >
+
+                                            <option
+                                                value="not_specified"
+                                                {% if profile.get('default_schedule_type') == 'not_specified' %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                Not specified
+                                            </option>
+
+                                            <option
+                                                value="flexible"
+                                                {% if profile.get('default_schedule_type') == 'flexible' %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                Flexible
+                                            </option>
+
+                                            <option
+                                                value="fixed"
+                                                {% if profile.get('default_schedule_type') == 'fixed' %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                Fixed
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-footer">
+
+                                <a
+                                    href="{{ url_for('profile') }}"
+                                    class="btn"
+                                >
+                                    Cancel
+                                </a>
+
+                                <button
+                                    type="submit"
+                                    class="btn primary"
+                                >
+                                    Save changes
+                                </button>
+
+                            </div>
+
+                        </section>
+
+
+                        <aside class="photo-card">
+
+                            <h2>
+                                Profile photo
+                            </h2>
+
+                            <p>
+                                Add a photo so your InternShield
+                                workspace feels more personal.
+                            </p>
+
+
+                            <div
+                                class="photo-preview"
+                                id="photoPreview"
+                            >
+
+                                {% if image_path %}
+                                    <img
+                                        id="previewImage"
+                                        src="{{ url_for('static', filename=image_path) }}"
+                                        alt="{{ current_name }} profile image"
+                                    >
+                                {% else %}
+                                    <span id="previewInitial">
+                                        {{ current_name[:1]|upper }}
+                                    </span>
+
+                                    <img
+                                        id="previewImage"
+                                        alt="Selected profile image preview"
+                                        style="display:none;"
+                                    >
+                                {% endif %}
+
+                            </div>
+
+
+                            <label class="file-picker">
+
+                                <input
+                                    id="profileImageInput"
+                                    name="profile_image"
+                                    type="file"
+                                    accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                                >
+
+                            </label>
+
+
+                            <p class="photo-help">
+                                JPG, PNG or WEBP. Maximum 2 MB.
+                                A square image works best.
+                            </p>
+
+
+                            {% if image_path %}
+
+                                <div class="remove-photo">
+
+                                    <label>
+
+                                        <input
+                                            type="checkbox"
+                                            name="remove_profile_image"
+                                            value="1"
+                                        >
+
+                                        Remove current photo
+
+                                    </label>
+
+                                </div>
+
+                            {% endif %}
+
+                        </aside>
+
+                    </div>
+
+                </form>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+</div>
+
+
+{% if edit_mode %}
+
+<script>
+    const profileImageInput =
+        document.getElementById(
+            "profileImageInput"
+        );
+
+    const previewImage =
+        document.getElementById(
+            "previewImage"
+        );
+
+    const previewInitial =
+        document.getElementById(
+            "previewInitial"
+        );
+
+
+    profileImageInput.addEventListener(
+        "change",
+        event => {
+
+            const file =
+                event.target.files[0];
+
+
+            if (!file) {
+                return;
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                loadEvent => {
+
+                    previewImage.src =
+                        loadEvent.target.result;
+
+                    previewImage.style.display =
+                        "block";
+
+
+                    if (previewInitial) {
+                        previewInitial.style.display =
+                            "none";
+                    }
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+</script>
+
+{% endif %}
+
+
+
+
+<script
+    src="{{ url_for('static', filename='js/sidebar_shell.js') }}"
+    defer
+></script>
+
+
+</div>
+
+    </section>
+
+</div>
+
+</body>
+</html>

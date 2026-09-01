@@ -1,0 +1,101 @@
+{% set current_endpoint = request.endpoint or "" %}
+
+<header class="is-app-topbar">
+    <div class="is-app-topbar-inner">
+
+        <a
+            class="is-app-brand"
+            href="{{ url_for('dashboard') }}"
+            aria-label="InternShield AI dashboard"
+        >
+            <span class="is-app-brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path
+                        d="M12 3L19 6V11C19 15.6 16.2 19.5 12 21C7.8 19.5 5 15.6 5 11V6L12 3Z"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linejoin="round"
+                    />
+                    <path
+                        d="M9 12L11 14L15.5 9.5"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+            </span>
+
+            <span class="is-app-brand-name">
+                InternShield
+                <span>AI</span>
+            </span>
+        </a>
+
+
+        <nav
+            class="is-app-nav"
+            aria-label="InternShield workspace navigation"
+        >
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="is-app-nav-link {% if current_endpoint == 'dashboard' %}is-active{% endif %}"
+            >
+                Dashboard
+            </a>
+
+            <a
+                href="{{ url_for('analyze') }}"
+                class="is-app-nav-link {% if current_endpoint == 'analyze' %}is-active{% endif %}"
+            >
+                New Assessment
+            </a>
+
+            <a
+                href="{{ url_for('applications') }}"
+                class="is-app-nav-link {% if current_endpoint == 'applications' %}is-active{% endif %}"
+            >
+                Applications
+            </a>
+
+            <a
+                href="{{ url_for('compare') }}"
+                class="is-app-nav-link {% if current_endpoint in ['compare', 'compare_result'] %}is-active{% endif %}"
+            >
+                Compare
+            </a>
+
+            <a
+                href="{{ url_for('shortlist') }}"
+                class="is-app-nav-link {% if current_endpoint == 'shortlist' %}is-active{% endif %}"
+            >
+                Shortlist
+            </a>
+        </nav>
+
+
+        <a
+            class="is-app-profile-link {% if current_endpoint == 'profile' %}is-active{% endif %}"
+            href="{{ url_for('profile') }}"
+            aria-label="Open my profile"
+            title="My profile"
+        >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle
+                    cx="12"
+                    cy="8"
+                    r="4"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                />
+                <path
+                    d="M4.5 20C5.3 16.5 8 14.5 12 14.5C16 14.5 18.7 16.5 19.5 20"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                    stroke-linecap="round"
+                />
+            </svg>
+        </a>
+
+    </div>
+</header>

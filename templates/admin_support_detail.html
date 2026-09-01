@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Support Request | InternShield Admin</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/sidebar_shell.css') }}"
+    >
+
+    <style>
+        :root {
+            --panel: rgba(24, 26, 45, .88);
+            --line: rgba(255, 255, 255, .09);
+            --text: #f8f8ff;
+            --muted: #85899f;
+            --primary: #8067ff;
+        }
+
+        .detail-page {
+            width: min(1160px, 92%);
+            margin: 0 auto;
+            padding: 30px 0 55px;
+        }
+
+        .flash {
+            margin-bottom: 15px;
+            padding: 13px 15px;
+            border: 1px solid;
+            border-radius: 12px;
+            font-size: .76rem;
+        }
+
+        .flash.success {
+            color: #91e7cf;
+            border-color: rgba(52, 217, 194, .28);
+            background: rgba(52, 217, 194, .08);
+        }
+
+        .flash.warning {
+            color: #ffe0a5;
+            border-color: rgba(255, 196, 95, .28);
+            background: rgba(255, 196, 95, .08);
+        }
+
+        .flash.danger {
+            color: #ffb7c1;
+            border-color: rgba(255, 113, 135, .28);
+            background: rgba(255, 113, 135, .08);
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) 340px;
+            gap: 16px;
+            align-items: start;
+        }
+
+        .card {
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: var(--panel);
+        }
+
+        .thread-card {
+            padding: 20px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            margin-bottom: 13px;
+            color: #9f95e9;
+            font-size: .67rem;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .kicker {
+            margin-bottom: 6px;
+            color: #978be1;
+            font-size: .58rem;
+            font-weight: 850;
+            text-transform: uppercase;
+        }
+
+        .thread-card h2 {
+            margin: 0 0 8px;
+            font-size: 1.35rem;
+        }
+
+        .student-meta {
+            margin-bottom: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            color: var(--muted);
+            font-size: .61rem;
+        }
+
+        .message {
+            max-width: 87%;
+            margin-bottom: 12px;
+            padding: 13px 14px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: rgba(255,255,255,.02);
+        }
+
+        .message.user {
+            margin-right: auto;
+            border-color: rgba(52,217,194,.13);
+            background: rgba(52,217,194,.04);
+        }
+
+        .message.admin {
+            margin-left: auto;
+            border-color: rgba(128,103,255,.17);
+            background: rgba(128,103,255,.07);
+        }
+
+        .message-label {
+            margin-bottom: 5px;
+            color: #75d8ca;
+            font-size: .55rem;
+            font-weight: 850;
+            text-transform: uppercase;
+        }
+
+        .message.admin .message-label {
+            color: #9e93e8;
+        }
+
+        .message p {
+            margin: 0;
+            color: #d2d4df;
+            font-size: .7rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .message small {
+            display: block;
+            margin-top: 7px;
+            color: #707488;
+            font-size: .54rem;
+        }
+
+        .side-card {
+            padding: 18px;
+        }
+
+        .side-card h3 {
+            margin: 0 0 5px;
+            font-size: .92rem;
+        }
+
+        .side-card > p {
+            margin: 0 0 14px;
+            color: var(--muted);
+            font-size: .64rem;
+            line-height: 1.5;
+        }
+
+        .info-list {
+            margin-bottom: 14px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .info-row {
+            padding: 10px 11px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: rgba(255,255,255,.018);
+        }
+
+        .info-row span {
+            display: block;
+            margin-bottom: 4px;
+            color: #707488;
+            font-size: .55rem;
+            text-transform: uppercase;
+        }
+
+        .info-row strong {
+            display: block;
+            color: #c9cbd8;
+            font-size: .66rem;
+            overflow-wrap: anywhere;
+        }
+
+        .reply-form label {
+            display: block;
+            margin-bottom: 7px;
+            color: #c4c6d4;
+            font-size: .66rem;
+            font-weight: 750;
+        }
+
+        .reply-form select,
+        .reply-form textarea {
+            width: 100%;
+            color: var(--text);
+            border: 1px solid var(--line);
+            border-radius: 11px;
+            outline: none;
+            background: rgba(5, 7, 17, .63);
+        }
+
+        .reply-form select {
+            min-height: 42px;
+            margin-bottom: 12px;
+            padding: 0 11px;
+        }
+
+        .reply-form textarea {
+            min-height: 135px;
+            padding: 11px;
+            resize: vertical;
+            line-height: 1.55;
+        }
+
+        .reply-form select:focus,
+        .reply-form textarea:focus {
+            border-color: rgba(128, 103, 255, .45);
+            box-shadow: 0 0 0 4px rgba(128, 103, 255, .07);
+        }
+
+        .reply-button {
+            width: 100%;
+            min-height: 42px;
+            margin-top: 11px;
+            border: 0;
+            border-radius: 11px;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), #6550db);
+            font-size: .68rem;
+            font-weight: 850;
+            cursor: pointer;
+        }
+
+        .reply-note {
+            margin-top: 8px;
+            color: #707488;
+            font-size: .56rem;
+            line-height: 1.45;
+        }
+
+        @media (max-width: 950px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body class="has-unified-sidebar">
+
+<div class="is-workspace-shell">
+
+    {% include "_app_sidebar.html" %}
+
+    <div
+        id="mobileOverlay"
+        class="is-mobile-overlay"
+    ></div>
+
+    <section class="is-workspace-main">
+
+        {% set page_heading = "Support Inbox" %}
+        {% include "_page_topbar.html" %}
+
+        <main class="detail-page">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endwith %}
+
+            <div class="detail-grid">
+
+                <section class="card thread-card">
+
+                    <a
+                        class="back-link"
+                        href="{{ url_for('admin_support') }}"
+                    >
+                        ← Back to Support Inbox
+                    </a>
+
+                    <div class="kicker">
+                        {{ support_request.category.replace('_', ' ')|title }}
+                    </div>
+
+                    <h2>
+                        {{ support_request.subject }}
+                    </h2>
+
+                    <div class="student-meta">
+                        <span>
+                            {{ support_request.user_name or 'Student' }}
+                        </span>
+                        <span>•</span>
+                        <span>
+                            {{ support_request.user_email or 'Email unavailable' }}
+                        </span>
+                        <span>•</span>
+                        <span>
+                            {{ support_request.created_at[:10] if support_request.created_at else '' }}
+                        </span>
+                    </div>
+
+                    <div class="message user">
+                        <div class="message-label">
+                            Student
+                        </div>
+
+                        <p>{{ support_request.message }}</p>
+
+                        <small>
+                            {{ support_request.created_at[:16].replace('T', ' ') if support_request.created_at else '' }}
+                        </small>
+                    </div>
+
+                    {% for reply in replies %}
+
+                        <div class="message {{ reply.sender_type }}">
+
+                            <div class="message-label">
+                                {% if reply.sender_type == "admin" %}
+                                    InternShield Support
+                                {% else %}
+                                    Student
+                                {% endif %}
+                            </div>
+
+                            <p>{{ reply.message }}</p>
+
+                            <small>
+                                {{ reply.created_at[:16].replace('T', ' ') if reply.created_at else '' }}
+                            </small>
+
+                        </div>
+
+                    {% endfor %}
+
+                </section>
+
+                <aside class="card side-card">
+
+                    <h3>
+                        Reply & manage
+                    </h3>
+
+                    <p>
+                        Reply to the student and update the request status.
+                    </p>
+
+                    <div class="info-list">
+
+                        <div class="info-row">
+                            <span>Student</span>
+                            <strong>
+                                {{ support_request.user_name or 'Student' }}
+                            </strong>
+                        </div>
+
+                        <div class="info-row">
+                            <span>Email</span>
+                            <strong>
+                                {{ support_request.user_email or 'Unavailable for older request' }}
+                            </strong>
+                        </div>
+
+                        <div class="info-row">
+                            <span>Current status</span>
+                            <strong>
+                                {{ support_request.status|title }}
+                            </strong>
+                        </div>
+
+                    </div>
+
+                    <form
+                        class="reply-form"
+                        method="post"
+                        action="{{ url_for(
+                            'admin_support_detail',
+                            request_id=support_request.id
+                        ) }}"
+                    >
+                        <label for="status">
+                            Request status
+                        </label>
+
+                        <select
+                            id="status"
+                            name="status"
+                        >
+                            <option value="open" {% if support_request.status == 'open' %}selected{% endif %}>
+                                Open
+                            </option>
+                            <option value="reviewing" {% if support_request.status == 'reviewing' %}selected{% endif %}>
+                                Reviewing
+                            </option>
+                            <option value="resolved" {% if support_request.status == 'resolved' %}selected{% endif %}>
+                                Resolved
+                            </option>
+                        </select>
+
+                        <label for="reply_message">
+                            Reply to student
+                        </label>
+
+                        <textarea
+                            id="reply_message"
+                            name="reply_message"
+                            maxlength="3000"
+                            placeholder="Write a clear support response..."
+                        ></textarea>
+
+                        <button
+                            class="reply-button"
+                            type="submit"
+                        >
+                            Save response
+                        </button>
+
+                        <p class="reply-note">
+                            Leave the reply box empty if you only want to change status.
+                        </p>
+                    </form>
+
+                </aside>
+
+            </div>
+
+        </main>
+
+    </section>
+
+</div>
+
+<script
+    src="{{ url_for('static', filename='js/sidebar_shell.js') }}"
+    defer
+></script>
+
+</body>
+</html>

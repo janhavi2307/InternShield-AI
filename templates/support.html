@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="InternShield AI Contact and Support."
+    >
+
+    <title>
+        Contact & Support | InternShield AI
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/sidebar_shell.css') }}"
+    >
+
+    <style>
+        :root {
+            --support-panel: rgba(24, 26, 45, 0.88);
+            --support-panel-dark: rgba(12, 15, 29, 0.92);
+            --support-line: rgba(255, 255, 255, 0.09);
+
+            --support-text: #f8f8ff;
+            --support-soft: #c9cbd8;
+            --support-muted: #85899f;
+
+            --support-primary: #8067ff;
+            --support-primary-light: #b0a3ff;
+            --support-cyan: #34d9c2;
+        }
+
+        .support-page {
+            width:
+                min(
+                    1220px,
+                    92%
+                );
+
+            margin:
+                0
+                auto;
+
+            padding:
+                30px
+                0
+                54px;
+        }
+
+
+        /* =====================================================
+           FLASH
+        ===================================================== */
+
+        .flash {
+            margin-bottom: 15px;
+
+            padding:
+                13px
+                15px;
+
+            border:
+                1px solid;
+
+            border-radius:
+                12px;
+
+            font-size:
+                0.76rem;
+        }
+
+        .flash.success {
+            color:
+                #91e7cf;
+
+            border-color:
+                rgba(52, 217, 194, 0.28);
+
+            background:
+                rgba(52, 217, 194, 0.08);
+        }
+
+        .flash.danger,
+        .flash.error {
+            color:
+                #ffb7c1;
+
+            border-color:
+                rgba(255, 113, 135, 0.28);
+
+            background:
+                rgba(255, 113, 135, 0.08);
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .support-hero {
+            position:
+                relative;
+
+            overflow:
+                hidden;
+
+            margin-bottom:
+                18px;
+
+            padding:
+                27px
+                29px;
+
+            border:
+                1px solid
+                var(--support-line);
+
+            border-radius:
+                20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(30, 32, 55, 0.96),
+                    rgba(15, 18, 33, 0.93)
+                );
+        }
+
+        .support-hero::after {
+            content: "";
+
+            position:
+                absolute;
+
+            width:
+                290px;
+
+            height:
+                290px;
+
+            top:
+                -205px;
+
+            right:
+                -55px;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(128, 103, 255, 0.20);
+        }
+
+        .support-kicker {
+            position:
+                relative;
+
+            z-index:
+                1;
+
+            margin-bottom:
+                7px;
+
+            color:
+                var(--support-primary-light);
+
+            font-size:
+                0.63rem;
+
+            font-weight:
+                850;
+
+            letter-spacing:
+                0.10em;
+
+            text-transform:
+                uppercase;
+        }
+
+        .support-hero h2 {
+            position:
+                relative;
+
+            z-index:
+                1;
+
+            margin:
+                0
+                0
+                7px;
+
+            font-size:
+                clamp(
+                    1.75rem,
+                    3vw,
+                    2.35rem
+                );
+
+            letter-spacing:
+                -0.045em;
+        }
+
+        .support-hero p {
+            position:
+                relative;
+
+            z-index:
+                1;
+
+            max-width:
+                720px;
+
+            margin:
+                0;
+
+            color:
+                var(--support-muted);
+
+            font-size:
+                0.76rem;
+
+            line-height:
+                1.6;
+        }
+
+
+        /* =====================================================
+           MAIN GRID
+        ===================================================== */
+
+        .support-layout {
+            display:
+                grid;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                350px;
+
+            gap:
+                16px;
+
+            align-items:
+                start;
+        }
+
+        .support-card,
+        .support-side-card {
+            border:
+                1px solid
+                var(--support-line);
+
+            border-radius:
+                18px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(24, 26, 45, 0.90),
+                    rgba(15, 18, 33, 0.87)
+                );
+        }
+
+        .support-card {
+            overflow:
+                hidden;
+        }
+
+
+        /* =====================================================
+           FORM HEADER
+        ===================================================== */
+
+        .support-card-header {
+            padding:
+                19px
+                21px
+                17px;
+
+            display:
+                flex;
+
+            align-items:
+                flex-start;
+
+            justify-content:
+                space-between;
+
+            gap:
+                16px;
+
+            border-bottom:
+                1px solid
+                var(--support-line);
+        }
+
+        .support-card-kicker {
+            margin-bottom:
+                5px;
+
+            color:
+                #968ae1;
+
+            font-size:
+                0.60rem;
+
+            font-weight:
+                850;
+
+            letter-spacing:
+                0.07em;
+
+            text-transform:
+                uppercase;
+        }
+
+        .support-card-header h3 {
+            margin:
+                0
+                0
+                4px;
+
+            font-size:
+                1rem;
+        }
+
+        .support-card-header p {
+            max-width:
+                520px;
+
+            margin:
+                0;
+
+            color:
+                var(--support-muted);
+
+            font-size:
+                0.68rem;
+
+            line-height:
+                1.5;
+        }
+
+        .support-status-chip {
+            min-height:
+                30px;
+
+            padding:
+                0
+                10px;
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                6px;
+
+            flex-shrink:
+                0;
+
+            border:
+                1px solid
+                rgba(52, 217, 194, 0.17);
+
+            border-radius:
+                999px;
+
+            color:
+                #83e4d5;
+
+            background:
+                rgba(52, 217, 194, 0.055);
+
+            font-size:
+                0.59rem;
+
+            font-weight:
+                800;
+        }
+
+        .support-status-chip::before {
+            content: "";
+
+            width:
+                6px;
+
+            height:
+                6px;
+
+            border-radius:
+                50%;
+
+            background:
+                var(--support-cyan);
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .support-form {
+            padding:
+                20px
+                21px
+                0;
+        }
+
+        .support-form-grid {
+            display:
+                grid;
+
+            grid-template-columns:
+                minmax(210px, 0.75fr)
+                minmax(0, 1.35fr);
+
+            gap:
+                14px;
+        }
+
+        .support-field {
+            min-width:
+                0;
+        }
+
+        .support-field.full {
+            grid-column:
+                1 / -1;
+        }
+
+        .support-field label {
+            display:
+                block;
+
+            margin-bottom:
+                7px;
+
+            color:
+                var(--support-soft);
+
+            font-size:
+                0.70rem;
+
+            font-weight:
+                750;
+        }
+
+        .support-field input,
+        .support-field select,
+        .support-field textarea {
+            width:
+                100%;
+
+            color:
+                var(--support-text);
+
+            border:
+                1px solid
+                var(--support-line);
+
+            border-radius:
+                11px;
+
+            outline:
+                none;
+
+            background:
+                rgba(5, 7, 17, 0.65);
+
+            transition:
+                border-color 0.18s ease,
+                box-shadow 0.18s ease,
+                background 0.18s ease;
+        }
+
+        .support-field input,
+        .support-field select {
+            min-height:
+                46px;
+
+            padding:
+                0
+                12px;
+        }
+
+        .support-field textarea {
+            min-height:
+                150px;
+
+            max-height:
+                310px;
+
+            padding:
+                12px;
+
+            resize:
+                vertical;
+
+            line-height:
+                1.55;
+        }
+
+        .support-field input:focus,
+        .support-field select:focus,
+        .support-field textarea:focus {
+            border-color:
+                rgba(128, 103, 255, 0.48);
+
+            background:
+                rgba(7, 9, 22, 0.80);
+
+            box-shadow:
+                0
+                0
+                0
+                4px
+                rgba(128, 103, 255, 0.07);
+        }
+
+        .support-field input::placeholder,
+        .support-field textarea::placeholder {
+            color:
+                #686c80;
+        }
+
+        .support-field option {
+            background:
+                #111426;
+        }
+
+        .support-message-meta {
+            margin-top:
+                7px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                12px;
+
+            color:
+                #6e7287;
+
+            font-size:
+                0.61rem;
+
+            line-height:
+                1.45;
+        }
+
+        .support-security-note {
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            gap:
+                6px;
+        }
+
+        .support-security-note::before {
+            content:
+                "•";
+
+            color:
+                var(--support-cyan);
+        }
+
+
+        /* =====================================================
+           FORM FOOTER
+        ===================================================== */
+
+        .support-form-footer {
+            margin:
+                19px
+                -21px
+                0;
+
+            padding:
+                15px
+                21px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                14px;
+
+            border-top:
+                1px solid
+                var(--support-line);
+
+            background:
+                rgba(255, 255, 255, 0.012);
+        }
+
+        .support-form-footer p {
+            max-width:
+                540px;
+
+            margin:
+                0;
+
+            color:
+                #717589;
+
+            font-size:
+                0.62rem;
+
+            line-height:
+                1.5;
+        }
+
+        .support-submit {
+            min-height:
+                43px;
+
+            padding:
+                0
+                16px;
+
+            flex-shrink:
+                0;
+
+            border:
+                0;
+
+            border-radius:
+                11px;
+
+            color:
+                white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--support-primary),
+                    #6550db
+                );
+
+            box-shadow:
+                0
+                10px
+                26px
+                rgba(128, 103, 255, 0.20);
+
+            font-size:
+                0.72rem;
+
+            font-weight:
+                850;
+
+            cursor:
+                pointer;
+        }
+
+
+        /* =====================================================
+           RIGHT COLUMN
+        ===================================================== */
+
+        .support-side-stack {
+            display:
+                grid;
+
+            gap:
+                14px;
+        }
+
+        .support-side-card {
+            padding:
+                18px;
+        }
+
+        .support-side-kicker {
+            margin-bottom:
+                5px;
+
+            color:
+                #9589df;
+
+            font-size:
+                0.59rem;
+
+            font-weight:
+                850;
+
+            letter-spacing:
+                0.07em;
+
+            text-transform:
+                uppercase;
+        }
+
+        .support-side-card h3 {
+            margin:
+                0
+                0
+                5px;
+
+            font-size:
+                0.94rem;
+        }
+
+        .support-side-card > p {
+            margin:
+                0;
+
+            color:
+                var(--support-muted);
+
+            font-size:
+                0.67rem;
+
+            line-height:
+                1.5;
+        }
+
+        .faq-list,
+        .recent-list {
+            margin-top:
+                14px;
+
+            display:
+                grid;
+
+            gap:
+                8px;
+        }
+
+        details {
+            overflow:
+                hidden;
+
+            border:
+                1px solid
+                var(--support-line);
+
+            border-radius:
+                11px;
+
+            background:
+                rgba(255, 255, 255, 0.018);
+        }
+
+        summary {
+            padding:
+                11px
+                12px;
+
+            color:
+                #d2d4df;
+
+            font-size:
+                0.68rem;
+
+            font-weight:
+                750;
+
+            line-height:
+                1.4;
+
+            cursor:
+                pointer;
+        }
+
+        details p {
+            padding:
+                0
+                12px
+                12px;
+
+            margin:
+                0;
+
+            color:
+                var(--support-muted);
+
+            font-size:
+                0.64rem;
+
+            line-height:
+                1.55;
+        }
+
+        .recent-item-link {
+            display: block;
+            color: inherit;
+            text-decoration: none;
+
+            transition:
+                transform .18s ease,
+                border-color .18s ease,
+                background .18s ease;
+        }
+
+        .recent-item-link:hover {
+            transform: translateY(-1px);
+
+            border-color:
+                rgba(128, 103, 255, .25);
+
+            background:
+                rgba(128, 103, 255, .04);
+        }
+
+        .recent-item {
+            padding:
+                11px
+                12px;
+
+            border:
+                1px solid
+                var(--support-line);
+
+            border-radius:
+                11px;
+
+            background:
+                rgba(255, 255, 255, 0.018);
+        }
+
+        .recent-item-top {
+            margin-bottom:
+                6px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                8px;
+        }
+
+        .recent-category {
+            color:
+                #9b90e3;
+
+            font-size:
+                0.56rem;
+
+            font-weight:
+                850;
+
+            letter-spacing:
+                0.045em;
+
+            text-transform:
+                uppercase;
+        }
+
+        .recent-status {
+            padding:
+                4px
+                6px;
+
+            border:
+                1px solid
+                rgba(52, 217, 194, 0.14);
+
+            border-radius:
+                999px;
+
+            color:
+                #83e4d5;
+
+            background:
+                rgba(52, 217, 194, 0.055);
+
+            font-size:
+                0.53rem;
+
+            font-weight:
+                850;
+
+            text-transform:
+                uppercase;
+        }
+
+        .recent-item strong {
+            display:
+                block;
+
+            color:
+                #d1d3de;
+
+            font-size:
+                0.68rem;
+
+            line-height:
+                1.4;
+        }
+
+        .recent-item small {
+            display:
+                block;
+
+            margin-top:
+                5px;
+
+            color:
+                #707488;
+
+            font-size:
+                0.57rem;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1080px) {
+            .support-layout {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .support-side-stack {
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(0, 1fr)
+                    );
+            }
+        }
+
+        @media (max-width: 760px) {
+            .support-form-grid,
+            .support-side-stack {
+                grid-template-columns:
+                    1fr;
+            }
+
+            .support-field.full {
+                grid-column:
+                    auto;
+            }
+
+            .support-card-header,
+            .support-form-footer {
+                align-items:
+                    stretch;
+
+                flex-direction:
+                    column;
+            }
+
+            .support-submit {
+                width:
+                    100%;
+            }
+        }
+    </style>
+</head>
+
+
+<body class="has-unified-sidebar">
+
+<div class="is-workspace-shell">
+
+    {% include "_app_sidebar.html" %}
+
+    <div
+        id="mobileOverlay"
+        class="is-mobile-overlay"
+    ></div>
+
+
+    <section class="is-workspace-main">
+
+        {% set page_heading = "Contact & Support" %}
+        {% include "_page_topbar.html" %}
+
+
+        <main class="support-page">
+
+            {% with messages =
+                get_flashed_messages(
+                    with_categories=true
+                )
+            %}
+
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+            {% endwith %}
+
+
+            <section class="support-hero">
+
+                <div class="support-kicker">
+                    Help center
+                </div>
+
+                <h2>
+                    How can we help?
+                </h2>
+
+                <p>
+                    Ask a question about an assessment, report a
+                    technical problem, or share feedback that can
+                    improve InternShield.
+                </p>
+
+            </section>
+
+
+            <section class="support-layout">
+
+                <article class="support-card">
+
+                    <header class="support-card-header">
+
+                        <div>
+
+                            <div class="support-card-kicker">
+                                New request
+                            </div>
+
+                            <h3>
+                                Send a support request
+                            </h3>
+
+                            <p>
+                                Describe the issue clearly so the
+                                request can be understood quickly.
+                            </p>
+
+                        </div>
+
+
+                        <span class="support-status-chip">
+                            Private to your account
+                        </span>
+
+                    </header>
+
+
+                    <form
+                        class="support-form"
+                        method="post"
+                        action="{{ url_for('support') }}"
+                    >
+
+                        <div class="support-form-grid">
+
+                            <div class="support-field">
+
+                                <label for="category">
+                                    Request category
+                                </label>
+
+                                <select
+                                    id="category"
+                                    name="category"
+                                    required
+                                >
+                                    <option value="">
+                                        Select a category
+                                    </option>
+
+                                    {% for value, label in categories.items() %}
+                                        <option
+                                            value="{{ value }}"
+                                            {% if form_data.category == value %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+
+                            </div>
+
+
+                            <div class="support-field">
+
+                                <label for="subject">
+                                    Subject
+                                </label>
+
+                                <input
+                                    id="subject"
+                                    name="subject"
+                                    maxlength="140"
+                                    value="{{ form_data.subject }}"
+                                    placeholder="e.g. Question about verification score"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="support-field full">
+
+                                <label for="message">
+                                    Describe your request
+                                </label>
+
+                                <textarea
+                                    id="message"
+                                    name="message"
+                                    maxlength="3000"
+                                    placeholder="Explain what happened, what you expected, and any useful details..."
+                                    required
+                                >{{ form_data.message }}</textarea>
+
+
+                                <div class="support-message-meta">
+
+                                    <span class="support-security-note">
+                                        Never include passwords, tokens or API keys.
+                                    </span>
+
+                                    <span id="messageCount">
+                                        0 / 3000
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <footer class="support-form-footer">
+
+                            <p>
+                                Your request is stored with your
+                                signed-in InternShield account and
+                                appears in Recent requests.
+                            </p>
+
+                            <button
+                                class="support-submit"
+                                type="submit"
+                            >
+                                Submit request
+                            </button>
+
+                        </footer>
+
+                    </form>
+
+                </article>
+
+
+                <aside class="support-side-stack">
+
+                    <article class="support-side-card">
+
+                        <div class="support-side-kicker">
+                            Quick help
+                        </div>
+
+                        <h3>
+                            Frequently asked questions
+                        </h3>
+
+                        <p>
+                            Common questions about InternShield's
+                            assessment and tracking workflows.
+                        </p>
+
+
+                        <div class="faq-list">
+
+                            <details>
+                                <summary>
+                                    Why can a high stipend still receive a warning?
+                                </summary>
+
+                                <p>
+                                    Compensation is only one signal.
+                                    Verification, recruiter evidence,
+                                    workload, consistency and warning
+                                    indicators are evaluated separately.
+                                </p>
+                            </details>
+
+
+                            <details>
+                                <summary>
+                                    Does InternShield prove a company is legitimate?
+                                </summary>
+
+                                <p>
+                                    No. InternShield organizes evidence
+                                    and highlights what should be verified
+                                    independently before accepting.
+                                </p>
+                            </details>
+
+
+                            <details>
+                                <summary>
+                                    What happens when a final offer changes?
+                                </summary>
+
+                                <p>
+                                    Offer Change Detection compares the
+                                    final written offer against the
+                                    original assessed opportunity.
+                                </p>
+                            </details>
+
+
+                            <details>
+                                <summary>
+                                    Is my Application Tracker private?
+                                </summary>
+
+                                <p>
+                                    Tracker records are associated with
+                                    your signed-in account and protected
+                                    by the project's Supabase access rules.
+                                </p>
+                            </details>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="support-side-card">
+
+                        <div class="support-side-kicker">
+                            Request history
+                        </div>
+
+                        <h3>
+                            Recent requests
+                        </h3>
+
+                        <p>
+                            Your five most recent support submissions.
+                        </p>
+
+
+                        <div class="recent-list">
+
+                            {% if recent_requests %}
+
+                                {% for item in recent_requests %}
+                                    <a
+                                        class="recent-item recent-item-link"
+                                        href="{{ url_for(
+                                            'support_request_detail',
+                                            request_id=item.id
+                                        ) }}"
+                                    >
+
+                                        <div class="recent-item-top">
+
+                                            <span class="recent-category">
+                                                {{ categories.get(
+                                                    item.category,
+                                                    item.category
+                                                ) }}
+                                            </span>
+
+                                            <span class="recent-status">
+                                                {{ item.status }}
+                                            </span>
+
+                                        </div>
+
+                                        <strong>
+                                            {{ item.subject }}
+                                        </strong>
+
+                                        <small>
+                                            {{ item.created_at[:10] if item.created_at else "" }}
+                                        </small>
+                                    </a>
+
+                                {% endfor %}
+
+                            {% else %}
+
+                                <div class="recent-item">
+
+                                    <strong>
+                                        No support requests yet
+                                    </strong>
+
+                                    <small>
+                                        Submitted requests will appear here.
+                                    </small>
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </article>
+
+                </aside>
+
+            </section>
+
+        </main>
+
+    </section>
+
+</div>
+
+
+<script
+    src="{{ url_for('static', filename='js/sidebar_shell.js') }}"
+    defer
+></script>
+
+
+<script>
+    const supportMessage =
+        document.getElementById(
+            "message"
+        );
+
+    const messageCount =
+        document.getElementById(
+            "messageCount"
+        );
+
+
+    function updateMessageCount() {
+        if (
+            !supportMessage
+            || !messageCount
+        ) {
+            return;
+        }
+
+        messageCount.textContent =
+            supportMessage.value.length
+            + " / 3000";
+    }
+
+
+    if (supportMessage) {
+        supportMessage.addEventListener(
+            "input",
+            updateMessageCount
+        );
+
+        updateMessageCount();
+    }
+</script>
+
+</body>
+</html>

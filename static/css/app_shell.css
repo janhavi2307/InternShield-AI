@@ -1,0 +1,438 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap");
+
+:root {
+    --is-bg: #080912;
+    --is-surface: rgba(24, 26, 45, 0.86);
+    --is-surface-soft: rgba(255, 255, 255, 0.035);
+    --is-line: rgba(255, 255, 255, 0.09);
+
+    --is-text: #f8f8ff;
+    --is-soft: #b7b8ca;
+    --is-muted: #85879a;
+
+    --is-primary: #8067ff;
+    --is-primary-light: #aa99ff;
+    --is-cyan: #2dd4bf;
+}
+
+/* ---------------------------------------------------------
+   GLOBAL CONSISTENCY FOR ALL NON-DASHBOARD APP PAGES
+--------------------------------------------------------- */
+
+body.app-standard-page {
+    min-height: 100vh !important;
+    overflow-x: hidden;
+
+    color: var(--is-text) !important;
+
+    background:
+        radial-gradient(
+            circle at 88% 5%,
+            rgba(128, 103, 255, 0.15),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 3% 78%,
+            rgba(45, 212, 191, 0.065),
+            transparent 24%
+        ),
+        var(--is-bg) !important;
+
+    font-family:
+        "DM Sans",
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        sans-serif !important;
+}
+
+body.app-standard-page button,
+body.app-standard-page input,
+body.app-standard-page select,
+body.app-standard-page textarea {
+    font-family: inherit !important;
+}
+
+body.app-standard-page h1,
+body.app-standard-page h2,
+body.app-standard-page h3,
+body.app-standard-page h4,
+body.app-standard-page h5,
+body.app-standard-page h6 {
+    font-family:
+        "Manrope",
+        "DM Sans",
+        sans-serif !important;
+}
+
+body.app-standard-page > .shell,
+body.app-standard-page .shell {
+    grid-template-columns: none !important;
+}
+
+body.app-standard-page .main {
+    grid-column: auto !important;
+    min-width: 0;
+}
+
+/* ---------------------------------------------------------
+   ONE NAVBAR ACROSS THE PRODUCT
+--------------------------------------------------------- */
+
+.is-app-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1100;
+
+    width: 100%;
+
+    border-bottom:
+        1px solid var(--is-line);
+
+    background:
+        rgba(8, 9, 18, 0.92);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+}
+
+.is-app-topbar-inner {
+    width:
+        min(
+            1380px,
+            calc(100% - 48px)
+        );
+
+    min-height: 82px;
+
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    gap: 26px;
+}
+
+.is-app-brand {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 11px;
+
+    color: var(--is-text) !important;
+
+    text-decoration: none !important;
+}
+
+.is-app-brand-mark {
+    position: relative;
+
+    width: 42px;
+    height: 42px;
+
+    overflow: hidden;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.13);
+
+    border-radius: 13px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #8b74ff,
+            #6250dd
+        );
+
+    box-shadow:
+        0 12px 28px
+        rgba(128, 103, 255, 0.28);
+}
+
+.is-app-brand-mark::after {
+    content: "";
+
+    position: absolute;
+
+    width: 25px;
+    height: 60px;
+
+    top: -20px;
+    left: -13px;
+
+    transform:
+        rotate(35deg);
+
+    background:
+        rgba(255, 255, 255, 0.18);
+}
+
+.is-app-brand-mark svg {
+    position: relative;
+    z-index: 1;
+
+    width: 22px;
+    height: 22px;
+}
+
+.is-app-brand-name {
+    font-family:
+        "Manrope",
+        sans-serif !important;
+
+    font-size: 1.13rem;
+    font-weight: 800;
+
+    letter-spacing: -0.04em;
+
+    white-space: nowrap;
+}
+
+.is-app-brand-name > span {
+    color:
+        var(--is-primary-light);
+}
+
+.is-app-nav {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 5px;
+}
+
+.is-app-nav-link {
+    min-height: 42px;
+
+    padding: 0 13px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid
+        transparent;
+
+    border-radius: 11px;
+
+    color:
+        var(--is-muted) !important;
+
+    background:
+        transparent;
+
+    text-decoration:
+        none !important;
+
+    font-size: 0.78rem !important;
+    font-weight: 750 !important;
+
+    white-space: nowrap;
+
+    transition:
+        color 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease,
+        transform 0.18s ease;
+}
+
+.is-app-nav-link:hover {
+    transform:
+        translateY(-1px);
+
+    color:
+        var(--is-text) !important;
+
+    border-color:
+        var(--is-line);
+
+    background:
+        rgba(255, 255, 255, 0.03);
+}
+
+.is-app-nav-link.is-active {
+    color:
+        #ddd7ff !important;
+
+    border-color:
+        rgba(128, 103, 255, 0.24);
+
+    background:
+        rgba(128, 103, 255, 0.09);
+}
+
+.is-app-profile-link {
+    width: 42px;
+    height: 42px;
+
+    display: grid;
+    place-items: center;
+
+    flex-shrink: 0;
+
+    border:
+        1px solid
+        var(--is-line);
+
+    border-radius: 12px;
+
+    color:
+        #b9b1ef !important;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease;
+}
+
+.is-app-profile-link:hover,
+.is-app-profile-link.is-active {
+    transform:
+        translateY(-1px);
+
+    border-color:
+        rgba(128, 103, 255, 0.34);
+
+    background:
+        rgba(128, 103, 255, 0.08);
+}
+
+.is-app-profile-link svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ---------------------------------------------------------
+   SMALL CONSISTENCY TOUCHES
+--------------------------------------------------------- */
+
+body.app-standard-page a,
+body.app-standard-page button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+body.app-standard-page ::selection {
+    background:
+        rgba(128, 103, 255, 0.34);
+
+    color: white;
+}
+
+body.app-standard-page input,
+body.app-standard-page select,
+body.app-standard-page textarea {
+    accent-color:
+        var(--is-primary);
+}
+
+/* Assistant-specific button moved from old sidebar topbar. */
+.is-assistant-clear {
+    margin-left: 8px;
+}
+
+@media (max-width: 980px) {
+    .is-app-topbar-inner {
+        width:
+            min(
+                100% - 30px,
+                1380px
+            );
+
+        gap: 14px;
+    }
+
+    .is-app-nav {
+        justify-content: flex-start;
+
+        overflow-x: auto;
+
+        scrollbar-width: none;
+    }
+
+    .is-app-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .is-app-nav-link {
+        padding:
+            0
+            11px;
+    }
+}
+
+@media (max-width: 720px) {
+    .is-app-topbar-inner {
+        min-height: 72px;
+
+        grid-template-columns:
+            auto
+            minmax(0, 1fr)
+            auto;
+    }
+
+    .is-app-brand-name {
+        display: none;
+    }
+
+    .is-app-brand-mark {
+        width: 40px;
+        height: 40px;
+    }
+
+    .is-app-nav-link {
+        min-height: 38px;
+
+        padding:
+            0
+            10px;
+
+        font-size:
+            0.72rem !important;
+    }
+
+    .is-app-profile-link {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 520px) {
+    .is-app-nav-link:nth-child(1),
+    .is-app-nav-link:nth-child(5) {
+        display: none;
+    }
+
+    .is-app-topbar-inner {
+        width:
+            calc(100% - 22px);
+
+        gap: 8px;
+    }
+
+    .is-app-nav {
+        gap: 2px;
+    }
+}

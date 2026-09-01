@@ -1,0 +1,135 @@
+{# Reusable floating InternShield Assistant launcher. #}
+<a
+    class="is-assistant-fab"
+    href="{{ url_for('assistant') }}"
+    aria-label="Open InternShield Assistant"
+    title="Open InternShield Assistant"
+>
+    <span class="is-assistant-fab__face" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none">
+            <rect x="13" y="16" width="38" height="33" rx="13" fill="currentColor" opacity="0.16"/>
+            <rect x="15" y="18" width="34" height="29" rx="11" stroke="currentColor" stroke-width="3"/>
+            <path d="M32 9V17" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="8" r="3" fill="currentColor"/>
+            <circle cx="25" cy="31" r="3" fill="currentColor"/>
+            <circle cx="39" cy="31" r="3" fill="currentColor"/>
+            <path d="M25 39C27 41 29.4 42 32 42C34.6 42 37 41 39 39" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <path d="M10 28H15M49 28H54" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+    </span>
+    <span class="is-assistant-fab__tooltip">Ask InternShield Assistant</span>
+</a>
+
+<style>
+    .is-assistant-fab {
+        position: fixed;
+        right: 28px;
+        bottom: 28px;
+        z-index: 1400;
+        width: 64px;
+        height: 64px;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(156, 139, 255, .34);
+        border-radius: 21px;
+        color: #fff;
+        background:
+            linear-gradient(145deg, #8d75ff, #6654e8 58%, #2bcdbd);
+        box-shadow:
+            0 18px 46px rgba(0, 0, 0, .38),
+            0 0 34px rgba(128, 103, 255, .22);
+        text-decoration: none;
+        transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+        isolation: isolate;
+    }
+
+    .is-assistant-fab::before {
+        content: "";
+        position: absolute;
+        inset: -7px;
+        z-index: -1;
+        border: 1px solid rgba(128, 103, 255, .14);
+        border-radius: 26px;
+        animation: isAssistantPulse 2.4s ease-out infinite;
+    }
+
+    .is-assistant-fab:hover {
+        transform: translateY(-4px) scale(1.025);
+        border-color: rgba(173, 159, 255, .58);
+        box-shadow:
+            0 22px 56px rgba(0, 0, 0, .44),
+            0 0 42px rgba(128, 103, 255, .32);
+    }
+
+    .is-assistant-fab:focus-visible {
+        outline: none;
+        box-shadow:
+            0 0 0 4px rgba(128, 103, 255, .2),
+            0 22px 56px rgba(0, 0, 0, .44);
+    }
+
+    .is-assistant-fab__face {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+    }
+
+    .is-assistant-fab__face svg {
+        width: 40px;
+        height: 40px;
+    }
+
+    .is-assistant-fab__tooltip {
+        position: absolute;
+        right: 76px;
+        bottom: 50%;
+        transform: translateY(50%) translateX(8px);
+        width: max-content;
+        max-width: 230px;
+        padding: 10px 13px;
+        border: 1px solid rgba(255,255,255,.09);
+        border-radius: 11px;
+        color: #dcd9f4;
+        background: rgba(13, 16, 31, .96);
+        box-shadow: 0 12px 30px rgba(0,0,0,.28);
+        font: 700 12px/1.25 Inter, "DM Sans", system-ui, sans-serif;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+        backdrop-filter: blur(14px);
+    }
+
+    .is-assistant-fab:hover .is-assistant-fab__tooltip,
+    .is-assistant-fab:focus-visible .is-assistant-fab__tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(50%) translateX(0);
+    }
+
+    @keyframes isAssistantPulse {
+        0% { transform: scale(.94); opacity: .7; }
+        75%, 100% { transform: scale(1.12); opacity: 0; }
+    }
+
+    @media (max-width: 700px) {
+        .is-assistant-fab {
+            right: 18px;
+            bottom: 18px;
+            width: 58px;
+            height: 58px;
+            border-radius: 19px;
+        }
+
+        .is-assistant-fab__face,
+        .is-assistant-fab__face svg {
+            width: 36px;
+            height: 36px;
+        }
+
+        .is-assistant-fab__tooltip {
+            display: none;
+        }
+    }
+</style>

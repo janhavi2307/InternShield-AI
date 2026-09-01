@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Support Inbox | InternShield AI</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/sidebar_shell.css') }}"
+    >
+
+    <style>
+        :root {
+            --panel: rgba(24, 26, 45, .88);
+            --line: rgba(255, 255, 255, .09);
+            --text: #f8f8ff;
+            --muted: #85899f;
+            --primary: #8067ff;
+        }
+
+        .inbox-page {
+            width: min(1220px, 92%);
+            margin: 0 auto;
+            padding: 30px 0 55px;
+        }
+
+        .flash {
+            margin-bottom: 15px;
+            padding: 13px 15px;
+            border: 1px solid;
+            border-radius: 12px;
+            font-size: .76rem;
+        }
+
+        .flash.success {
+            color: #91e7cf;
+            border-color: rgba(52, 217, 194, .28);
+            background: rgba(52, 217, 194, .08);
+        }
+
+        .flash.warning {
+            color: #ffe0a5;
+            border-color: rgba(255, 196, 95, .28);
+            background: rgba(255, 196, 95, .08);
+        }
+
+        .flash.danger {
+            color: #ffb7c1;
+            border-color: rgba(255, 113, 135, .28);
+            background: rgba(255, 113, 135, .08);
+        }
+
+        .inbox-hero {
+            margin-bottom: 16px;
+            padding: 23px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(30, 32, 55, .95),
+                    rgba(15, 18, 33, .91)
+                );
+        }
+
+        .inbox-kicker {
+            margin-bottom: 6px;
+            color: #998de3;
+            font-size: .59rem;
+            font-weight: 850;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .inbox-hero h2 {
+            margin: 0 0 6px;
+            font-size: 1.5rem;
+        }
+
+        .inbox-hero p {
+            margin: 0;
+            color: var(--muted);
+            font-size: .69rem;
+        }
+
+        .stats {
+            margin-bottom: 16px;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .stat {
+            padding: 15px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: var(--panel);
+        }
+
+        .stat span {
+            display: block;
+            color: var(--muted);
+            font-size: .61rem;
+        }
+
+        .stat strong {
+            display: block;
+            margin-top: 6px;
+            color: #b3a7ff;
+            font-size: 1.3rem;
+        }
+
+        .inbox-card {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: var(--panel);
+        }
+
+        .toolbar {
+            padding: 14px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 180px auto;
+            gap: 10px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .toolbar input,
+        .toolbar select {
+            min-height: 42px;
+            padding: 0 11px;
+            color: var(--text);
+            border: 1px solid var(--line);
+            border-radius: 11px;
+            outline: none;
+            background: rgba(5, 7, 17, .63);
+        }
+
+        .toolbar button {
+            padding: 0 14px;
+            border: 0;
+            border-radius: 11px;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), #6550db);
+            font-size: .68rem;
+            font-weight: 850;
+            cursor: pointer;
+        }
+
+        .request-row {
+            padding: 15px;
+            display: grid;
+            grid-template-columns:
+                minmax(0, 1.25fr)
+                minmax(0, .8fr)
+                110px
+                100px;
+            gap: 13px;
+            align-items: center;
+            border-bottom: 1px solid var(--line);
+            color: inherit;
+            text-decoration: none;
+            transition: background .18s ease;
+        }
+
+        .request-row:last-child {
+            border-bottom: 0;
+        }
+
+        .request-row:hover {
+            background: rgba(128, 103, 255, .035);
+        }
+
+        .request-subject strong,
+        .request-user strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #d3d5e0;
+            font-size: .7rem;
+        }
+
+        .request-subject span,
+        .request-user span,
+        .request-date {
+            color: var(--muted);
+            font-size: .59rem;
+        }
+
+        .status {
+            width: fit-content;
+            padding: 6px 8px;
+            border-radius: 999px;
+            color: #86e6d7;
+            background: rgba(52,217,194,.055);
+            border: 1px solid rgba(52,217,194,.14);
+            font-size: .52rem;
+            font-weight: 850;
+            text-transform: uppercase;
+        }
+
+        .empty {
+            padding: 34px 18px;
+            color: var(--muted);
+            text-align: center;
+            font-size: .7rem;
+        }
+
+        @media (max-width: 850px) {
+            .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .toolbar,
+            .request-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body class="has-unified-sidebar">
+
+<div class="is-workspace-shell">
+
+    {% include "_app_sidebar.html" %}
+
+    <div
+        id="mobileOverlay"
+        class="is-mobile-overlay"
+    ></div>
+
+    <section class="is-workspace-main">
+
+        {% set page_heading = "Support Inbox" %}
+        {% include "_page_topbar.html" %}
+
+        <main class="inbox-page">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endwith %}
+
+            <section class="inbox-hero">
+                <div class="inbox-kicker">
+                    Admin workspace
+                </div>
+
+                <h2>
+                    Support Inbox
+                </h2>
+
+                <p>
+                    Review student requests, reply, and manage request status.
+                </p>
+            </section>
+
+            <section class="stats">
+                <article class="stat">
+                    <span>Total requests</span>
+                    <strong>{{ statistics.total }}</strong>
+                </article>
+
+                <article class="stat">
+                    <span>Open</span>
+                    <strong>{{ statistics.open }}</strong>
+                </article>
+
+                <article class="stat">
+                    <span>Reviewing</span>
+                    <strong>{{ statistics.reviewing }}</strong>
+                </article>
+
+                <article class="stat">
+                    <span>Resolved</span>
+                    <strong>{{ statistics.resolved }}</strong>
+                </article>
+            </section>
+
+            <section class="inbox-card">
+
+                <form
+                    class="toolbar"
+                    method="get"
+                    action="{{ url_for('admin_support') }}"
+                >
+                    <input
+                        name="q"
+                        value="{{ search_query }}"
+                        placeholder="Search subject, student or email..."
+                    >
+
+                    <select name="status">
+                        <option value="all" {% if status_filter == 'all' %}selected{% endif %}>
+                            All statuses
+                        </option>
+                        <option value="open" {% if status_filter == 'open' %}selected{% endif %}>
+                            Open
+                        </option>
+                        <option value="reviewing" {% if status_filter == 'reviewing' %}selected{% endif %}>
+                            Reviewing
+                        </option>
+                        <option value="resolved" {% if status_filter == 'resolved' %}selected{% endif %}>
+                            Resolved
+                        </option>
+                    </select>
+
+                    <button type="submit">
+                        Filter
+                    </button>
+                </form>
+
+                {% if support_requests %}
+
+                    {% for item in support_requests %}
+
+                        <a
+                            class="request-row"
+                            href="{{ url_for(
+                                'admin_support_detail',
+                                request_id=item.id
+                            ) }}"
+                        >
+                            <div class="request-subject">
+                                <strong>
+                                    {{ item.subject }}
+                                </strong>
+
+                                <span>
+                                    {{ item.category.replace('_', ' ')|title }}
+                                </span>
+                            </div>
+
+                            <div class="request-user">
+                                <strong>
+                                    {{ item.user_name or 'Student' }}
+                                </strong>
+
+                                <span>
+                                    {{ item.user_email or 'Email unavailable' }}
+                                </span>
+                            </div>
+
+                            <span class="status">
+                                {{ item.status }}
+                            </span>
+
+                            <span class="request-date">
+                                {{ item.updated_at[:10] if item.updated_at else (item.created_at[:10] if item.created_at else '') }}
+                            </span>
+                        </a>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty">
+                        No support requests match the current filter.
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+        </main>
+
+    </section>
+
+</div>
+
+<script
+    src="{{ url_for('static', filename='js/sidebar_shell.js') }}"
+    defer
+></script>
+
+</body>
+</html>

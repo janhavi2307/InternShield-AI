@@ -1158,10 +1158,147 @@
                 transition-duration: 0.01ms !important;
             }
         }
+
+        .row-actions { display: flex; align-items: center; gap: 8px; }
+        .shortlist-button {
+            width: 36px; height: 36px; display: grid; place-items: center;
+            border: 1px solid var(--border); border-radius: 9px;
+            color: var(--text-muted); background: rgba(255,255,255,.025);
+            cursor: pointer; font-size: 1rem;
+        }
+        .shortlist-button.saved {
+            color: #ffd36a; border-color: rgba(255,211,106,.35);
+            background: rgba(255,211,106,.09);
+        }
+
+        .delete-assessment-button {
+            min-height: 36px;
+            padding: 0 11px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+
+            color: #ff9bab;
+            border: 1px solid rgba(255, 104, 124, 0.24);
+            border-radius: 9px;
+            background: rgba(255, 104, 124, 0.055);
+
+            font-size: 0.72rem;
+            font-weight: 800;
+            cursor: pointer;
+
+            transition:
+                color 0.25s ease,
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                background-color 0.25s ease;
+        }
+
+        .delete-assessment-button:hover {
+            color: #ffd2d8;
+            transform: translateY(-2px);
+            border-color: rgba(255, 104, 124, 0.48);
+            background: rgba(255, 104, 124, 0.12);
+        }
+
+        .delete-assessment-button svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .delete-assessment-form {
+            margin: 0;
+            display: inline-flex;
+        }
+
+        /* Stable dashboard layout: keep the fixed navigation and filters aligned. */
+        @media (min-width: 851px) {
+            .sidebar {
+                left: 0 !important;
+                transform: none !important;
+                animation: none !important;
+            }
+
+            .main-area {
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+
+        .history-toolbar {
+            display: grid;
+            grid-template-columns: minmax(260px, 1fr) minmax(190px, 0.42fr) minmax(190px, 0.42fr);
+            gap: 16px;
+            padding: 22px 25px;
+            align-items: end;
+        }
+
+        .history-field {
+            min-width: 0;
+            display: grid;
+            gap: 8px;
+        }
+
+        .history-field label {
+            color: var(--text-soft);
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .history-control {
+            width: 100%;
+            min-width: 0;
+        }
+
+        @media (max-width: 1050px) and (min-width: 851px) {
+            .history-toolbar {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .history-field:first-child {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .history-toolbar {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+        }
+
+        .sidebar-profile {
+            text-decoration: none;
+            cursor: pointer;
+            transition:
+                border-color .2s ease,
+                background .2s ease,
+                transform .2s ease;
+        }
+
+        .sidebar-profile:hover {
+            transform: translateY(-1px);
+            border-color: rgba(128, 103, 255, .35);
+            background: rgba(128, 103, 255, .06);
+        }
+
+
     </style>
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/enhancements.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/sidebar_shell.css') }}"
+    >
+
 </head>
 
-<body>
+<body class="has-unified-sidebar">
     {% set analyses =
         analyses
         if analyses is defined and analyses is not none
@@ -1249,163 +1386,11 @@
     %}
 
     <div class="dashboard-shell">
-        <aside
-            id="sidebar"
-            class="sidebar"
-        >
-            <a
-                href="/dashboard"
-                class="brand"
-            >
-                <span class="brand-mark">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M12 3L19 6V11C19 15.6 16.2 19.5 12 21C7.8 19.5 5 15.6 5 11V6L12 3Z"
-                            stroke="white"
-                            stroke-width="1.8"
-                            stroke-linejoin="round"
-                        />
-
-                        <path
-                            d="M9 12L11 14L15.5 9.5"
-                            stroke="white"
-                            stroke-width="1.8"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        />
-                    </svg>
-                </span>
-
-                <span>
-                    InternShield
-                    <span class="brand-accent">AI</span>
-                </span>
-            </a>
-
-            <p class="navigation-label">
-                Workspace
-            </p>
-
-            <nav class="navigation">
-                <a
-                    href="/dashboard"
-                    class="nav-link active"
-                >
-                    <span class="nav-icon">
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <rect
-                                x="3"
-                                y="3"
-                                width="7"
-                                height="7"
-                                rx="2"
-                                stroke="currentColor"
-                                stroke-width="1.7"
-                            />
-
-                            <rect
-                                x="14"
-                                y="3"
-                                width="7"
-                                height="7"
-                                rx="2"
-                                stroke="currentColor"
-                                stroke-width="1.7"
-                            />
-
-                            <rect
-                                x="3"
-                                y="14"
-                                width="7"
-                                height="7"
-                                rx="2"
-                                stroke="currentColor"
-                                stroke-width="1.7"
-                            />
-
-                            <rect
-                                x="14"
-                                y="14"
-                                width="7"
-                                height="7"
-                                rx="2"
-                                stroke="currentColor"
-                                stroke-width="1.7"
-                            />
-                        </svg>
-                    </span>
-
-                    Dashboard
-                </a>
-
-                <a
-                    href="{{ url_for('compare') }}"
-                    class="nav-link"
-                >
-                    <span class="nav-icon">
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path
-                                d="M7 7H19M19 7L16 4M19 7L16 10"
-                                stroke="currentColor"
-                                stroke-width="1.7"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                            <path
-                                d="M17 17H5M5 17L8 14M5 17L8 20"
-                                stroke="currentColor"
-                                stroke-width="1.7"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                        </svg>
-                    </span>
-
-                    Compare internships
-                </a>
-            </nav>
-
-            <div class="sidebar-footer">
-                <div class="sidebar-profile">
-                    <div class="profile-avatar">
-                        {{ student_name[:1]|upper }}
-                    </div>
-
-                    <div class="profile-information">
-                        <strong>{{ student_name }}</strong>
-                        <span>{{ student_email }}</span>
-                    </div>
-                </div>
-
-                <a
-                    href="/logout"
-                    class="logout-link"
-                >
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M10 5H6C4.9 5 4 5.9 4 7V17C4 18.1 4.9 19 6 19H10"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linecap="round"
-                        />
-
-                        <path
-                            d="M14 8L18 12L14 16M18 12H9"
-                            stroke="currentColor"
-                            stroke-width="1.8"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        />
-                    </svg>
-
-                    Log out
-                </a>
-            </div>
-        </aside>
+        {% include "_app_sidebar.html" %}
 
         <div
             id="mobileOverlay"
-            class="mobile-overlay"
+            class="mobile-overlay is-mobile-overlay"
         ></div>
 
         <main class="main-area">
@@ -1621,8 +1606,47 @@
                     </div>
 
                     {% if analyses %}
+                        <div class="history-toolbar" aria-label="Assessment history controls">
+                            <div class="history-field">
+                                <label for="historySearch">Search assessments</label>
+                                <input
+                                    id="historySearch"
+                                    class="history-control"
+                                    type="search"
+                                    placeholder="Search opportunity or company"
+                                    autocomplete="off"
+                                >
+                            </div>
+
+                            <div class="history-field">
+                                <label for="historyStatus">Filter by status</label>
+                                <select id="historyStatus" class="history-control">
+                                    <option value="all">All statuses</option>
+                                    <option value="appears_reasonable">Appears reasonable</option>
+                                    <option value="verification_required">Verification required</option>
+                                    <option value="potentially_suspicious">Potentially suspicious</option>
+                                </select>
+                            </div>
+
+                            <div class="history-field">
+                                <label for="historySort">Sort assessments</label>
+                                <select id="historySort" class="history-control">
+                                    <option value="newest">Newest first</option>
+                                    <option value="oldest">Oldest first</option>
+                                    <option value="verification">Highest verification</option>
+                                    <option value="value">Highest value</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <p
+                            id="historyResultsSummary"
+                            class="history-results-summary"
+                            aria-live="polite"
+                        ></p>
+
                         <div class="table-container">
-                            <table class="history-table">
+                            <table class="history-table" data-history-table>
                                 <thead>
                                     <tr>
                                         <th>Opportunity</th>
@@ -1642,7 +1666,14 @@
                                             or "verification_required"
                                         %}
 
-                                        <tr>
+                                        <tr
+                                            data-history-row
+                                            data-search="{{ ((analysis.internship_role or analysis.role_title or 'Internship') ~ ' ' ~ (analysis.company_name or 'Not provided'))|lower|e }}"
+                                            data-status="{{ status }}"
+                                            data-verification="{{ analysis.verification_score or 0 }}"
+                                            data-value="{{ analysis.value_score or 0 }}"
+                                            data-date="{{ analysis.created_at or '' }}"
+                                        >
                                             <td class="opportunity-cell">
                                                 <strong>
                                                     {{
@@ -1710,10 +1741,12 @@
                                             </td>
 
                                             <td>
-                                                <a
-                                                    href="/analysis/{{ analysis.id }}"
-                                                    class="view-button"
-                                                >
+                                                <div class="row-actions">
+                                                <form method="post" action="{{ url_for('toggle_shortlist', analysis_id=analysis.id) }}">
+                                                    <input type="hidden" name="action" value="{{ 'remove' if analysis.is_shortlisted else 'add' }}">
+                                                    <button class="shortlist-button {{ 'saved' if analysis.is_shortlisted else '' }}" type="submit" title="{{ 'Remove from shortlist' if analysis.is_shortlisted else 'Add to shortlist' }}" aria-label="{{ 'Remove from shortlist' if analysis.is_shortlisted else 'Add to shortlist' }}">★</button>
+                                                </form>
+                                                <a href="/analysis/{{ analysis.id }}" class="view-button">
                                                     View
 
                                                     <svg
@@ -1729,11 +1762,50 @@
                                                         />
                                                     </svg>
                                                 </a>
+
+                                                <form
+                                                    class="delete-assessment-form"
+                                                    method="post"
+                                                    action="{{ url_for('delete_analysis', analysis_id=analysis.id) }}"
+                                                    onsubmit="return confirm('Delete this assessment permanently? This cannot be undone.');"
+                                                >
+                                                    <button
+                                                        class="delete-assessment-button"
+                                                        type="submit"
+                                                        title="Delete assessment"
+                                                        aria-label="Delete assessment"
+                                                    >
+                                                        <svg
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                            aria-hidden="true"
+                                                        >
+                                                            <path
+                                                                d="M4 7H20M9 7V5H15V7M8 10V17M12 10V17M16 10V17M6 7L7 20H17L18 7"
+                                                                stroke="currentColor"
+                                                                stroke-width="1.7"
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                            />
+                                                        </svg>
+
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
+                        </div>
+
+                        <div
+                            id="historyEmptyFilter"
+                            class="history-empty-filter"
+                            hidden
+                        >
+                            No assessments match the current search and filter.
                         </div>
                     {% else %}
                         <div class="empty-state">
@@ -1806,5 +1878,14 @@
             }
         );
     </script>
+    <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+    {% include "_assistant_fab.html" %}
+
+
+<script
+    src="{{ url_for('static', filename='js/sidebar_shell.js') }}"
+    defer
+></script>
+
 </body>
 </html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="InternShield AI error page">
+    <title>{{ status_code }} | InternShield AI</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhancements.css') }}">
+    <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            min-height: 100vh; margin: 0; display: grid; place-items: center;
+            padding: 24px; color: #f8f8ff; background:
+            radial-gradient(circle at 20% 20%, rgba(128,103,255,.22), transparent 32%),
+            radial-gradient(circle at 85% 80%, rgba(45,212,191,.14), transparent 30%),
+            #080912; font-family: Inter, system-ui, sans-serif;
+        }
+        main {
+            width: min(650px, 100%); padding: clamp(30px, 6vw, 58px);
+            border: 1px solid rgba(255,255,255,.1); border-radius: 26px;
+            background: rgba(22,24,42,.9); box-shadow: 0 30px 80px rgba(0,0,0,.35);
+        }
+        .code { color: #8e77ff; font-size: clamp(4rem, 13vw, 7rem); font-weight: 900; line-height: .9; }
+        h1 { margin: 24px 0 12px; font-size: clamp(1.8rem, 4vw, 2.8rem); }
+        p { margin: 0 0 28px; color: #b7b8ca; line-height: 1.7; }
+        .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+        a { padding: 13px 18px; border-radius: 12px; color: #fff; text-decoration: none; font-weight: 750; }
+        .primary { background: linear-gradient(135deg, #8067ff, #6d4df2); }
+        .secondary { border: 1px solid rgba(255,255,255,.13); background: rgba(255,255,255,.04); }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="code">{{ status_code }}</div>
+        <h1>{{ title }}</h1>
+        <p>{{ message }}</p>
+        <div class="actions">
+            <a class="primary" href="{{ url_for('dashboard') if session.get('user_id') else url_for('home') }}">
+                {{ "Return to dashboard" if session.get("user_id") else "Return home" }}
+            </a>
+            <a class="secondary" href="javascript:history.back()">Go back</a>
+        </div>
+    </main>
+</body>
+</html>

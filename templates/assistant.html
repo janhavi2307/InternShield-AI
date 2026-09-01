@@ -1,0 +1,2447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        InternShield Assistant
+    </title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        :root {
+            --bg: #080912;
+            --sidebar: rgba(13, 14, 26, .98);
+            --surface: rgba(24, 26, 45, .86);
+            --surface-2: rgba(14, 17, 31, .88);
+            --border: rgba(255, 255, 255, .09);
+
+            --text: #f8f8ff;
+            --soft: #c6c8d7;
+            --muted: #888ba0;
+
+            --primary: #8067ff;
+            --primary-light: #b0a3ff;
+            --cyan: #34d9c2;
+            --danger: #ff7187;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 86% 5%,
+                    rgba(128, 103, 255, .16),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 96% 90%,
+                    rgba(52, 217, 194, .055),
+                    transparent 25%
+                ),
+                var(--bg);
+
+            font-family:
+                "DM Sans",
+                sans-serif;
+
+            overflow: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        .shell {
+            min-height: 100vh;
+
+            display: grid;
+            grid-template-columns:
+                255px minmax(0, 1fr);
+        }
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            z-index: 30;
+
+            width: 255px;
+            height: 100vh;
+
+            padding: 25px 18px;
+
+            display: flex;
+            flex-direction: column;
+
+            border-right:
+                1px solid var(--border);
+
+            background: var(--sidebar);
+
+            backdrop-filter: blur(20px);
+        }
+
+        .brand {
+            margin-bottom: 38px;
+            padding: 0 7px;
+
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1.14rem;
+            font-weight: 800;
+            letter-spacing: -.04em;
+        }
+
+        .brand-mark {
+            position: relative;
+
+            width: 40px;
+            height: 40px;
+
+            overflow: hidden;
+
+            display: grid;
+            place-items: center;
+
+            flex-shrink: 0;
+
+            border:
+                1px solid rgba(255,255,255,.13);
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #6650db
+                );
+
+            box-shadow:
+                0 12px 28px
+                rgba(128,103,255,.28);
+        }
+
+        .brand-mark::after {
+            content: "";
+
+            position: absolute;
+
+            width: 25px;
+            height: 60px;
+
+            top: -20px;
+            left: -12px;
+
+            transform: rotate(35deg);
+
+            background:
+                rgba(255,255,255,.22);
+        }
+
+        .brand-mark svg {
+            position: relative;
+            z-index: 2;
+
+            width: 22px;
+            height: 22px;
+        }
+
+        .brand-accent {
+            color: var(--primary-light);
+        }
+
+        .nav-label {
+            margin: 0 10px 10px;
+
+            color: #646678;
+
+            font-size: .67rem;
+            font-weight: 800;
+            letter-spacing: .10em;
+            text-transform: uppercase;
+        }
+
+        .nav {
+            display: grid;
+            gap: 7px;
+        }
+
+        .nav-link {
+            min-height: 47px;
+
+            padding: 0 13px;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            color: var(--muted);
+
+            border:
+                1px solid transparent;
+
+            border-radius: 12px;
+
+            font-size: .88rem;
+            font-weight: 700;
+
+            transition:
+                color .2s ease,
+                background .2s ease,
+                border-color .2s ease,
+                transform .2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text);
+
+            border-color: var(--border);
+
+            background:
+                rgba(255,255,255,.035);
+
+            transform: translateX(3px);
+        }
+
+        .nav-link.active {
+            color: #ded8ff;
+
+            border-color:
+                rgba(128,103,255,.25);
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(128,103,255,.16),
+                    rgba(128,103,255,.05)
+                );
+        }
+
+        .nav-icon {
+            width: 34px;
+            height: 34px;
+
+            display: grid;
+            place-items: center;
+
+            flex-shrink: 0;
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,.035);
+        }
+
+        .nav-link.active .nav-icon {
+            color: var(--primary-light);
+
+            background:
+                rgba(128,103,255,.13);
+        }
+
+        .nav-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+        }
+
+        .account-card {
+            margin-bottom: 11px;
+            padding: 12px;
+
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 14px;
+
+            background:
+                rgba(255,255,255,.025);
+        }
+
+        .account-avatar {
+            width: 40px;
+            height: 40px;
+
+            overflow: hidden;
+
+            display: grid;
+            place-items: center;
+
+            flex-shrink: 0;
+
+            border-radius: 11px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #f07f89
+                );
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-weight: 800;
+        }
+
+        .account-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .account-copy {
+            min-width: 0;
+        }
+
+        .account-copy strong,
+        .account-copy span {
+            display: block;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .account-copy strong {
+            margin-bottom: 3px;
+
+            color: var(--soft);
+
+            font-size: .78rem;
+        }
+
+        .account-copy span {
+            color: var(--muted);
+
+            font-size: .66rem;
+        }
+
+        .logout {
+            min-height: 43px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #ffabb7;
+
+            border:
+                1px solid rgba(255,113,135,.18);
+
+            border-radius: 11px;
+
+            background:
+                rgba(255,113,135,.055);
+
+            font-size: .81rem;
+            font-weight: 800;
+        }
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .main {
+            grid-column: 2;
+            min-width: 0;
+            min-height: 0;
+        }
+
+        .topbar {
+            min-height: 82px;
+
+            padding: 0 4%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+
+            border-bottom:
+                1px solid var(--border);
+
+            background:
+                rgba(8,9,18,.68);
+
+            backdrop-filter: blur(18px);
+        }
+
+        .topbar-copy span {
+            display: block;
+
+            margin-bottom: 3px;
+
+            color: var(--muted);
+
+            font-size: .72rem;
+        }
+
+        .topbar-copy strong {
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1.08rem;
+        }
+
+        .clear-button {
+            min-height: 40px;
+
+            padding: 0 13px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 10px;
+
+            color: var(--muted);
+
+            background:
+                rgba(255,255,255,.025);
+
+            font-size: .7rem;
+            font-weight: 800;
+
+            cursor: pointer;
+        }
+
+        .content {
+            width:
+                min(1320px, 94%);
+
+            height:
+                calc(100dvh - 82px);
+
+            margin: 0 auto;
+
+            padding: 20px 0;
+
+            overflow: hidden;
+        }
+
+        .flash {
+            margin-bottom: 12px;
+            padding: 12px 14px;
+
+            border: 1px solid;
+            border-radius: 12px;
+
+            font-size: .78rem;
+        }
+
+        .flash.warning {
+            color: #ffe0a5;
+
+            border-color:
+                rgba(255,196,95,.27);
+
+            background:
+                rgba(255,196,95,.07);
+        }
+
+        .flash.danger,
+        .flash.error {
+            color: #ffb6c1;
+
+            border-color:
+                rgba(255,113,135,.27);
+
+            background:
+                rgba(255,113,135,.07);
+        }
+
+        /* =====================================================
+           ASSISTANT WORKSPACE
+        ===================================================== */
+
+        .assistant-layout {
+            height: 100%;
+            min-height: 0;
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.65fr)
+                330px;
+
+            gap: 17px;
+        }
+
+        .chat-card {
+            height: 100%;
+            min-height: 0;
+
+            display: flex;
+            flex-direction: column;
+
+            overflow: hidden;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(24,26,45,.90),
+                    rgba(13,16,30,.91)
+                );
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,.20);
+        }
+
+        .assistant-hero {
+            flex-shrink: 0;
+
+            padding: 20px 22px 17px;
+
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            border-bottom:
+                1px solid var(--border);
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(128,103,255,.08),
+                    transparent
+                );
+        }
+
+        .assistant-mark {
+            width: 48px;
+            height: 48px;
+
+            display: grid;
+            place-items: center;
+
+            flex-shrink: 0;
+
+            border:
+                1px solid rgba(128,103,255,.25);
+
+            border-radius: 15px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #8067ff,
+                    #5e4bd1
+                );
+
+            box-shadow:
+                0 12px 30px rgba(128,103,255,.25);
+        }
+
+        .assistant-mark svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .assistant-hero-copy {
+            min-width: 0;
+        }
+
+        .assistant-hero-copy h1 {
+            margin-bottom: 4px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1.15rem;
+        }
+
+        .assistant-hero-copy p {
+            color: var(--muted);
+
+            font-size: .74rem;
+            line-height: 1.5;
+        }
+
+        .assistant-live {
+            margin-left: auto;
+
+            padding: 7px 9px;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            border:
+                1px solid rgba(52,217,194,.19);
+
+            border-radius: 999px;
+
+            color: #83e7d7;
+
+            background:
+                rgba(52,217,194,.055);
+
+            font-size: .63rem;
+            font-weight: 800;
+        }
+
+        .assistant-live::before {
+            content: "";
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: var(--cyan);
+
+            box-shadow:
+                0 0 9px rgba(52,217,194,.6);
+        }
+
+        .quick-actions {
+            flex-shrink: 0;
+
+            padding: 12px 18px;
+
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+
+            border-bottom:
+                1px solid var(--border);
+
+            background:
+                rgba(255,255,255,.012);
+        }
+
+        .quick-action {
+            min-height: 34px;
+
+            padding: 0 11px;
+
+            border:
+                1px solid rgba(128,103,255,.17);
+
+            border-radius: 999px;
+
+            color: #b7aff0;
+
+            background:
+                rgba(128,103,255,.045);
+
+            font-size: .67rem;
+            font-weight: 750;
+
+            cursor: pointer;
+
+            transition:
+                border-color .2s ease,
+                background .2s ease,
+                transform .2s ease,
+                opacity .2s ease;
+        }
+
+        .quick-action:hover:not(:disabled) {
+            transform: translateY(-1px);
+
+            border-color:
+                rgba(128,103,255,.34);
+
+            background:
+                rgba(128,103,255,.09);
+        }
+
+        .quick-action:disabled {
+            cursor: not-allowed;
+            opacity: .42;
+        }
+
+        /* =====================================================
+           INTERNAL CHAT SCROLLER
+        ===================================================== */
+
+        .conversation {
+            flex: 1 1 auto;
+
+            min-height: 0;
+
+            padding: 12px 22px 24px;
+
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            overscroll-behavior: contain;
+            scrollbar-gutter: stable;
+
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+
+            scroll-behavior: smooth;
+        }
+
+        .conversation::-webkit-scrollbar,
+        .context-stack::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .conversation::-webkit-scrollbar-track,
+        .context-stack::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .conversation::-webkit-scrollbar-thumb,
+        .context-stack::-webkit-scrollbar-thumb {
+            border: 2px solid transparent;
+            border-radius: 999px;
+
+            background:
+                rgba(176,163,255,.27);
+
+            background-clip: padding-box;
+        }
+
+        .conversation::-webkit-scrollbar-thumb:hover,
+        .context-stack::-webkit-scrollbar-thumb:hover {
+            background:
+                rgba(176,163,255,.42);
+
+            background-clip: padding-box;
+        }
+
+        .welcome-state {
+            margin: auto;
+            max-width: 610px;
+
+            padding: 22px;
+
+            text-align: center;
+        }
+
+        .welcome-orb {
+            width: 68px;
+            height: 68px;
+
+            margin: 0 auto 16px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 21px;
+
+            color: #c8c1ff;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(128,103,255,.18),
+                    rgba(52,217,194,.06)
+                );
+
+            border:
+                1px solid rgba(128,103,255,.19);
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .welcome-state h2 {
+            margin-bottom: 8px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1.25rem;
+        }
+
+        .welcome-state p {
+            color: var(--muted);
+
+            font-size: .78rem;
+            line-height: 1.65;
+        }
+
+        .message-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+
+            scroll-margin-top: 10px;
+        }
+
+        .message-row.user {
+            justify-content: flex-end;
+        }
+
+        .message-avatar {
+            width: 31px;
+            height: 31px;
+
+            display: grid;
+            place-items: center;
+
+            flex-shrink: 0;
+
+            border-radius: 10px;
+
+            color: #c7c0ff;
+
+            background:
+                rgba(128,103,255,.10);
+
+            border:
+                1px solid rgba(128,103,255,.16);
+
+            font-size: .63rem;
+            font-weight: 850;
+        }
+
+        .message-row.user .message-avatar {
+            order: 2;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    var(--primary),
+                    #6550db
+                );
+        }
+
+        .message-content-stack {
+            max-width: 76%;
+
+            display: grid;
+            gap: 7px;
+        }
+
+        .message-row.user .message-content-stack {
+            order: 1;
+            justify-items: end;
+        }
+
+        .message-bubble {
+            max-width: 100%;
+
+            padding: 13px 15px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                6px 16px 16px 16px;
+
+            color: #cfd1dd;
+
+            background:
+                rgba(255,255,255,.025);
+
+            font-size: .75rem;
+            line-height: 1.68;
+
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .message-row.user .message-bubble {
+            border-color:
+                rgba(128,103,255,.18);
+
+            border-radius:
+                16px 6px 16px 16px;
+
+            color: #f4f2ff;
+
+            background:
+                rgba(128,103,255,.105);
+        }
+
+        .response-source {
+            width: fit-content;
+
+            padding: 5px 8px;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            border: 1px solid;
+            border-radius: 999px;
+
+            font-size: .58rem;
+            font-weight: 850;
+            letter-spacing: .025em;
+        }
+
+        .response-source::before {
+            content: "";
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .response-source.ai {
+            color: #83e7d7;
+
+            border-color:
+                rgba(52,217,194,.20);
+
+            background:
+                rgba(52,217,194,.055);
+        }
+
+        .response-source.fallback {
+            color: #c0b8ff;
+
+            border-color:
+                rgba(128,103,255,.19);
+
+            background:
+                rgba(128,103,255,.055);
+        }
+
+        /* =====================================================
+           AI WAITING / TYPING STATE
+        ===================================================== */
+
+        .message-row.thinking {
+            animation:
+                thinkingReveal .25s ease both;
+        }
+
+        .thinking-bubble {
+            min-width: 250px;
+
+            padding: 13px 15px;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            border:
+                1px solid rgba(52,217,194,.14);
+
+            border-radius:
+                6px 16px 16px 16px;
+
+            color: #bfc3d2;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(52,217,194,.045),
+                    rgba(128,103,255,.055)
+                );
+        }
+
+        .thinking-dots {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+
+            flex-shrink: 0;
+        }
+
+        .thinking-dots span {
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: var(--cyan);
+
+            animation:
+                thinkingDot 1.15s infinite ease-in-out;
+
+            box-shadow:
+                0 0 7px rgba(52,217,194,.32);
+        }
+
+        .thinking-dots span:nth-child(2) {
+            animation-delay: .15s;
+        }
+
+        .thinking-dots span:nth-child(3) {
+            animation-delay: .30s;
+        }
+
+        .thinking-copy strong {
+            display: block;
+
+            margin-bottom: 2px;
+
+            color: #e6e7ef;
+
+            font-size: .72rem;
+            font-weight: 750;
+        }
+
+        .thinking-copy span {
+            color: var(--muted);
+
+            font-size: .64rem;
+        }
+
+        @keyframes thinkingDot {
+            0%,
+            70%,
+            100% {
+                transform: translateY(0);
+                opacity: .38;
+            }
+
+            35% {
+                transform: translateY(-5px);
+                opacity: 1;
+            }
+        }
+
+        @keyframes thinkingReveal {
+            from {
+                transform: translateY(6px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* =====================================================
+           COMPOSER
+        ===================================================== */
+
+        .composer {
+            flex-shrink: 0;
+
+            padding: 14px 17px;
+
+            border-top:
+                1px solid var(--border);
+
+            background:
+                rgba(8,10,20,.88);
+
+            backdrop-filter: blur(18px);
+        }
+
+        .composer-shell {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0,1fr) auto;
+
+            gap: 9px;
+        }
+
+        .composer input {
+            min-height: 50px;
+
+            padding: 0 15px;
+
+            color: var(--text);
+
+            outline: none;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 13px;
+
+            background:
+                rgba(4,6,15,.58);
+
+            transition:
+                border-color .2s ease,
+                box-shadow .2s ease,
+                opacity .2s ease;
+        }
+
+        .composer input:focus {
+            border-color:
+                rgba(128,103,255,.42);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(128,103,255,.07);
+        }
+
+        .composer input:disabled {
+            opacity: .58;
+            cursor: wait;
+        }
+
+        .send-button {
+            min-width: 112px;
+
+            border: 0;
+            border-radius: 13px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #6250d8
+                );
+
+            box-shadow:
+                0 11px 26px
+                rgba(128,103,255,.20);
+
+            font-size: .75rem;
+            font-weight: 850;
+
+            cursor: pointer;
+
+            transition:
+                transform .2s ease,
+                opacity .2s ease;
+        }
+
+        .send-button:hover:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .send-button:disabled {
+            cursor: wait;
+            opacity: .68;
+        }
+
+        .send-button.is-waiting {
+            position: relative;
+
+            padding-right: 17px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6757cf,
+                    #5243bb
+                );
+        }
+
+        .composer-note {
+            margin-top: 7px;
+
+            color: #666a7e;
+
+            font-size: .61rem;
+            line-height: 1.45;
+        }
+
+        /* =====================================================
+           CONTEXT SIDEBAR
+        ===================================================== */
+
+        .context-stack {
+            min-height: 0;
+            max-height: 100%;
+
+            display: grid;
+            align-content: start;
+            gap: 14px;
+
+            overflow-y: auto;
+            overscroll-behavior: contain;
+
+            padding-right: 3px;
+        }
+
+        .context-card {
+            padding: 19px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 18px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(24,26,45,.88),
+                    rgba(16,18,34,.84)
+                );
+        }
+
+        .context-kicker {
+            margin-bottom: 6px;
+
+            color: #9388df;
+
+            font-size: .61rem;
+            font-weight: 850;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+        }
+
+        .context-card h2 {
+            margin-bottom: 6px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: .94rem;
+        }
+
+        .context-card > p {
+            color: var(--muted);
+
+            font-size: .69rem;
+            line-height: 1.55;
+        }
+
+        .context-stats {
+            margin-top: 15px;
+
+            display: grid;
+            grid-template-columns:
+                repeat(2,minmax(0,1fr));
+
+            gap: 8px;
+        }
+
+        .context-stat {
+            padding: 11px;
+
+            border:
+                1px solid rgba(255,255,255,.07);
+
+            border-radius: 11px;
+
+            background:
+                rgba(255,255,255,.018);
+        }
+
+        .context-stat span {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: #6f7387;
+
+            font-size: .59rem;
+        }
+
+        .context-stat strong {
+            color: #b7abff;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1.15rem;
+        }
+
+        .latest-card {
+            margin-top: 14px;
+            padding: 13px;
+
+            border:
+                1px solid rgba(128,103,255,.12);
+
+            border-radius: 12px;
+
+            background:
+                rgba(128,103,255,.035);
+        }
+
+        .latest-card span {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: #73778d;
+
+            font-size: .6rem;
+            text-transform: uppercase;
+        }
+
+        .latest-card strong {
+            display: block;
+
+            color: #d3d4df;
+
+            font-size: .72rem;
+            line-height: 1.45;
+        }
+
+        .grounding-note {
+            border-color:
+                rgba(52,217,194,.13);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(52,217,194,.04),
+                    rgba(18,21,37,.87)
+                );
+        }
+
+        .grounding-list {
+            margin-top: 14px;
+
+            display: grid;
+            gap: 9px;
+        }
+
+        .grounding-item {
+            display: grid;
+            grid-template-columns:
+                24px minmax(0,1fr);
+            gap: 8px;
+
+            color: #9fa2b4;
+
+            font-size: .66rem;
+            line-height: 1.5;
+        }
+
+        .grounding-number {
+            width: 24px;
+            height: 24px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 7px;
+
+            color: #86e5d6;
+
+            background:
+                rgba(52,217,194,.07);
+
+            font-size: .59rem;
+            font-weight: 850;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1050px) {
+            body {
+                overflow: auto;
+            }
+
+            .content {
+                height: auto;
+                min-height:
+                    calc(100dvh - 82px);
+
+                overflow: visible;
+
+                padding:
+                    22px 0 36px;
+            }
+
+            .assistant-layout {
+                height: auto;
+
+                grid-template-columns: 1fr;
+            }
+
+            .chat-card {
+                height:
+                    min(760px, calc(100dvh - 120px));
+
+                min-height: 650px;
+            }
+
+            .context-stack {
+                max-height: none;
+
+                grid-template-columns:
+                    repeat(2,minmax(0,1fr));
+
+                overflow: visible;
+            }
+        }
+
+        @media (max-width: 850px) {
+            .shell {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+
+                width: 100%;
+                height: auto;
+
+                border-right: 0;
+                border-bottom:
+                    1px solid var(--border);
+            }
+
+            .sidebar-footer {
+                display: none;
+            }
+
+            .brand {
+                margin-bottom: 16px;
+            }
+
+            .nav-label {
+                display: none;
+            }
+
+            .nav {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            .main {
+                grid-column: 1;
+            }
+
+            .chat-card {
+                height: 720px;
+                min-height: 620px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .content {
+                width: 92%;
+            }
+
+            .context-stack {
+                grid-template-columns: 1fr;
+            }
+
+            .assistant-live {
+                display: none;
+            }
+
+            .assistant-hero {
+                padding: 17px;
+            }
+
+            .quick-actions {
+                padding: 11px 14px;
+            }
+
+            .conversation {
+                padding: 16px 14px 18px;
+            }
+
+            .message-content-stack {
+                max-width: 88%;
+            }
+
+            .thinking-bubble {
+                min-width: 0;
+            }
+
+            .composer-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .send-button {
+                min-height: 46px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .conversation {
+                scroll-behavior: auto;
+            }
+
+            .thinking-dots span,
+            .message-row.thinking {
+                animation: none;
+            }
+        }
+    </style>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/sidebar_shell.css') }}"
+    >
+
+</head>
+
+<body class="has-unified-sidebar">
+<div class="is-workspace-shell">
+
+    {% include "_app_sidebar.html" %}
+
+    <div
+        id="mobileOverlay"
+        class="is-mobile-overlay"
+    ></div>
+
+    <section class="is-workspace-main">
+
+        {% set page_heading = "InternShield Assistant" %}
+        {% include "_page_topbar.html" %}
+
+        <div class="is-workspace-content">
+
+            {% set image_path =
+                profile.get("profile_image_path")
+                if profile
+                else ""
+            %}
+
+            <div class="shell">
+
+                <main class="main">
+
+                    <div class="content">
+
+                        {% with messages =
+                            get_flashed_messages(
+                                with_categories=true
+                            )
+                        %}
+
+                            {% for category, message in messages %}
+                                <div class="flash {{ category }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+
+                        {% endwith %}
+
+
+                        <section class="assistant-layout">
+
+                            <article class="chat-card">
+
+                                <div class="assistant-hero">
+
+                                    <div class="assistant-mark">
+
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                        >
+                                            <path
+                                                d="M12 3L19 6V11C19 15.5 16.2 19.3 12 21C7.8 19.3 5 15.5 5 11V6L12 3Z"
+                                                stroke="currentColor"
+                                                stroke-width="1.7"
+                                            />
+
+                                            <path
+                                                d="M9 10.5H15M9 14H13"
+                                                stroke="currentColor"
+                                                stroke-width="1.7"
+                                                stroke-linecap="round"
+                                            />
+                                        </svg>
+
+                                    </div>
+
+
+                                    <div class="assistant-hero-copy">
+
+                                        <h1>
+                                            Your internship decision assistant
+                                        </h1>
+
+                                        <p>
+                                            Ask about saved assessments,
+                                            application stages, offer changes,
+                                            warnings and recruiter follow-ups.
+                                        </p>
+
+                                    </div>
+
+
+                                    <span class="assistant-live">
+                                        Your data connected
+                                    </span>
+
+                                </div>
+
+
+                                <div class="quick-actions">
+
+                                    {% set quick_questions = [
+                                        "Explain my latest assessment",
+                                        "What should I do next?",
+                                        "Show my application status",
+                                        "Check my final offers",
+                                        "Draft a recruiter follow-up"
+                                    ] %}
+
+                                    {% for question in quick_questions %}
+
+                                        <form
+                                            method="post"
+                                            action="{{ url_for('assistant') }}"
+                                            class="assistant-request-form"
+                                            data-assistant-message="{{ question }}"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="message"
+                                                value="{{ question }}"
+                                            >
+
+                                            <button
+                                                class="quick-action"
+                                                type="submit"
+                                            >
+                                                {{ question }}
+                                            </button>
+                                        </form>
+
+                                    {% endfor %}
+
+                                </div>
+
+
+                                <div
+                                    class="conversation"
+                                    id="conversation"
+                                    role="log"
+                                    aria-live="polite"
+                                    aria-relevant="additions"
+                                >
+
+                                    {% if not chat_history %}
+
+                                        <div
+                                            class="welcome-state"
+                                            id="assistantWelcomeState"
+                                        >
+
+                                            <div class="welcome-orb">
+                                                IS
+                                            </div>
+
+                                            <h2>
+                                                Hi {{ full_name.split()[0] }}.
+                                                What can I help you review?
+                                            </h2>
+
+                                            <p>
+                                                This assistant uses information
+                                                already saved in your InternShield
+                                                account. It can explain scores and
+                                                warnings, summarize your tracker
+                                                and help draft professional
+                                                recruiter messages.
+                                            </p>
+
+                                        </div>
+
+                                    {% else %}
+
+                                        {% for item in chat_history %}
+
+                                            <div
+                                                class="message-row {{ item.role }}"
+                                            >
+
+                                                <div class="message-avatar">
+                                                    {% if item.role == "assistant" %}
+                                                        IS
+                                                    {% else %}
+                                                        {{ full_name[:1]|upper }}
+                                                    {% endif %}
+                                                </div>
+
+
+                                                <div class="message-content-stack">
+
+                                                    <div class="message-bubble">{{- item.content -}}</div>
+
+                                                    {% if item.role == "assistant" %}
+
+                                                        <span
+                                                            class="response-source {% if item.ai_used %}ai{% else %}fallback{% endif %}"
+                                                        >
+                                                            {% if item.ai_used %}
+                                                                AI-assisted
+                                                            {% else %}
+                                                                InternShield fallback
+                                                            {% endif %}
+                                                        </span>
+
+                                                    {% endif %}
+
+                                                </div>
+
+                                            </div>
+
+                                        {% endfor %}
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <form
+                                    class="composer assistant-request-form"
+                                    id="assistantComposer"
+                                    method="post"
+                                    action="{{ url_for('assistant') }}"
+                                    autocomplete="off"
+                                >
+
+                                    <div class="composer-shell">
+
+                                        <input
+                                            id="assistantMessage"
+                                            name="message"
+                                            maxlength="800"
+                                            placeholder="Ask about an assessment, offer, application or recruiter..."
+                                            required
+                                        >
+
+                                        <button
+                                            class="send-button"
+                                            id="assistantSendButton"
+                                            type="submit"
+                                        >
+                                            Send
+                                        </button>
+
+                                    </div>
+
+
+                                    <p class="composer-note">
+                                        InternShield Assistant explains your
+                                        saved project data. It does not replace
+                                        direct company/recruiter verification.
+                                    </p>
+
+                                </form>
+
+                            </article>
+
+
+                            <aside class="context-stack">
+
+                                <article class="context-card">
+
+                                    <div class="context-kicker">
+                                        Connected context
+                                    </div>
+
+                                    <h2>
+                                        Your InternShield activity
+                                    </h2>
+
+                                    <p>
+                                        The assistant can reference these saved
+                                        records while answering.
+                                    </p>
+
+
+                                    <div class="context-stats">
+
+                                        <div class="context-stat">
+                                            <span>
+                                                Assessments
+                                            </span>
+
+                                            <strong>
+                                                {{ assistant_statistics.assessments }}
+                                            </strong>
+                                        </div>
+
+
+                                        <div class="context-stat">
+                                            <span>
+                                                Applications
+                                            </span>
+
+                                            <strong>
+                                                {{ assistant_statistics.applications }}
+                                            </strong>
+                                        </div>
+
+
+                                        <div class="context-stat">
+                                            <span>
+                                                Offers
+                                            </span>
+
+                                            <strong>
+                                                {{ assistant_statistics.offers }}
+                                            </strong>
+                                        </div>
+
+
+                                        <div class="context-stat">
+                                            <span>
+                                                Saved warnings
+                                            </span>
+
+                                            <strong>
+                                                {{ assistant_statistics.warnings }}
+                                            </strong>
+                                        </div>
+
+                                    </div>
+
+
+                                    {% if latest_analysis %}
+
+                                        <div class="latest-card">
+
+                                            <span>
+                                                Latest assessment
+                                            </span>
+
+                                            <strong>
+                                                {{ latest_analysis.role_title or "Internship" }}
+                                                at
+                                                {{ latest_analysis.company_name or "Unknown company" }}
+                                            </strong>
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </article>
+
+
+                                <article class="context-card grounding-note">
+
+                                    <div class="context-kicker">
+                                        Grounded assistance
+                                    </div>
+
+                                    <h2>
+                                        What it can help with
+                                    </h2>
+
+                                    <p>
+                                        The assistant is designed around
+                                        InternShield workflows rather than
+                                        generic open-ended chat.
+                                    </p>
+
+
+                                    <div class="grounding-list">
+
+                                        <div class="grounding-item">
+                                            <span class="grounding-number">
+                                                1
+                                            </span>
+
+                                            <span>
+                                                Explain verification, value,
+                                                compatibility and consistency
+                                                results.
+                                            </span>
+                                        </div>
+
+
+                                        <div class="grounding-item">
+                                            <span class="grounding-number">
+                                                2
+                                            </span>
+
+                                            <span>
+                                                Summarize applications and
+                                                final-offer change results.
+                                            </span>
+                                        </div>
+
+
+                                        <div class="grounding-item">
+                                            <span class="grounding-number">
+                                                3
+                                            </span>
+
+                                            <span>
+                                                Draft follow-up, post-interview
+                                                and offer-clarification messages.
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </article>
+
+                            </aside>
+
+                        </section>
+
+                    </div>
+
+                </main>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+    (() => {
+        const conversation =
+            document.getElementById(
+                "conversation"
+            );
+
+        const messageInput =
+            document.getElementById(
+                "assistantMessage"
+            );
+
+        const sendButton =
+            document.getElementById(
+                "assistantSendButton"
+            );
+
+        const requestForms =
+            Array.from(
+                document.querySelectorAll(
+                    ".assistant-request-form"
+                )
+            );
+
+        let requestInProgress = false;
+        let waitingRow = null;
+        let waitingStatus = null;
+        let waitTimer = null;
+
+
+        const scrollConversationToBottom = (
+            behavior = "smooth"
+        ) => {
+            if (!conversation) {
+                return;
+            }
+
+            requestAnimationFrame(() => {
+                conversation.scrollTo({
+                    top: conversation.scrollHeight,
+                    behavior,
+                });
+            });
+        };
+
+
+        const scrollToLatestExchange = (
+            behavior = "smooth"
+        ) => {
+            if (!conversation) {
+                return;
+            }
+
+            const userMessages =
+                conversation.querySelectorAll(
+                    ".message-row.user"
+                );
+
+            const latestUserMessage =
+                userMessages[
+                    userMessages.length - 1
+                ];
+
+            if (!latestUserMessage) {
+                scrollConversationToBottom(
+                    behavior
+                );
+
+                return;
+            }
+
+            requestAnimationFrame(() => {
+                const conversationTop =
+                    conversation.getBoundingClientRect().top;
+
+                const messageTop =
+                    latestUserMessage
+                        .getBoundingClientRect()
+                        .top;
+
+                const targetScrollTop =
+                    conversation.scrollTop
+                    + (
+                        messageTop
+                        - conversationTop
+                    )
+                    - 10;
+
+                conversation.scrollTo({
+                    top: Math.max(
+                        0,
+                        targetScrollTop
+                    ),
+                    behavior,
+                });
+            });
+        };
+
+
+        const removeWelcomeState = () => {
+            const welcomeState =
+                document.getElementById(
+                    "assistantWelcomeState"
+                );
+
+            if (welcomeState) {
+                welcomeState.remove();
+            }
+        };
+
+
+        const createUserMessage = (
+            message
+        ) => {
+            if (
+                !conversation
+                || !message
+            ) {
+                return;
+            }
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className =
+                "message-row user";
+
+            const avatar =
+                document.createElement(
+                    "div"
+                );
+
+            avatar.className =
+                "message-avatar";
+
+            avatar.textContent =
+                "{{ full_name[:1]|upper }}";
+
+            const stack =
+                document.createElement(
+                    "div"
+                );
+
+            stack.className =
+                "message-content-stack";
+
+            const bubble =
+                document.createElement(
+                    "div"
+                );
+
+            bubble.className =
+                "message-bubble";
+
+            bubble.textContent =
+                message;
+
+            stack.appendChild(
+                bubble
+            );
+
+            row.appendChild(
+                avatar
+            );
+
+            row.appendChild(
+                stack
+            );
+
+            conversation.appendChild(
+                row
+            );
+        };
+
+
+        const createThinkingMessage = () => {
+            if (!conversation) {
+                return;
+            }
+
+            waitingRow =
+                document.createElement(
+                    "div"
+                );
+
+            waitingRow.className =
+                "message-row assistant thinking";
+
+            waitingRow.setAttribute(
+                "aria-label",
+                "InternShield AI is preparing a response"
+            );
+
+            const avatar =
+                document.createElement(
+                    "div"
+                );
+
+            avatar.className =
+                "message-avatar";
+
+            avatar.textContent =
+                "IS";
+
+            const stack =
+                document.createElement(
+                    "div"
+                );
+
+            stack.className =
+                "message-content-stack";
+
+            const bubble =
+                document.createElement(
+                    "div"
+                );
+
+            bubble.className =
+                "thinking-bubble";
+
+            const dots =
+                document.createElement(
+                    "span"
+                );
+
+            dots.className =
+                "thinking-dots";
+
+            dots.innerHTML =
+                "<span></span><span></span><span></span>";
+
+            const copy =
+                document.createElement(
+                    "span"
+                );
+
+            copy.className =
+                "thinking-copy";
+
+            const title =
+                document.createElement(
+                    "strong"
+                );
+
+            title.textContent =
+                "InternShield AI is reviewing…";
+
+            waitingStatus =
+                document.createElement(
+                    "span"
+                );
+
+            waitingStatus.textContent =
+                "Checking your saved assessment context.";
+
+            copy.appendChild(
+                title
+            );
+
+            copy.appendChild(
+                waitingStatus
+            );
+
+            bubble.appendChild(
+                dots
+            );
+
+            bubble.appendChild(
+                copy
+            );
+
+            stack.appendChild(
+                bubble
+            );
+
+            waitingRow.appendChild(
+                avatar
+            );
+
+            waitingRow.appendChild(
+                stack
+            );
+
+            conversation.appendChild(
+                waitingRow
+            );
+        };
+
+
+        const startWaitMessages = () => {
+            if (!waitingStatus) {
+                return;
+            }
+
+            const messages = [
+                "Checking your saved assessment context.",
+                "Reviewing verification and compatibility signals.",
+                "Preparing a grounded response from your InternShield data.",
+                "Still working — AI responses can take a few seconds.",
+            ];
+
+            let index = 0;
+
+            waitTimer =
+                window.setInterval(
+                    () => {
+                        index =
+                            Math.min(
+                                index + 1,
+                                messages.length - 1
+                            );
+
+                        if (waitingStatus) {
+                            waitingStatus.textContent =
+                                messages[index];
+                        }
+
+                        if (
+                            index
+                            === messages.length - 1
+                        ) {
+                            window.clearInterval(
+                                waitTimer
+                            );
+                        }
+                    },
+                    3500
+                );
+        };
+
+
+        const setRequestControlsBusy = () => {
+            document
+                .querySelectorAll(
+                    ".assistant-request-form button"
+                )
+                .forEach(
+                    (button) => {
+                        button.disabled = true;
+                    }
+                );
+
+            if (messageInput) {
+                messageInput.disabled =
+                    true;
+            }
+
+            if (sendButton) {
+                sendButton.classList.add(
+                    "is-waiting"
+                );
+
+                sendButton.textContent =
+                    "Replying…";
+            }
+        };
+
+
+        const getSubmittedMessage = (
+            form
+        ) => {
+            if (
+                form.dataset
+                && form.dataset.assistantMessage
+            ) {
+                return (
+                    form.dataset
+                        .assistantMessage
+                        .trim()
+                );
+            }
+
+            const field =
+                form.querySelector(
+                    '[name="message"]'
+                );
+
+            if (!field) {
+                return "";
+            }
+
+            return (
+                field.value
+                || ""
+            ).trim();
+        };
+
+
+        requestForms.forEach(
+            (form) => {
+                form.addEventListener(
+                    "submit",
+                    (event) => {
+                        if (
+                            requestInProgress
+                        ) {
+                            event.preventDefault();
+                            return;
+                        }
+
+                        const message =
+                            getSubmittedMessage(
+                                form
+                            );
+
+                        if (!message) {
+                            return;
+                        }
+
+                        requestInProgress =
+                            true;
+
+                        removeWelcomeState();
+
+                        createUserMessage(
+                            message
+                        );
+
+                        createThinkingMessage();
+
+                        setRequestControlsBusy();
+
+                        scrollToLatestExchange(
+                            "smooth"
+                        );
+
+                        startWaitMessages();
+
+                        /*
+                         * Do NOT call preventDefault here.
+                         *
+                         * The normal Flask POST continues in the
+                         * background while this optimistic UI remains
+                         * visible, so the student immediately sees that
+                         * InternShield AI is working.
+                         */
+                    }
+                );
+            }
+        );
+
+
+        window.addEventListener(
+            "pageshow",
+            () => {
+                scrollToLatestExchange(
+                    "auto"
+                );
+
+                if (messageInput) {
+                    messageInput.focus();
+                }
+            }
+        );
+
+
+        window.addEventListener(
+            "beforeunload",
+            () => {
+                if (waitTimer) {
+                    window.clearInterval(
+                        waitTimer
+                    );
+                }
+            }
+        );
+
+
+        scrollToLatestExchange(
+            "auto"
+        );
+
+        if (messageInput) {
+            messageInput.focus();
+        }
+    })();
+</script>
+
+
+<script
+    src="{{ url_for('static', filename='js/sidebar_shell.js') }}"
+    defer
+></script>
+
+</body>
+</html>

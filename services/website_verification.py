@@ -254,4 +254,3 @@ def verify_company_website(
     raise WebsiteVerificationError(
         f"The company website exceeded {MAX_REDIRECTS} redirects."
     )
-

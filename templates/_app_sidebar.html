@@ -1,0 +1,295 @@
+{% set endpoint = request.endpoint or "" %}
+
+<aside
+    id="sidebar"
+    class="is-sidebar"
+>
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="is-sidebar-brand"
+        aria-label="InternShield AI dashboard"
+    >
+        <span class="is-sidebar-brand-mark" aria-hidden="true">
+
+            <svg viewBox="0 0 24 24" fill="none">
+                <path
+                    d="M12 3L19 6V11C19 15.6 16.2 19.5 12 21C7.8 19.5 5 15.6 5 11V6L12 3Z"
+                    stroke="white"
+                    stroke-width="1.8"
+                    stroke-linejoin="round"
+                />
+
+                <path
+                    d="M9 12L11 14L15.5 9.5"
+                    stroke="white"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+            </svg>
+
+        </span>
+
+        <span class="is-sidebar-brand-name">
+            InternShield
+            <span>AI</span>
+        </span>
+    </a>
+
+
+    <div class="is-sidebar-sections">
+
+        <section class="is-sidebar-section">
+
+            <p class="is-sidebar-label">
+                Workspace
+            </p>
+
+            <nav class="is-sidebar-nav">
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="is-sidebar-link {% if endpoint == 'dashboard' %}active{% endif %}"
+                >
+                    <span class="is-sidebar-icon">
+
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <rect x="3" y="3" width="7" height="7" rx="2"
+                                stroke="currentColor" stroke-width="1.7"/>
+                            <rect x="14" y="3" width="7" height="7" rx="2"
+                                stroke="currentColor" stroke-width="1.7"/>
+                            <rect x="3" y="14" width="7" height="7" rx="2"
+                                stroke="currentColor" stroke-width="1.7"/>
+                            <rect x="14" y="14" width="7" height="7" rx="2"
+                                stroke="currentColor" stroke-width="1.7"/>
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+                </a>
+
+
+                <a
+                    href="{{ url_for('compare') }}"
+                    class="is-sidebar-link {% if endpoint in ['compare', 'compare_result'] %}active{% endif %}"
+                >
+                    <span class="is-sidebar-icon">
+
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M7 7H19M19 7L16 4M19 7L16 10"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M17 17H5M5 17L8 14M5 17L8 20"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Compare internships
+                    </span>
+                </a>
+
+
+                <a
+                    href="{{ url_for('applications') }}"
+                    class="is-sidebar-link {% if endpoint == 'applications' %}active{% endif %}"
+                >
+                    <span class="is-sidebar-icon">
+
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M8 7V5C8 3.9 8.9 3 10 3H14C15.1 3 16 3.9 16 5V7M4 8H20V20H4V8Z"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M4 13H20M10 13V15H14V13"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Application tracker
+                    </span>
+                </a>
+
+
+                <a
+                    href="{{ url_for('shortlist') }}"
+                    class="is-sidebar-link {% if endpoint == 'shortlist' %}active{% endif %}"
+                >
+                    <span class="is-sidebar-icon">
+                        ★
+                    </span>
+
+                    <span>
+                        Shortlist
+                    </span>
+                </a>
+
+            </nav>
+
+        </section>
+
+
+        <section class="is-sidebar-section is-sidebar-help-section">
+
+            <p class="is-sidebar-label">
+                Help
+            </p>
+
+            <nav class="is-sidebar-nav">
+
+                <a
+                    href="{{ url_for('support') }}"
+                    class="is-sidebar-link {% if endpoint == 'support' %}active{% endif %}"
+                >
+                    <span class="is-sidebar-icon">
+
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M12 21C17 21 21 17.2 21 12.5C21 7.8 17 4 12 4C7 4 3 7.8 3 12.5C3 14.8 4 16.9 5.8 18.5L5 21L8.2 20C9.4 20.7 10.7 21 12 21Z"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M9 12.2H9.01M12 12.2H12.01M15 12.2H15.01"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                                stroke-linecap="round"
+                            />
+                        </svg>
+
+                    </span>
+
+                    <span>
+                        Contact & Support
+                    </span>
+                </a>
+
+
+                {% if workspace_is_support_admin %}
+
+                    <a
+                        href="{{ url_for('admin_support') }}"
+                        class="is-sidebar-link {% if endpoint in ['admin_support', 'admin_support_detail'] %}active{% endif %}"
+                    >
+                        <span class="is-sidebar-icon">
+
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path
+                                    d="M4 6H20V18H4V6Z"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linejoin="round"
+                                />
+
+                                <path
+                                    d="M4 8L12 13L20 8"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+
+                        </span>
+
+                        <span>
+                            Support Inbox
+                        </span>
+                    </a>
+
+                {% endif %}
+
+            </nav>
+
+        </section>
+
+    </div>
+
+
+    <div class="is-sidebar-footer">
+
+        <a
+            href="{{ url_for('profile') }}"
+            class="is-sidebar-profile {% if endpoint == 'profile' %}active{% endif %}"
+            aria-label="Open my profile"
+        >
+            <div class="is-sidebar-avatar">
+
+                {% if workspace_profile_image_path %}
+                    <img
+                        src="{{ url_for('static', filename=workspace_profile_image_path) }}"
+                        alt="{{ workspace_user_name }} profile image"
+                    >
+                {% else %}
+                    {{ workspace_user_name[:1]|upper }}
+                {% endif %}
+
+            </div>
+
+            <div class="is-sidebar-profile-copy">
+
+                <strong>
+                    {{ workspace_user_name }}
+                </strong>
+
+                <span>
+                    {{ workspace_user_email }}
+                </span>
+
+            </div>
+        </a>
+
+
+        <a
+            href="{{ url_for('logout') }}"
+            class="is-sidebar-logout"
+        >
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                    d="M10 5H6C4.9 5 4 5.9 4 7V17C4 18.1 4.9 19 6 19H10"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                />
+
+                <path
+                    d="M14 8L18 12L14 16M18 12H9"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+            </svg>
+
+            <span>
+                Log out
+            </span>
+        </a>
+
+    </div>
+
+</aside>

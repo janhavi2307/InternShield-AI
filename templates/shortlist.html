@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Shortlist | InternShield AI</title><link rel="stylesheet" href="{{ url_for('static', filename='css/enhancements.css') }}"><style>
+:root{--bg:#080912;--panel:#17192b;--line:rgba(255,255,255,.09);--text:#f8f8ff;--muted:#999caf;--purple:#8067ff;--teal:#2dd4bf;--gold:#ffd36a;--red:#ff8095}*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,system-ui,sans-serif;background:radial-gradient(circle at 90% 5%,rgba(128,103,255,.18),transparent 28%),radial-gradient(circle at 3% 75%,rgba(45,212,191,.07),transparent 22%),var(--bg)}a{color:inherit;text-decoration:none}.topbar{min-height:86px;padding:0 max(4vw,22px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:rgba(8,9,18,.88);backdrop-filter:blur(18px)}.brand{font-size:1.14rem;font-weight:850}.brand span{color:#aa99ff}.back{padding:11px 15px;border:1px solid var(--line);border-radius:11px;color:#cbcbd8;font-weight:750}main{width:min(1160px,92%);margin:45px auto 78px}.eyebrow{color:var(--gold);font-size:.7rem;font-weight:850;letter-spacing:.1em}.hero{display:flex;justify-content:space-between;gap:24px;align-items:end;margin:13px 0 28px}.hero h1{margin:0 0 9px;font-size:clamp(2.2rem,5vw,3.8rem);letter-spacing:-.05em}.hero p{margin:0;color:var(--muted);max-width:680px;line-height:1.65}.compare{border:0;border-radius:12px;padding:13px 18px;color:white;background:linear-gradient(135deg,#856bff,#6547df);font-weight:850;cursor:pointer;white-space:nowrap}.compare:disabled{opacity:.42;cursor:not-allowed}.selection{color:var(--muted);font-size:.78rem;text-align:right;margin-top:8px}.flash{margin:17px 0;padding:13px 15px;border:1px solid rgba(255,211,106,.28);border-radius:12px;background:rgba(255,211,106,.07)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.card{position:relative;padding:23px;border:1px solid var(--line);border-radius:19px;background:rgba(23,25,43,.92);transition:.2s}.card:hover{transform:translateY(-2px);border-color:rgba(128,103,255,.28)}.card.selected{border-color:var(--purple);box-shadow:0 0 0 3px rgba(128,103,255,.11)}.pick{position:absolute;top:19px;right:19px;width:21px;height:21px;accent-color:var(--purple)}.company{color:var(--teal);font-size:.72rem;font-weight:850;text-transform:uppercase;letter-spacing:.07em}.card h2{margin:8px 40px 17px 0;font-size:1.3rem}.scores{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.score{padding:11px;border-radius:11px;background:rgba(255,255,255,.032)}.score span{display:block;color:var(--muted);font-size:.65rem;margin-bottom:5px}.score strong{font-size:.92rem}.actions{display:flex;gap:9px;margin-top:18px}.action{padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:transparent;color:#d6d5e2;font:inherit;font-size:.72rem;font-weight:750;cursor:pointer}.remove{color:#ff9bab}.empty{padding:65px 24px;text-align:center;border:1px dashed rgba(128,103,255,.27);border-radius:19px;color:var(--muted)}.empty strong{display:block;color:var(--text);font-size:1.35rem;margin-bottom:8px}.empty a{display:inline-block;margin-top:17px;padding:11px 15px;border-radius:10px;background:var(--purple);color:white;font-weight:800}@media(max-width:760px){.hero{display:block}.hero form{margin-top:20px}.selection{text-align:left}.grid{grid-template-columns:1fr}.scores{grid-template-columns:1fr 1fr}.topbar{min-height:76px}}
+</style>
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/sidebar_shell.css') }}"
+    >
+
+</head><body class="has-unified-sidebar">
+<div class="is-workspace-shell">
+
+    {% include "_app_sidebar.html" %}
+
+    <div
+        id="mobileOverlay"
+        class="is-mobile-overlay"
+    ></div>
+
+    <section class="is-workspace-main">
+
+{% set page_heading = "Shortlist" %}
+{% include "_page_topbar.html" %}
+<div class="is-workspace-content">
+<main><div class="hero"><div><div class="eyebrow">★ SAVED OPPORTUNITIES</div><h1>Your shortlist</h1><p>Keep promising internships together. Select exactly two cards to compare verification, value and academic compatibility.</p></div>{% if analyses|length >= 2 %}<form id="compareForm" method="post" action="{{ url_for('compare') }}"><input id="firstId" type="hidden" name="first_analysis_id"><input id="secondId" type="hidden" name="second_analysis_id"><button id="compareButton" class="compare" disabled>Compare selected</button><div id="selectionCount" class="selection">0 of 2 selected</div></form>{% endif %}</div>{% with messages=get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="flash">{{ message }}</div>{% endfor %}{% endwith %}{% if analyses %}<section class="grid">{% for item in analyses %}<article class="card" data-shortlist-card>{% if analyses|length >= 2 %}<input class="pick" type="checkbox" value="{{ item.id }}" aria-label="Select {{ item.role_title or 'internship' }} for comparison">{% endif %}<div class="company">{{ item.company_name or 'Company not provided' }}</div><h2>{{ item.role_title or 'Internship' }}</h2><div class="scores"><div class="score"><span>Verification</span><strong>{{ item.verification_score if item.verification_score is not none else 'N/A' }}{% if item.verification_score is not none %}/100{% endif %}</strong></div><div class="score"><span>Value</span><strong>{{ item.value_score if item.value_score is not none else 'N/A' }}{% if item.value_score is not none %}/100{% endif %}</strong></div><div class="score"><span>Compatibility</span><strong>{{ item.compatibility_score if item.compatibility_score is not none else 'N/A' }}{% if item.compatibility_score is not none %}/100{% endif %}</strong></div></div><div class="actions"><a class="action" href="{{ url_for('analysis_result', analysis_id=item.id) }}">View assessment</a><form method="post" action="{{ url_for('toggle_shortlist', analysis_id=item.id) }}"><input type="hidden" name="action" value="remove"><input type="hidden" name="next" value="shortlist"><button class="action remove" type="submit">Remove</button></form></div></article>{% endfor %}</section>{% else %}<div class="empty"><strong>Your shortlist is empty</strong>Save promising assessments from your dashboard to see them here.<br><a href="{{ url_for('dashboard') }}">Browse assessments</a></div>{% endif %}</main><script>const picks=[...document.querySelectorAll('.pick')],button=document.getElementById('compareButton');function sync(){let chosen=picks.filter(x=>x.checked);if(chosen.length>2){this.checked=false;chosen=picks.filter(x=>x.checked)}picks.forEach(x=>x.closest('[data-shortlist-card]').classList.toggle('selected',x.checked));const count=document.getElementById('selectionCount');if(count)count.textContent=`${chosen.length} of 2 selected`;if(button)button.disabled=chosen.length!==2;if(chosen.length===2){document.getElementById('firstId').value=chosen[0].value;document.getElementById('secondId').value=chosen[1].value}}picks.forEach(x=>x.addEventListener('change',sync));</script>{% include "_assistant_fab.html" %}
+<script
+    src="{{ url_for('static', filename='js/sidebar_shell.js') }}"
+    defer
+></script>
+
+
+</div>
+
+    </section>
+
+</div>
+
+</body></html>

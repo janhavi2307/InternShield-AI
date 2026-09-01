@@ -334,6 +334,72 @@
                 0 17px 36px rgba(128, 103, 255, 0.36);
         }
 
+        .hero-side {
+            position: relative;
+            z-index: 3;
+
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .hero-side-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 9px;
+        }
+
+        .hero-pdf-button {
+            min-height: 42px;
+            padding: 0 14px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            color: #ffffff;
+            border: 1px solid rgba(128, 103, 255, 0.30);
+            border-radius: 11px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(128, 103, 255, 0.95),
+                    rgba(101, 80, 219, 0.95)
+                );
+
+            box-shadow:
+                0 10px 24px rgba(128, 103, 255, 0.18);
+
+            font-size: 0.72rem;
+            font-weight: 850;
+            text-decoration: none;
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .hero-pdf-button:hover {
+            transform: translateY(-2px);
+
+            border-color:
+                rgba(174, 160, 255, 0.55);
+
+            box-shadow:
+                0 15px 30px rgba(128, 103, 255, 0.28);
+        }
+
+        .hero-pdf-button svg {
+            width: 16px;
+            height: 16px;
+            flex: 0 0 auto;
+        }
+
         /* -------------------------------------------------------
            Main content
         ------------------------------------------------------- */
@@ -778,6 +844,758 @@
             line-height: 1.55;
         }
 
+
+        /* -------------------------------------------------------
+           Final offer decision support
+        ------------------------------------------------------- */
+
+        .offer-decision-card {
+            position: relative;
+            overflow: hidden;
+
+            margin-bottom: 21px;
+            padding: 28px;
+
+            border: 1px solid var(--border);
+            border-radius: 21px;
+
+            background:
+                linear-gradient(
+                    125deg,
+                    rgba(128, 103, 255, 0.10),
+                    rgba(45, 212, 191, 0.055),
+                    rgba(24, 26, 45, 0.86)
+                );
+
+            box-shadow:
+                0 24px 70px
+                rgba(0, 0, 0, 0.20);
+
+            animation:
+                fadeUp 0.65s 0.28s ease both;
+        }
+
+        .offer-decision-card::before {
+            content: "";
+
+            position: absolute;
+
+            width: 260px;
+            height: 260px;
+
+            top: -175px;
+            right: -85px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(128, 103, 255, 0.13);
+
+            pointer-events: none;
+        }
+
+        .offer-decision-header {
+            position: relative;
+            z-index: 2;
+
+            margin-bottom: 20px;
+
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 22px;
+        }
+
+        .offer-decision-heading {
+            min-width: 0;
+        }
+
+        .offer-decision-eyebrow {
+            width: fit-content;
+
+            margin-bottom: 10px;
+            padding: 6px 10px;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            color: #d8d1ff;
+
+            border: 1px solid
+                rgba(128, 103, 255, 0.24);
+
+            border-radius: 999px;
+
+            background:
+                rgba(128, 103, 255, 0.08);
+
+            font-size: 0.64rem;
+            font-weight: 800;
+            letter-spacing: 0.055em;
+            text-transform: uppercase;
+        }
+
+        .offer-decision-eyebrow-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: var(--secondary);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(45, 212, 191, 0.09);
+        }
+
+        .offer-decision-heading h2 {
+            margin-bottom: 7px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1.25rem;
+            letter-spacing: -0.035em;
+        }
+
+        .offer-decision-heading p {
+            max-width: 760px;
+
+            color: var(--text-muted);
+
+            font-size: 0.78rem;
+            line-height: 1.65;
+        }
+
+        .offer-decision-score {
+            min-width: 120px;
+            padding: 16px;
+
+            flex-shrink: 0;
+
+            border: 1px solid
+                rgba(128, 103, 255, 0.24);
+
+            border-radius: 16px;
+
+            background:
+                rgba(7, 9, 20, 0.46);
+
+            text-align: center;
+        }
+
+        .offer-decision-score span {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: var(--text-muted);
+
+            font-size: 0.64rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .offer-decision-score strong {
+            color: var(--primary-light);
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 2rem;
+            line-height: 1;
+            letter-spacing: -0.055em;
+        }
+
+        .offer-decision-score small {
+            margin-left: 3px;
+
+            color: var(--text-muted);
+
+            font-size: 0.65rem;
+        }
+
+        .offer-decision-verdict {
+            position: relative;
+            z-index: 2;
+
+            margin-bottom: 18px;
+            padding: 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+
+            border: 1px solid var(--border);
+            border-radius: 15px;
+
+            background:
+                rgba(7, 9, 20, 0.42);
+        }
+
+        .offer-decision-label {
+            min-width: 0;
+        }
+
+        .offer-decision-label span {
+            display: block;
+
+            margin-bottom: 6px;
+
+            color: var(--text-muted);
+
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .offer-decision-label strong {
+            display: block;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1.02rem;
+            line-height: 1.4;
+        }
+
+        .offer-decision-badge {
+            flex-shrink: 0;
+
+            padding: 9px 13px;
+
+            border: 1px solid;
+            border-radius: 999px;
+
+            font-size: 0.68rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .offer-decision-badge.success {
+            color: #74e6c9;
+
+            border-color:
+                rgba(54, 214, 169, 0.33);
+
+            background:
+                var(--success-background);
+        }
+
+        .offer-decision-badge.warning {
+            color: #ffd480;
+
+            border-color:
+                rgba(255, 196, 95, 0.34);
+
+            background:
+                var(--warning-background);
+        }
+
+        .offer-decision-badge.danger {
+            color: #ff9bab;
+
+            border-color:
+                rgba(255, 104, 124, 0.34);
+
+            background:
+                var(--danger-background);
+        }
+
+        .offer-decision-summary {
+            position: relative;
+            z-index: 2;
+
+            margin-bottom: 18px;
+            padding: 16px 17px;
+
+            color: var(--text-soft);
+
+            border-left: 3px solid
+                var(--primary);
+
+            border-radius:
+                0 12px 12px 0;
+
+            background:
+                rgba(128, 103, 255, 0.06);
+
+            font-size: 0.8rem;
+            line-height: 1.65;
+        }
+
+        .offer-signal-grid {
+            position: relative;
+            z-index: 2;
+
+            margin-bottom: 18px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(150px, 1fr)
+                );
+
+            gap: 11px;
+        }
+
+        .offer-signal {
+            padding: 14px;
+
+            border: 1px solid var(--border);
+            border-radius: 13px;
+
+            background:
+                rgba(7, 9, 20, 0.40);
+        }
+
+        .offer-signal span {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: var(--text-muted);
+
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+
+        .offer-signal strong {
+            color: var(--text-soft);
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1rem;
+        }
+
+        .offer-signal small {
+            margin-left: 2px;
+
+            color: var(--text-muted);
+
+            font-size: 0.6rem;
+        }
+
+        .offer-change-impact {
+            position: relative;
+            z-index: 2;
+
+            margin-bottom: 18px;
+            padding: 15px 16px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+
+            border: 1px solid var(--border);
+            border-radius: 14px;
+
+            background:
+                rgba(7, 9, 20, 0.38);
+        }
+
+        .offer-change-impact-copy {
+            min-width: 0;
+        }
+
+        .offer-change-impact-copy span {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: var(--text-muted);
+
+            font-size: 0.61rem;
+            font-weight: 850;
+            letter-spacing: 0.055em;
+            text-transform: uppercase;
+        }
+
+        .offer-change-impact-copy strong {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: var(--text-soft);
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 0.88rem;
+        }
+
+        .offer-change-impact-copy p {
+            margin: 0;
+
+            color: var(--text-muted);
+
+            font-size: 0.68rem;
+            line-height: 1.5;
+        }
+
+        .offer-change-impact-score {
+            min-width: 76px;
+            padding: 11px 12px;
+
+            flex-shrink: 0;
+
+            text-align: center;
+
+            border: 1px solid var(--border);
+            border-radius: 12px;
+
+            background:
+                rgba(255, 255, 255, 0.025);
+        }
+
+        .offer-change-impact-score strong {
+            display: block;
+
+            color: var(--primary-light);
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1.25rem;
+        }
+
+        .offer-change-impact-score small {
+            color: var(--text-muted);
+
+            font-size: 0.57rem;
+        }
+
+        .offer-change-impact.success {
+            border-color:
+                rgba(54, 214, 169, 0.22);
+
+            background:
+                rgba(54, 214, 169, 0.035);
+        }
+
+        .offer-change-impact.warning {
+            border-color:
+                rgba(255, 196, 95, 0.22);
+
+            background:
+                rgba(255, 196, 95, 0.035);
+        }
+
+        .offer-change-impact.danger {
+            border-color:
+                rgba(255, 104, 124, 0.24);
+
+            background:
+                rgba(255, 104, 124, 0.04);
+        }
+
+        .offer-change-impact.pending {
+            border-style: dashed;
+        }
+
+        .offer-change-impact-link {
+            display: inline-flex;
+
+            margin-top: 7px;
+
+            color: var(--primary-light);
+
+            font-size: 0.66rem;
+            font-weight: 800;
+
+            text-decoration: none;
+        }
+
+        .offer-change-impact-link:hover {
+            text-decoration: underline;
+        }
+
+        .offer-decision-grid {
+            position: relative;
+            z-index: 2;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 14px;
+        }
+
+        .offer-decision-panel {
+            min-width: 0;
+            padding: 17px;
+
+            border: 1px solid var(--border);
+            border-radius: 14px;
+
+            background:
+                rgba(7, 9, 20, 0.37);
+        }
+
+        .offer-decision-panel h3 {
+            margin-bottom: 13px;
+
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 0.82rem;
+        }
+
+        .offer-panel-dot {
+            width: 8px;
+            height: 8px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background: var(--primary-light);
+        }
+
+        .offer-panel-dot.strength {
+            background: var(--success);
+        }
+
+        .offer-panel-dot.concern {
+            background: var(--warning);
+        }
+
+        .offer-panel-dot.step {
+            background: var(--info);
+        }
+
+        .offer-decision-list {
+            display: grid;
+            gap: 9px;
+        }
+
+        .offer-decision-item {
+            display: grid;
+
+            grid-template-columns:
+                23px minmax(0, 1fr);
+
+            gap: 9px;
+
+            color: var(--text-soft);
+
+            font-size: 0.71rem;
+            line-height: 1.55;
+        }
+
+        .offer-decision-item-number {
+            width: 23px;
+            height: 23px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 7px;
+
+            color: var(--primary-light);
+
+            background:
+                rgba(128, 103, 255, 0.10);
+
+            font-size: 0.6rem;
+            font-weight: 800;
+        }
+
+        .offer-decision-empty {
+            color: var(--text-muted);
+
+            font-size: 0.71rem;
+            line-height: 1.55;
+        }
+
+        .offer-factor-section {
+            position: relative;
+            z-index: 2;
+
+            margin-top: 18px;
+            padding-top: 18px;
+
+            border-top: 1px solid var(--border);
+        }
+
+        .offer-factor-section h3 {
+            margin-bottom: 12px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 0.82rem;
+        }
+
+        .offer-factor-list {
+            display: grid;
+            gap: 9px;
+        }
+
+        .offer-factor {
+            padding: 12px;
+
+            display: grid;
+
+            grid-template-columns:
+                54px minmax(0, 1fr);
+
+            gap: 11px;
+            align-items: start;
+
+            border: 1px solid var(--border);
+            border-radius: 12px;
+
+            background:
+                rgba(255, 255, 255, 0.023);
+        }
+
+        .offer-factor-impact {
+            min-height: 30px;
+            padding: 5px 7px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 8px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 0.68rem;
+            font-weight: 800;
+        }
+
+        .offer-factor-impact.positive {
+            color: #74e6c9;
+
+            background:
+                var(--success-background);
+        }
+
+        .offer-factor-impact.warning {
+            color: #ffd480;
+
+            background:
+                var(--warning-background);
+        }
+
+        .offer-factor-impact.danger {
+            color: #ff9bab;
+
+            background:
+                var(--danger-background);
+        }
+
+        .offer-factor-title {
+            margin-bottom: 3px;
+
+            color: var(--text-soft);
+
+            font-size: 0.74rem;
+            font-weight: 800;
+        }
+
+        .offer-factor-description {
+            color: var(--text-muted);
+
+            font-size: 0.68rem;
+            line-height: 1.5;
+        }
+
+        .offer-decision-disclaimer {
+            position: relative;
+            z-index: 2;
+
+            margin-top: 18px;
+            padding: 14px 16px;
+
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+
+            color: #c4c5d3;
+
+            border-left: 3px solid
+                var(--secondary);
+
+            border-radius:
+                0 11px 11px 0;
+
+            background:
+                rgba(45, 212, 191, 0.05);
+
+            font-size: 0.72rem;
+            line-height: 1.58;
+        }
+
+        .offer-decision-disclaimer svg {
+            width: 17px;
+            height: 17px;
+
+            flex-shrink: 0;
+
+            margin-top: 2px;
+
+            color: var(--secondary);
+        }
+
+        @media (max-width: 1000px) {
+            .offer-signal-grid {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+            .offer-decision-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .offer-decision-card {
+                padding: 21px 18px;
+            }
+
+            .offer-decision-header,
+            .offer-decision-verdict {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .offer-decision-score {
+                min-width: 0;
+                width: 100%;
+            }
+
+            .offer-signal-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
         /* -------------------------------------------------------
            General cards
         ------------------------------------------------------- */
@@ -853,6 +1671,208 @@
             margin-top: 2px;
 
             color: var(--primary-light);
+        }
+
+
+        /* -------------------------------------------------------
+           Gemini-assisted explanation
+        ------------------------------------------------------- */
+
+        .ai-explanation-card {
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(
+                    130deg,
+                    rgba(128, 103, 255, 0.11),
+                    rgba(45, 212, 191, 0.06),
+                    rgba(24, 26, 45, 0.84)
+                );
+        }
+
+        .ai-explanation-card::after {
+            content: "";
+            position: absolute;
+            width: 230px;
+            height: 230px;
+            top: -155px;
+            right: -80px;
+            border-radius: 50%;
+            background: rgba(128, 103, 255, 0.12);
+            pointer-events: none;
+        }
+
+        .ai-explanation-heading {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .ai-explanation-heading-copy {
+            min-width: 0;
+        }
+
+        .ai-explanation-heading-copy .card-title {
+            margin-bottom: 7px;
+        }
+
+        .ai-explanation-heading-copy > p {
+            max-width: 780px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            line-height: 1.62;
+        }
+
+        .ai-provider-chip {
+            position: relative;
+            z-index: 2;
+            flex-shrink: 0;
+            padding: 8px 11px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            border: 1px solid;
+            border-radius: 999px;
+            font-size: 0.66rem;
+            font-weight: 850;
+            letter-spacing: 0.025em;
+        }
+
+        .ai-provider-chip::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .ai-provider-chip.live {
+            color: #74e6c9;
+            border-color: rgba(54, 214, 169, 0.30);
+            background: rgba(54, 214, 169, 0.08);
+        }
+
+        .ai-provider-chip.fallback {
+            color: #ffd480;
+            border-color: rgba(255, 196, 95, 0.28);
+            background: rgba(255, 196, 95, 0.07);
+        }
+
+        .ai-summary {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 15px;
+            padding: 17px 18px;
+            color: var(--text-soft);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(7, 9, 20, 0.40);
+            font-size: 0.84rem;
+            line-height: 1.68;
+        }
+
+        .ai-explanation-grid {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.75fr);
+            gap: 14px;
+        }
+
+        .ai-explanation-panel {
+            min-width: 0;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(7, 9, 20, 0.34);
+        }
+
+        .ai-explanation-panel h3 {
+            margin-bottom: 12px;
+            font-family: "Manrope", sans-serif;
+            font-size: 0.83rem;
+        }
+
+        .ai-key-points {
+            display: grid;
+            gap: 10px;
+        }
+
+        .ai-key-point {
+            display: grid;
+            grid-template-columns: 25px minmax(0, 1fr);
+            gap: 9px;
+            align-items: start;
+            color: var(--text-soft);
+            font-size: 0.75rem;
+            line-height: 1.58;
+        }
+
+        .ai-key-point-number {
+            width: 25px;
+            height: 25px;
+            display: grid;
+            place-items: center;
+            border-radius: 8px;
+            color: var(--primary-light);
+            background: rgba(128, 103, 255, 0.10);
+            font-size: 0.62rem;
+            font-weight: 850;
+        }
+
+        .ai-next-step {
+            color: var(--text-soft);
+            font-size: 0.78rem;
+            line-height: 1.65;
+        }
+
+        .ai-next-step strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #74e6c9;
+            font-family: "Manrope", sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
+        }
+
+        .ai-explanation-note {
+            position: relative;
+            z-index: 2;
+            margin-top: 14px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            color: var(--text-muted);
+            border-left: 3px solid var(--secondary);
+            border-radius: 0 10px 10px 0;
+            background: rgba(45, 212, 191, 0.04);
+            font-size: 0.70rem;
+            line-height: 1.56;
+        }
+
+        .ai-explanation-note svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            color: var(--secondary);
+        }
+
+        @media (max-width: 800px) {
+            .ai-explanation-heading {
+                flex-direction: column;
+            }
+
+            .ai-explanation-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* -------------------------------------------------------
@@ -1149,7 +2169,149 @@
             margin-top: 0;
             border-left-color: var(--secondary);
         }
+/* -------------------------------------------------------
+   Evidence consistency
+------------------------------------------------------- */
 
+    .consistency-card {
+        background:
+            linear-gradient(
+                130deg,
+                rgba(105, 167, 255, 0.07),
+                rgba(128, 103, 255, 0.07),
+                rgba(24, 26, 45, 0.82)
+            );
+    }
+
+    .consistency-overview {
+        margin-bottom: 18px;
+
+        display: grid;
+        grid-template-columns: 180px minmax(0, 1fr);
+        gap: 15px;
+    }
+
+    .consistency-score-box,
+    .consistency-summary-box {
+        padding: 18px;
+
+        border: 1px solid var(--border);
+        border-radius: 15px;
+        background: rgba(7, 9, 20, 0.42);
+    }
+
+    .consistency-score-label {
+        display: block;
+        margin-bottom: 8px;
+
+        color: var(--text-muted);
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .consistency-score-value {
+        color: var(--primary-light);
+
+        font-family: "Manrope", sans-serif;
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: -0.05em;
+    }
+
+    .consistency-score-value small {
+        margin-left: 3px;
+
+        color: var(--text-muted);
+        font-size: 0.7rem;
+    }
+
+    .consistency-summary-box p {
+        color: var(--text-soft);
+        font-size: 0.78rem;
+        line-height: 1.65;
+    }
+
+    .domain-status.review-recommended {
+        color: #ffd480;
+        border-color: rgba(255, 196, 95, 0.34);
+        background: var(--warning-background);
+    }
+
+    .domain-status.conflicting-evidence {
+        color: #ff9bab;
+        border-color: rgba(255, 104, 124, 0.34);
+        background: var(--danger-background);
+    }
+
+    .consistency-check-list {
+        margin-bottom: 18px;
+
+        display: grid;
+        gap: 10px;
+    }
+
+    .consistency-check {
+        padding: 14px;
+
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+
+        border: 1px solid var(--border);
+        border-radius: 13px;
+        background: rgba(255, 255, 255, 0.025);
+    }
+
+    .consistency-check-badge {
+        min-width: 78px;
+        padding: 6px 8px;
+
+        text-align: center;
+
+        border-radius: 999px;
+
+        font-size: 0.59rem;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    .consistency-check-badge.consistent {
+        color: #74e6c9;
+        background: var(--success-background);
+    }
+
+    .consistency-check-badge.warning {
+        color: #ff9bab;
+        background: var(--danger-background);
+    }
+
+    .consistency-check-badge.unknown {
+        color: #ffd480;
+        background: var(--warning-background);
+    }
+
+    .consistency-check-title {
+        margin-bottom: 4px;
+
+        color: var(--text-soft);
+        font-size: 0.77rem;
+        font-weight: 800;
+    }
+
+    .consistency-check-message {
+        color: var(--text-muted);
+        font-size: 0.7rem;
+        line-height: 1.55;
+    }
+
+    @media (max-width: 700px) {
+        .consistency-overview {
+            grid-template-columns: 1fr;
+        }
+    }
         /* -------------------------------------------------------
            Compatibility
         ------------------------------------------------------- */
@@ -1588,6 +2750,20 @@
                 width: fit-content;
             }
 
+            .hero-side {
+                width: 100%;
+                align-items: flex-start;
+            }
+
+            .hero-side-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .hero-pdf-button {
+                width: auto;
+            }
+
             .compatibility-heading {
                 align-items: flex-start;
                 flex-direction: column;
@@ -1664,9 +2840,30 @@
             }
         }
     </style>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/sidebar_shell.css') }}"
+    >
+
 </head>
 
-<body>
+<body class="has-unified-sidebar">
+<div class="is-workspace-shell">
+
+    {% include "_app_sidebar.html" %}
+
+    <div
+        id="mobileOverlay"
+        class="is-mobile-overlay"
+    ></div>
+
+    <section class="is-workspace-main">
+
+{% set page_heading = "Assessment result" %}
+{% include "_page_topbar.html" %}
+<div class="is-workspace-content">
+
     {% set record =
         analysis
         if analysis is defined and analysis is not none
@@ -1723,122 +2920,19 @@
         or []
     %}
 
+    {% set offer_decision_data =
+        offer_decision
+        if offer_decision is defined
+        and offer_decision is not none
+        else none
+    %}
+
     <div class="page">
         <div class="grid-background"></div>
         <div class="orb orb-one"></div>
         <div class="orb orb-two"></div>
 
-        <header class="header">
-            <nav class="navbar">
-                <a
-                    href="/dashboard"
-                    class="brand"
-                >
-                    <span class="brand-mark">
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <path
-                                d="M12 3L19 6V11C19 15.6 16.2 19.5 12 21C7.8 19.5 5 15.6 5 11V6L12 3Z"
-                                stroke="white"
-                                stroke-width="1.8"
-                                stroke-linejoin="round"
-                            />
 
-                            <path
-                                d="M9 12L11 14L15.5 9.5"
-                                stroke="white"
-                                stroke-width="1.8"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                        </svg>
-                    </span>
-
-                    <span>
-                        InternShield
-                        <span class="brand-accent">AI</span>
-                    </span>
-                </a>
-
-                <div class="header-actions">
-                    <a
-                        href="/dashboard"
-                        class="action-button secondary"
-                        title="Dashboard"
-                    >
-                        <svg viewBox="0 0 24 24" fill="none">
-                            <rect
-                                x="3"
-                                y="3"
-                                width="7"
-                                height="7"
-                                rx="2"
-                                stroke="currentColor"
-                                stroke-width="1.7"
-                            />
-
-                            <rect
-                                x="14"
-                                y="3"
-                                width="7"
-                                height="7"
-                                rx="2"
-                                stroke="currentColor"
-                                stroke-width="1.7"
-                            />
-
-                            <rect
-                                x="3"
-                                y="14"
-                                width="7"
-                                height="7"
-                                rx="2"
-                                stroke="currentColor"
-                                stroke-width="1.7"
-                            />
-
-                            <rect
-                                x="14"
-                                y="14"
-                                width="7"
-                                height="7"
-                                rx="2"
-                                stroke="currentColor"
-                                stroke-width="1.7"
-                            />
-                        </svg>
-
-                        <span>Dashboard</span>
-                    </a>
-
-                    {% if analysis_id %}
-                        <a
-                            href="/analysis/{{ analysis_id }}/report"
-                            class="action-button download"
-                            title="Download PDF report"
-                        >
-                            <svg viewBox="0 0 24 24" fill="none">
-                                <path
-                                    d="M12 3V15M7 10L12 15L17 10"
-                                    stroke="currentColor"
-                                    stroke-width="1.8"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-
-                                <path
-                                    d="M5 20H19"
-                                    stroke="currentColor"
-                                    stroke-width="1.8"
-                                    stroke-linecap="round"
-                                />
-                            </svg>
-
-                            <span>Download PDF</span>
-                        </a>
-                    {% endif %}
-                </div>
-            </nav>
-        </header>
 
         <main class="main-container">
             <section class="result-hero">
@@ -1870,18 +2964,72 @@
                     </p>
                 </div>
 
-                <div
-                    class="status-badge {{ status|replace('_', '-') }}"
-                >
-                    <span class="status-dot"></span>
+                <div class="hero-side">
 
-                    {% if status == "appears_reasonable" %}
-                        Appears Reasonable
-                    {% elif status == "potentially_suspicious" %}
-                        Potentially Suspicious
-                    {% else %}
-                        Verification Required
+                    <div
+                        class="status-badge {{ status|replace('_', '-') }}"
+                    >
+                        <span class="status-dot"></span>
+
+                        {% if status == "appears_reasonable" %}
+                            Appears Reasonable
+                        {% elif status == "potentially_suspicious" %}
+                            Potentially Suspicious
+                        {% else %}
+                            Verification Required
+                        {% endif %}
+                    </div>
+
+
+                    {% if analysis_id %}
+
+                        <div class="hero-side-actions">
+
+                            <a
+                                class="hero-pdf-button"
+                                href="{{ url_for(
+                                    'download_analysis_report',
+                                    analysis_id=analysis_id
+                                ) }}"
+                                title="Download this assessment as a PDF report"
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="M12 3V15"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                    />
+
+                                    <path
+                                        d="M7.5 10.5L12 15L16.5 10.5"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+
+                                    <path
+                                        d="M5 20H19"
+                                        stroke="currentColor"
+                                        stroke-width="1.8"
+                                        stroke-linecap="round"
+                                    />
+                                </svg>
+
+                                <span>
+                                    Download PDF
+                                </span>
+                            </a>
+
+                        </div>
+
                     {% endif %}
+
                 </div>
             </section>
 
@@ -1990,6 +3138,759 @@
                     </p>
                 </article>
             </section>
+
+
+            {% set ai_data =
+                ai_explanation
+                if ai_explanation is defined
+                and ai_explanation
+                else none
+            %}
+
+            {% if ai_data %}
+                <section class="content-card ai-explanation-card">
+                    <div class="ai-explanation-heading">
+                        <div class="ai-explanation-heading-copy">
+                            <h2 class="card-title">
+                                <span class="title-icon">
+                                    <svg viewBox="0 0 24 24" fill="none">
+                                        <path
+                                            d="M12 3L13.7 8.3L19 10L13.7 11.7L12 17L10.3 11.7L5 10L10.3 8.3L12 3Z"
+                                            stroke="currentColor"
+                                            stroke-width="1.7"
+                                            stroke-linejoin="round"
+                                        />
+                                        <path
+                                            d="M18.5 15L19.4 17.6L22 18.5L19.4 19.4L18.5 22L17.6 19.4L15 18.5L17.6 17.6L18.5 15Z"
+                                            stroke="currentColor"
+                                            stroke-width="1.5"
+                                            stroke-linejoin="round"
+                                        />
+                                    </svg>
+                                </span>
+                                AI Assessment Explanation
+                            </h2>
+
+                            <p>
+                                A concise explanation of the results
+                                already calculated by InternShield's
+                                verification, value, compatibility,
+                                consistency and offer-review engines.
+                            </p>
+                        </div>
+
+                        <span
+                            class="ai-provider-chip {% if ai_data.get('ai_used') %}live{% else %}fallback{% endif %}"
+                        >
+                            {% if ai_data.get("ai_used") %}
+                                AI-assisted explanation
+                            {% else %}
+                                Explainable fallback
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="ai-summary">
+                        {{
+                            ai_data.get(
+                                "summary",
+                                "InternShield could not generate an additional explanation for this assessment."
+                            )
+                        }}
+                    </div>
+
+                    <div class="ai-explanation-grid">
+                        <article class="ai-explanation-panel">
+                            <h3>What influenced this result</h3>
+
+                            {% set ai_points =
+                                ai_data.get("key_points", [])
+                                or []
+                            %}
+
+                            {% if ai_points %}
+                                <div class="ai-key-points">
+                                    {% for point in ai_points %}
+                                        <div class="ai-key-point">
+                                            <span class="ai-key-point-number">
+                                                {{ loop.index }}
+                                            </span>
+                                            <span>{{ point }}</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p class="factor-empty">
+                                    Use the detailed score breakdown below
+                                    to review the recorded evidence factors.
+                                </p>
+                            {% endif %}
+                        </article>
+
+                        <article class="ai-explanation-panel">
+                            <h3>Recommended next action</h3>
+                            <p class="ai-next-step">
+                                <strong>Next step</strong>
+                                {{
+                                    ai_data.get(
+                                        "next_step",
+                                        "Independently verify the recruiter, company and written terms before making a final decision."
+                                    )
+                                }}
+                            </p>
+                        </article>
+                    </div>
+
+                    <div class="ai-explanation-note">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M12 9V13M12 17H12.01M10.3 4.7L2.7 18C2.3 18.7 2.8 19.5 3.6 19.5H20.4C21.2 19.5 21.7 18.7 21.3 18L13.7 4.7C13.3 4 12.7 4 12 4C11.3 4 10.7 4 10.3 4.7Z"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                        <span>
+                            AI is used only to explain InternShield's
+                            existing structured results. It does not
+                            calculate or modify scores and does not
+                            independently verify a company, recruiter,
+                            internship or final offer.
+                        </span>
+                    </div>
+                </section>
+            {% endif %}
+
+            {% if offer_decision_data %}
+                <section class="offer-decision-card">
+
+                    <div class="offer-decision-header">
+
+                        <div class="offer-decision-heading">
+
+                            <span class="offer-decision-eyebrow">
+                                <span class="offer-decision-eyebrow-dot"></span>
+                                Offer stage reached
+                            </span>
+
+                            <h2>
+                                Final Offer Decision Support
+                            </h2>
+
+                            <p>
+                                InternShield combines the saved
+                                assessment, verification signals,
+                                opportunity value, academic
+                                compatibility and evidence consistency
+                                to help you review this offer before
+                                accepting.
+                            </p>
+
+                        </div>
+
+
+                        <div class="offer-decision-score">
+
+                            <span>
+                                Decision score
+                            </span>
+
+                            <strong>
+                                {{
+                                    offer_decision_data.get(
+                                        "decision_score",
+                                        "N/A"
+                                    )
+                                }}
+                            </strong>
+
+                            {% if
+                                offer_decision_data.get(
+                                    "decision_score"
+                                ) is not none
+                            %}
+                                <small>/100</small>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="offer-decision-verdict">
+
+                        <div class="offer-decision-label">
+
+                            <span>
+                                Current guidance
+                            </span>
+
+                            <strong>
+                                {{
+                                    offer_decision_data.get(
+                                        "decision_label",
+                                        "Review Carefully"
+                                    )
+                                }}
+                            </strong>
+
+                        </div>
+
+
+                        <span
+                            class="offer-decision-badge {{ offer_decision_data.get('decision_class', 'warning') }}"
+                        >
+                            {% if
+                                offer_decision_data.get(
+                                    "decision_code"
+                                )
+                                == "accept"
+                            %}
+                                Consider
+                            {% elif
+                                offer_decision_data.get(
+                                    "decision_code"
+                                )
+                                == "avoid"
+                            %}
+                                High Caution
+                            {% else %}
+                                Review
+                            {% endif %}
+                        </span>
+
+                    </div>
+
+
+                    <div class="offer-decision-summary">
+                        {{
+                            offer_decision_data.get(
+                                "summary",
+                                "Review the written offer and independently verify all important terms before deciding."
+                            )
+                        }}
+                    </div>
+
+
+                    <div class="offer-signal-grid">
+
+                        <div class="offer-signal">
+                            <span>
+                                Verification
+                            </span>
+
+                            <strong>
+                                {{
+                                    offer_decision_data.get(
+                                        "verification_score",
+                                        "N/A"
+                                    )
+                                    if offer_decision_data.get(
+                                        "verification_score"
+                                    ) is not none
+                                    else "N/A"
+                                }}
+                            </strong>
+
+                            {% if
+                                offer_decision_data.get(
+                                    "verification_score"
+                                ) is not none
+                            %}
+                                <small>/100</small>
+                            {% endif %}
+                        </div>
+
+
+                        <div class="offer-signal">
+                            <span>
+                                Opportunity value
+                            </span>
+
+                            <strong>
+                                {{
+                                    offer_decision_data.get(
+                                        "value_score",
+                                        "N/A"
+                                    )
+                                    if offer_decision_data.get(
+                                        "value_score"
+                                    ) is not none
+                                    else "N/A"
+                                }}
+                            </strong>
+
+                            {% if
+                                offer_decision_data.get(
+                                    "value_score"
+                                ) is not none
+                            %}
+                                <small>/100</small>
+                            {% endif %}
+                        </div>
+
+
+                        <div class="offer-signal">
+                            <span>
+                                Academic compatibility
+                            </span>
+
+                            <strong>
+                                {{
+                                    offer_decision_data.get(
+                                        "compatibility_score",
+                                        "N/A"
+                                    )
+                                    if offer_decision_data.get(
+                                        "compatibility_score"
+                                    ) is not none
+                                    else "N/A"
+                                }}
+                            </strong>
+
+                            {% if
+                                offer_decision_data.get(
+                                    "compatibility_score"
+                                ) is not none
+                            %}
+                                <small>/100</small>
+                            {% endif %}
+                        </div>
+
+
+                        <div class="offer-signal">
+                            <span>
+                                Evidence consistency
+                            </span>
+
+                            <strong>
+                                {{
+                                    offer_decision_data.get(
+                                        "consistency_score",
+                                        "N/A"
+                                    )
+                                    if offer_decision_data.get(
+                                        "consistency_score"
+                                    ) is not none
+                                    else "N/A"
+                                }}
+                            </strong>
+
+                            {% if
+                                offer_decision_data.get(
+                                    "consistency_score"
+                                ) is not none
+                            %}
+                                <small>/100</small>
+                            {% endif %}
+                        </div>
+
+
+                        <div class="offer-signal">
+                            <span>
+                                Final offer match
+                            </span>
+
+                            <strong>
+                                {% if
+                                    offer_decision_data.get(
+                                        "offer_change_score"
+                                    ) is not none
+                                %}
+                                    {{
+                                        offer_decision_data.get(
+                                            "offer_change_score"
+                                        )
+                                    }}
+                                {% else %}
+                                    Pending
+                                {% endif %}
+                            </strong>
+
+                            {% if
+                                offer_decision_data.get(
+                                    "offer_change_score"
+                                ) is not none
+                            %}
+                                <small>/100</small>
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+
+                    {% set change_status =
+                        offer_decision_data.get(
+                            "offer_change_status",
+                            "Not Reviewed"
+                        )
+                    %}
+
+                    {% set change_status_lower =
+                        change_status|string|lower
+                    %}
+
+                    {% if
+                        offer_decision_data.get(
+                            "offer_change_reviewed"
+                        )
+                    %}
+
+                        {% if "major" in change_status_lower %}
+                            {% set change_class = "danger" %}
+                        {% elif "review" in change_status_lower %}
+                            {% set change_class = "warning" %}
+                        {% else %}
+                            {% set change_class = "success" %}
+                        {% endif %}
+
+                        <div
+                            class="offer-change-impact {{ change_class }}"
+                        >
+
+                            <div class="offer-change-impact-copy">
+
+                                <span>
+                                    Final offer comparison impact
+                                </span>
+
+                                <strong>
+                                    {{ change_status }}
+                                </strong>
+
+                                <p>
+                                    Offer Change Detection is now part
+                                    of this decision score. Changed
+                                    stipend, workload, duration,
+                                    identity, recruiter or warning
+                                    terms can lower the guidance score.
+                                </p>
+
+                            </div>
+
+
+                            <div class="offer-change-impact-score">
+
+                                <strong>
+                                    {{
+                                        offer_decision_data.get(
+                                            "offer_change_score",
+                                            "N/A"
+                                        )
+                                    }}
+                                </strong>
+
+                                <small>
+                                    /100 match
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="offer-change-impact pending">
+
+                            <div class="offer-change-impact-copy">
+
+                                <span>
+                                    Final offer comparison pending
+                                </span>
+
+                                <strong>
+                                    Final written offer not reviewed yet
+                                </strong>
+
+                                <p>
+                                    Analyze the final written offer in
+                                    Application Tracker so changed terms
+                                    can influence this decision.
+                                </p>
+
+                                <a
+                                    class="offer-change-impact-link"
+                                    href="{{ url_for('applications') }}"
+                                >
+                                    Review final offer →
+                                </a>
+
+                            </div>
+
+
+                            <div class="offer-change-impact-score">
+
+                                <strong>
+                                    —
+                                </strong>
+
+                                <small>
+                                    pending
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="offer-decision-grid">
+
+                        <article class="offer-decision-panel">
+
+                            <h3>
+                                <span class="offer-panel-dot strength"></span>
+                                Positive signals
+                            </h3>
+
+                            {% set offer_strengths =
+                                offer_decision_data.get(
+                                    "strengths",
+                                    []
+                                )
+                            %}
+
+                            {% if offer_strengths %}
+
+                                <div class="offer-decision-list">
+
+                                    {% for item in offer_strengths %}
+
+                                        <div class="offer-decision-item">
+
+                                            <span class="offer-decision-item-number">
+                                                {{ loop.index }}
+                                            </span>
+
+                                            <span>
+                                                {{ item }}
+                                            </span>
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% else %}
+
+                                <p class="offer-decision-empty">
+                                    No strong positive signal was
+                                    recorded beyond the available
+                                    assessment data.
+                                </p>
+
+                            {% endif %}
+
+                        </article>
+
+
+                        <article class="offer-decision-panel">
+
+                            <h3>
+                                <span class="offer-panel-dot concern"></span>
+                                Concerns to review
+                            </h3>
+
+                            {% set offer_concerns =
+                                offer_decision_data.get(
+                                    "concerns",
+                                    []
+                                )
+                            %}
+
+                            {% if offer_concerns %}
+
+                                <div class="offer-decision-list">
+
+                                    {% for item in offer_concerns %}
+
+                                        <div class="offer-decision-item">
+
+                                            <span class="offer-decision-item-number">
+                                                {{ loop.index }}
+                                            </span>
+
+                                            <span>
+                                                {{ item }}
+                                            </span>
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% else %}
+
+                                <p class="offer-decision-empty">
+                                    No additional concern was generated
+                                    by the final offer review.
+                                </p>
+
+                            {% endif %}
+
+                        </article>
+
+
+                        <article class="offer-decision-panel">
+
+                            <h3>
+                                <span class="offer-panel-dot step"></span>
+                                Before you decide
+                            </h3>
+
+                            {% set offer_steps =
+                                offer_decision_data.get(
+                                    "next_steps",
+                                    []
+                                )
+                            %}
+
+                            {% if offer_steps %}
+
+                                <div class="offer-decision-list">
+
+                                    {% for item in offer_steps %}
+
+                                        <div class="offer-decision-item">
+
+                                            <span class="offer-decision-item-number">
+                                                {{ loop.index }}
+                                            </span>
+
+                                            <span>
+                                                {{ item }}
+                                            </span>
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
+
+                        </article>
+
+                    </div>
+
+
+                    {% set offer_factors =
+                        offer_decision_data.get(
+                            "factors",
+                            []
+                        )
+                    %}
+
+                    {% if offer_factors %}
+
+                        <div class="offer-factor-section">
+
+                            <h3>
+                                Why InternShield reached this guidance
+                            </h3>
+
+                            <div class="offer-factor-list">
+
+                                {% for factor in offer_factors %}
+
+                                    {% if factor is mapping %}
+
+                                        {% set factor_type =
+                                            factor.get(
+                                                "type",
+                                                "warning"
+                                            )
+                                        %}
+
+                                        <div class="offer-factor">
+
+                                            <span
+                                                class="offer-factor-impact {{ factor_type }}"
+                                            >
+                                                {% if
+                                                    factor.get(
+                                                        "impact",
+                                                        0
+                                                    )|float > 0
+                                                %}
+                                                    +
+                                                {% endif %}
+
+                                                {{
+                                                    factor.get(
+                                                        "impact",
+                                                        0
+                                                    )
+                                                }}
+                                            </span>
+
+                                            <div>
+
+                                                <p class="offer-factor-title">
+                                                    {{
+                                                        factor.get(
+                                                            "label",
+                                                            "Decision factor"
+                                                        )
+                                                    }}
+                                                </p>
+
+                                                <p class="offer-factor-description">
+                                                    {{
+                                                        factor.get(
+                                                            "description",
+                                                            "This signal contributed to the final decision support."
+                                                        )
+                                                    }}
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="offer-decision-disclaimer">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                        >
+                            <path
+                                d="M12 9V13M12 17H12.01M10.3 4.7L2.7 18C2.3 18.7 2.8 19.5 3.6 19.5H20.4C21.2 19.5 21.7 18.7 21.3 18L13.7 4.7C13.3 4 12.7 4 12 4C11.3 4 10.7 4 10.3 4.7Z"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+
+                        <span>
+                            {{
+                                offer_decision_data.get(
+                                    "disclaimer",
+                                    "This is decision-support guidance only. Independently verify the written offer before accepting."
+                                )
+                            }}
+                        </span>
+
+                    </div>
+
+                </section>
+            {% endif %}
 
             <section class="content-card explanation-card">
                 <h2 class="card-title">
@@ -2215,7 +4116,244 @@
                     </span>
                 </div>
             </section>
+            {% set consistency =
+                record.get("consistency_verification") or {}
+            %}
 
+            {% if
+                record.get("consistency_score") is not none
+                or consistency
+            %}
+                <section class="content-card consistency-card">
+                    <div class="domain-heading">
+                        <div class="domain-heading-copy">
+                            <h2 class="card-title">
+                                <span class="title-icon">
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                    >
+                                        <path
+                                            d="M4 6H9M15 6H20M9 6L11 8M15 6L13 8M4 18H9M15 18H20M9 18L11 16M15 18L13 16M12 8V16"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        />
+
+                                        <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="2"
+                                            stroke="currentColor"
+                                            stroke-width="1.8"
+                                        />
+                                    </svg>
+                                </span>
+
+                                Evidence Consistency
+                            </h2>
+
+                            <p>
+                                InternShield compares the company,
+                                internship role and recruiter details
+                                against the submitted internship
+                                evidence to identify contradictions
+                                that may require additional
+                                verification.
+                            </p>
+                        </div>
+
+                        {% set consistency_status =
+                            record.get("consistency_status")
+                            or consistency.get(
+                                "consistency_status",
+                                "Review Recommended"
+                            )
+                        %}
+
+                        <span
+                            class="domain-status {{ consistency_status|lower|replace(' ', '-') }}"
+                        >
+                            {{ consistency_status }}
+                        </span>
+                    </div>
+
+                    <div class="consistency-overview">
+                        <div class="consistency-score-box">
+                            <span class="consistency-score-label">
+                                Consistency score
+                            </span>
+
+                            <div class="consistency-score-value">
+                                {{
+                                    record.get(
+                                        "consistency_score",
+                                        consistency.get(
+                                            "consistency_score",
+                                            "N/A"
+                                        )
+                                    )
+                                }}
+
+                                {% if
+                                    record.get("consistency_score")
+                                    is not none
+                                    or consistency.get(
+                                        "consistency_score"
+                                    ) is not none
+                                %}
+                                    <small>/100</small>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="consistency-summary-box">
+                            <span class="consistency-score-label">
+                                What this means
+                            </span>
+
+                            <p>
+                                {% if consistency_status == "Consistent" %}
+                                    The supplied company, role and
+                                    available recruiter information
+                                    appear consistent with the submitted
+                                    evidence. This does not independently
+                                    prove legitimacy.
+                                {% elif consistency_status == "Conflicting Evidence" %}
+                                    Significant differences were found
+                                    between the supplied information and
+                                    the submitted evidence. Verify the
+                                    company, recruiter and internship
+                                    details before proceeding.
+                                {% else %}
+                                    Some information could not be fully
+                                    confirmed or showed differences.
+                                    Additional independent verification
+                                    is recommended.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    {% if consistency.get("checks") %}
+                        <div class="consistency-check-list">
+                            {% for check in consistency.get("checks") %}
+                                {% if check is mapping %}
+                                    {% set check_status =
+                                        check.get(
+                                            "status",
+                                            "unknown"
+                                        )
+                                    %}
+
+                                    <div class="consistency-check">
+                                        <span
+                                            class="consistency-check-badge {{ check_status }}"
+                                        >
+                                            {% if check_status == "consistent" %}
+                                                Consistent
+                                            {% elif check_status == "warning" %}
+                                                Review
+                                            {% else %}
+                                                Unknown
+                                            {% endif %}
+                                        </span>
+
+                                        <div>
+                                            <p
+                                                class="consistency-check-title"
+                                            >
+                                                {{
+                                                    check.get(
+                                                        "name",
+                                                        "Evidence check"
+                                                    )
+                                                }}
+                                            </p>
+
+                                            <p
+                                                class="consistency-check-message"
+                                            >
+                                                {{
+                                                    check.get(
+                                                        "message",
+                                                        "No explanation "
+                                                        "was recorded."
+                                                    )
+                                                }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="empty-message">
+                            Detailed consistency checks are unavailable
+                            for this assessment.
+                        </div>
+                    {% endif %}
+
+                    {% if
+                        consistency.get("recruiter_domain")
+                        or consistency.get("website_domain")
+                    %}
+                        <div class="domain-grid">
+                            <div class="domain-detail">
+                                <span>
+                                    Recruiter domain used in comparison
+                                </span>
+
+                                <strong>
+                                    {{
+                                        consistency.get(
+                                            "recruiter_domain",
+                                            "Unavailable"
+                                        )
+                                        or "Unavailable"
+                                    }}
+                                </strong>
+                            </div>
+
+                            <div class="domain-detail">
+                                <span>
+                                    Website domain used in comparison
+                                </span>
+
+                                <strong>
+                                    {{
+                                        consistency.get(
+                                            "website_domain",
+                                            "Unavailable"
+                                        )
+                                        or "Unavailable"
+                                    }}
+                                </strong>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="disclaimer domain-disclaimer">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M12 9V13M12 17H12.01M10.3 4.7L2.7 18C2.3 18.7 2.8 19.5 3.6 19.5H20.4C21.2 19.5 21.7 18.7 21.3 18L13.7 4.7C13.3 4 12.7 4 12 4C11.3 4 10.7 4 10.3 4.7Z"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+
+                        <span>
+                            Evidence consistency is an explainable
+                            comparison signal. A high score does not
+                            prove that an internship, recruiter or
+                            company is legitimate.
+                        </span>
+                    </div>
+                </section>
+            {% endif %}
             {% set domain =
                 record.get("domain_verification") or {}
             %}
@@ -3019,5 +5157,20 @@
             {% endif %}
         </main>
     </div>
+    {% include "_assistant_fab.html" %}
+
+
+<script
+    src="{{ url_for('static', filename='js/sidebar_shell.js') }}"
+    defer
+></script>
+
+
+</div>
+
+    </section>
+
+</div>
+
 </body>
 </html>
