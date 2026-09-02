@@ -241,7 +241,7 @@
 
                 {% if workspace_profile_image_path %}
                     <img
-                        src="{{ url_for('static', filename=workspace_profile_image_path) }}"
+                        src="{{ workspace_profile_image_path if workspace_profile_image_path[:4] == 'http' else url_for('static', filename=workspace_profile_image_path) }}"
                         alt="{{ workspace_user_name }} profile image"
                     >
                 {% else %}

@@ -2150,7 +2150,7 @@
 
                         {% if image_path %}
                             <img
-                                src="{{ url_for('static', filename=image_path) }}"
+                                src="{{ image_path if image_path[:4] == 'http' else url_for('static', filename=image_path) }}"
                                 alt="{{ current_name }} profile image"
                             >
                         {% else %}
@@ -2937,7 +2937,7 @@
                                 {% if image_path %}
                                     <img
                                         id="previewImage"
-                                        src="{{ url_for('static', filename=image_path) }}"
+                                        src="{{ image_path if image_path[:4] == 'http' else url_for('static', filename=image_path) }}"
                                         alt="{{ current_name }} profile image"
                                     >
                                 {% else %}

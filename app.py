@@ -1,4 +1,5 @@
 import os
+import uuid
 from datetime import datetime, timedelta, timezone
 from functools import wraps
 from services.consistency_engine import analyze_consistency
@@ -15,6 +16,7 @@ from flask import (
     url_for,
 )
 from flask_session import Session
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from services.analysis_engine import analyze_internship
 from services.application_tracker import (
@@ -62,14 +64,57 @@ from services.support_system import (
 
 load_dotenv()
 
+IS_PRODUCTION = (
+    (
+        os.getenv("APP_ENV")
+        or ""
+    ).strip().lower()
+    == "production"
+    or (
+        os.getenv("RENDER")
+        or ""
+    ).strip().lower()
+    in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+)
+
+flask_secret_key = (
+    os.getenv("FLASK_SECRET_KEY")
+    or os.getenv("SECRET_KEY")
+    or ""
+).strip()
+
+if (
+    IS_PRODUCTION
+    and not flask_secret_key
+):
+    raise RuntimeError(
+        "FLASK_SECRET_KEY must be configured "
+        "in production."
+    )
+
+if not flask_secret_key:
+    flask_secret_key = (
+        "internshield-local-development-key"
+    )
+
 app = Flask(__name__)
 
+# Render sits behind a reverse proxy. ProxyFix makes Flask
+# understand the original public host and HTTPS scheme.
+app.wsgi_app = ProxyFix(
+    app.wsgi_app,
+    x_for=1,
+    x_proto=1,
+    x_host=1,
+)
+
 app.config.update(
-    SECRET_KEY=(
-        os.getenv("FLASK_SECRET_KEY")
-        or os.getenv("SECRET_KEY")
-        or "internshield-local-development-key"
-    ),
+    SECRET_KEY=flask_secret_key,
     MAX_CONTENT_LENGTH=6 * 1024 * 1024,
     SESSION_TYPE="filesystem",
     SESSION_FILE_DIR=os.path.join(
@@ -81,9 +126,47 @@ app.config.update(
     SESSION_USE_SIGNER=True,
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
+    SESSION_COOKIE_SECURE=IS_PRODUCTION,
+    PREFERRED_URL_SCHEME=(
+        "https"
+        if IS_PRODUCTION
+        else "http"
+    ),
 )
 
 Session(app)
+
+
+@app.after_request
+def add_security_headers(response):
+    # Safe headers that do not interfere with the existing UI.
+    response.headers.setdefault(
+        "X-Content-Type-Options",
+        "nosniff",
+    )
+
+    response.headers.setdefault(
+        "X-Frame-Options",
+        "SAMEORIGIN",
+    )
+
+    response.headers.setdefault(
+        "Referrer-Policy",
+        "strict-origin-when-cross-origin",
+    )
+
+    response.headers.setdefault(
+        "Permissions-Policy",
+        "camera=(), microphone=(), geolocation=()",
+    )
+
+    if IS_PRODUCTION:
+        response.headers.setdefault(
+            "Strict-Transport-Security",
+            "max-age=31536000; includeSubDomains",
+        )
+
+    return response
 
 register_support_routes(app)
 
@@ -117,6 +200,78 @@ def get_authenticated_supabase():
         )
 
     return supabase
+
+
+# =========================================================
+# PROFILE IMAGE STORAGE
+# =========================================================
+
+PROFILE_IMAGE_BUCKET = "profile-images"
+
+
+def _profile_storage_object_path(image_value):
+    value = str(image_value or "").strip()
+
+    marker = (
+        "/storage/v1/object/public/"
+        + PROFILE_IMAGE_BUCKET
+        + "/"
+    )
+
+    if marker not in value:
+        return ""
+
+    return (
+        value
+        .split(marker, 1)[1]
+        .split("?", 1)[0]
+        .strip("/")
+    )
+
+
+def _delete_profile_image_value(
+    supabase,
+    image_value,
+):
+    """Delete an old Supabase avatar or legacy local avatar."""
+
+    value = str(image_value or "").strip()
+
+    if not value:
+        return
+
+    storage_path = _profile_storage_object_path(value)
+
+    if storage_path:
+        try:
+            (
+                supabase
+                .storage
+                .from_(PROFILE_IMAGE_BUCKET)
+                .remove([storage_path])
+            )
+        except Exception:
+            app.logger.exception(
+                "Old Supabase profile image could not be removed"
+            )
+
+        return
+
+    if value.startswith(("http://", "https://")):
+        return
+
+    legacy_path = os.path.join(
+        app.static_folder,
+        value,
+    )
+
+    if os.path.isfile(legacy_path):
+        try:
+            os.remove(legacy_path)
+        except OSError:
+            app.logger.exception(
+                "Legacy local profile image could not be removed"
+            )
 
 
 @app.context_processor
@@ -271,8 +426,8 @@ def record_timeline_event(
 @app.errorhandler(413)
 def file_too_large(error):
     flash(
-        "The uploaded file is too large. Select a file "
-        "smaller than 5 MB.",
+        "The uploaded file is too large. "
+        "The maximum allowed size is 6 MB.",
         "danger",
     )
     return redirect(url_for("analyze"))
@@ -1047,231 +1202,244 @@ def profile():
             # SAVE / REMOVE PROFILE IMAGE
             # -------------------------------------------------
 
-            profile_image_directory = (
-                os.path.join(
-                    app.static_folder,
-                    "profile_images",
-                )
-            )
-
-            os.makedirs(
-                profile_image_directory,
-                exist_ok=True,
-            )
-
-            old_relative_path = (
-                profile_data.get(
-                    "profile_image_path"
-                )
+            old_profile_image_path = (
+                profile_data.get("profile_image_path")
                 or ""
             )
 
-            old_absolute_path = (
-                os.path.join(
-                    app.static_folder,
-                    old_relative_path,
-                )
-                if old_relative_path
-                else ""
-            )
+            new_profile_image_path = old_profile_image_path
+            uploaded_storage_path = ""
+            old_image_should_be_deleted = False
 
             if remove_profile_image:
-                if (
-                    old_absolute_path
-                    and os.path.isfile(
-                        old_absolute_path
-                    )
-                ):
-                    try:
-                        os.remove(
-                            old_absolute_path
-                        )
-                    except OSError:
-                        app.logger.exception(
-                            "Old profile image could not be removed"
-                        )
-
                 new_profile_image_path = ""
+                old_image_should_be_deleted = bool(
+                    old_profile_image_path
+                )
 
             if (
                 uploaded_profile_image
                 and uploaded_profile_image.filename
                 and image_extension
             ):
-                # Remove the previous image if it used
-                # a different extension.
-                if (
-                    old_absolute_path
-                    and os.path.isfile(
-                        old_absolute_path
-                    )
-                ):
-                    try:
-                        os.remove(
-                            old_absolute_path
-                        )
-                    except OSError:
-                        app.logger.exception(
-                            "Old profile image could not be replaced"
-                        )
-
-                safe_user_id = (
-                    str(
-                        session["user_id"]
-                    )
-                    .replace(
-                        "-",
-                        "",
-                    )
-                )
-
                 normalized_extension = (
                     ".jpg"
                     if image_extension == ".jpeg"
                     else image_extension
                 )
 
-                image_filename = (
-                    f"{safe_user_id}"
-                    f"{normalized_extension}"
+                storage_filename = (
+                    "avatar-"
+                    + uuid.uuid4().hex
+                    + normalized_extension
                 )
 
-                absolute_image_path = (
-                    os.path.join(
-                        profile_image_directory,
-                        image_filename,
-                    )
+                storage_object_path = (
+                    str(session["user_id"])
+                    + "/"
+                    + storage_filename
                 )
-
-                uploaded_profile_image.save(
-                    absolute_image_path
-                )
-
-                new_profile_image_path = (
-                    "profile_images/"
-                    + image_filename
-                )
-
-            # -------------------------------------------------
-            # DATABASE SAVE
-            # -------------------------------------------------
-
-            now_iso = datetime.now(
-                timezone.utc
-            ).isoformat()
-
-            save_payload = {
-                "full_name": full_name,
-                "college_name": (
-                    college_name
-                    or None
-                ),
-                "branch": (
-                    branch
-                    or None
-                ),
-                "semester": semester,
-                "available_hours_per_week": (
-                    available_hours
-                ),
-                "preferred_work_mode": (
-                    preferred_work_mode
-                ),
-                "default_schedule_type": (
-                    default_schedule_type
-                ),
-                "profile_image_path": (
-                    new_profile_image_path
-                    or None
-                ),
-                "updated_at": now_iso,
-            }
-
-            try:
-                if existing_profile:
-                    save_response = (
-                        supabase
-                        .table("user_profiles")
-                        .update(
-                            save_payload
-                        )
-                        .eq(
-                            "user_id",
-                            session["user_id"],
-                        )
-                        .execute()
-                    )
-
-                else:
-                    create_payload = {
-                        **save_payload,
-                        "user_id": (
-                            session["user_id"]
-                        ),
-                    }
-
-                    save_response = (
-                        supabase
-                        .table("user_profiles")
-                        .insert(
-                            create_payload
-                        )
-                        .execute()
-                    )
-
-                if not save_response.data:
-                    raise ValueError(
-                        "Profile save returned no data."
-                    )
-
-                session["full_name"] = (
-                    full_name
-                )
-
-                session[
-                    "workspace_profile_image_path"
-                ] = (
-                    new_profile_image_path
-                    or ""
-                )
-
-                session[
-                    "workspace_profile_loaded"
-                ] = True
 
                 try:
-                    supabase.auth.update_user({
-                        "data": {
-                            "full_name": (
-                                full_name
-                            )
-                        }
-                    })
+                    uploaded_profile_image.stream.seek(0)
+                    image_bytes = uploaded_profile_image.stream.read()
+                    uploaded_profile_image.stream.seek(0)
+
+                    (
+                        supabase
+                        .storage
+                        .from_(PROFILE_IMAGE_BUCKET)
+                        .upload(
+                            path=storage_object_path,
+                            file=image_bytes,
+                            file_options={
+                                "content-type": (
+                                    uploaded_profile_image.mimetype
+                                    or "application/octet-stream"
+                                ),
+                                "cache-control": "3600",
+                                "upsert": "false",
+                            },
+                        )
+                    )
+
+                    public_url = (
+                        supabase
+                        .storage
+                        .from_(PROFILE_IMAGE_BUCKET)
+                        .get_public_url(storage_object_path)
+                    )
+
+                    public_url = str(public_url or "").strip()
+
+                    if not public_url.startswith(("http://", "https://")):
+                        raise ValueError(
+                            "Supabase returned an invalid public image URL."
+                        )
+
+                    uploaded_storage_path = storage_object_path
+                    new_profile_image_path = public_url
+                    old_image_should_be_deleted = bool(
+                        old_profile_image_path
+                    )
 
                 except Exception:
                     app.logger.exception(
-                        "Auth profile name could not be synchronized"
+                        "Profile image upload to Supabase Storage failed"
+                    )
+                    errors.append(
+                        "Your profile photo could not be uploaded. "
+                        "Please try again."
                     )
 
-                flash(
-                    "Profile updated successfully.",
-                    "success",
-                )
+            if errors:
+                for message in errors:
+                    flash(message, "danger")
 
-                return redirect(
-                    url_for("profile")
-                )
+            else:
+                # -------------------------------------------------
+                # DATABASE SAVE
+                # -------------------------------------------------
 
-            except Exception:
-                app.logger.exception(
-                    "User profile could not be saved"
-                )
+                now_iso = datetime.now(
+                    timezone.utc
+                ).isoformat()
 
-                flash(
-                    "Your profile could not be saved. "
-                    "Check the Flask terminal for details.",
-                    "danger",
-                )
+                save_payload = {
+                    "full_name": full_name,
+                    "college_name": (
+                        college_name
+                        or None
+                    ),
+                    "branch": (
+                        branch
+                        or None
+                    ),
+                    "semester": semester,
+                    "available_hours_per_week": (
+                        available_hours
+                    ),
+                    "preferred_work_mode": (
+                        preferred_work_mode
+                    ),
+                    "default_schedule_type": (
+                        default_schedule_type
+                    ),
+                    "profile_image_path": (
+                        new_profile_image_path
+                        or None
+                    ),
+                    "updated_at": now_iso,
+                }
+
+                try:
+                    if existing_profile:
+                        save_response = (
+                            supabase
+                            .table("user_profiles")
+                            .update(
+                                save_payload
+                            )
+                            .eq(
+                                "user_id",
+                                session["user_id"],
+                            )
+                            .execute()
+                        )
+
+                    else:
+                        create_payload = {
+                            **save_payload,
+                            "user_id": (
+                                session["user_id"]
+                            ),
+                        }
+
+                        save_response = (
+                            supabase
+                            .table("user_profiles")
+                            .insert(
+                                create_payload
+                            )
+                            .execute()
+                        )
+
+                    if not save_response.data:
+                        raise ValueError(
+                            "Profile save returned no data."
+                        )
+
+                    session["full_name"] = (
+                        full_name
+                    )
+
+                    session[
+                        "workspace_profile_image_path"
+                    ] = (
+                        new_profile_image_path
+                        or ""
+                    )
+
+                    session[
+                        "workspace_profile_loaded"
+                    ] = True
+
+                    if (
+                        old_image_should_be_deleted
+                        and old_profile_image_path
+                        and old_profile_image_path != new_profile_image_path
+                    ):
+                        _delete_profile_image_value(
+                            supabase,
+                            old_profile_image_path,
+                        )
+
+                    try:
+                        supabase.auth.update_user({
+                            "data": {
+                                "full_name": (
+                                    full_name
+                                )
+                            }
+                        })
+
+                    except Exception:
+                        app.logger.exception(
+                            "Auth profile name could not be synchronized"
+                        )
+
+                    flash(
+                        "Profile updated successfully.",
+                        "success",
+                    )
+
+                    return redirect(
+                        url_for("profile")
+                    )
+
+                except Exception:
+                    if uploaded_storage_path:
+                        try:
+                            (
+                                supabase
+                                .storage
+                                .from_(PROFILE_IMAGE_BUCKET)
+                                .remove([uploaded_storage_path])
+                            )
+                        except Exception:
+                            app.logger.exception(
+                                "Uncommitted profile image rollback failed"
+                            )
+
+                    app.logger.exception(
+                        "User profile could not be saved"
+                    )
+
+                    flash(
+                        "Your profile could not be saved. "
+                        "Check the Flask terminal for details.",
+                        "danger",
+                    )
 
     # ---------------------------------------------------------
     # ACCOUNT OVERVIEW
@@ -3724,4 +3892,6 @@ def health():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(
+        debug=not IS_PRODUCTION
+    )
