@@ -363,6 +363,142 @@ def add_unique(items: list, value) -> None:
         items.append(value)
 
 
+
+def _parse_stipend_amount(
+    raw_amount: str,
+    thousand_suffix: str = "",
+) -> Optional[float]:
+    cleaned = str(raw_amount or "").replace(",", "").strip()
+
+    if not cleaned:
+        return None
+
+    try:
+        amount = float(cleaned)
+    except ValueError:
+        return None
+
+    if thousand_suffix:
+        amount *= 1000
+
+    if amount < 0:
+        return None
+
+    return amount
+
+
+def extract_monthly_stipend(
+    text: str,
+) -> Optional[float]:
+    # Conservative monthly-stipend extraction.
+    # Manual form input still takes priority in app.py.
+    source = str(text or "")
+
+    if not source.strip():
+        return None
+
+    normalized = (
+        source
+        .replace("\u00a0", " ")
+        .replace("–", "-")
+        .replace("—", "-")
+    )
+
+    amount_pattern = (
+        r"(?P<amount>"
+        r"(?:\d{1,3}(?:,\d{2,3})+|\d+)"
+        r"(?:\.\d+)?"
+        r")"
+        r"\s*(?P<k>[kK])?"
+    )
+
+    currency_pattern = r"(?:₹|rs\.?|inr)"
+
+    monthly_pattern = (
+        r"(?:"
+        r"/\s*(?:month|mo)\b"
+        r"|per\s+month\b"
+        r"|monthly\b"
+        r"|p\.?\s*m\.?\b"
+        r")"
+    )
+
+    # Examples:
+    # Stipend: ₹15,000 / month
+    # Monthly stipend Rs. 18,000
+    # Stipend 10k/month
+    label_pattern = re.compile(
+        r"(?:monthly\s+)?"
+        r"(?:stipend|compensation|allowance)"
+        r"\s*(?:amount)?"
+        r"\s*(?:is|of|:|-)?"
+        r"\s*"
+        rf"(?:{currency_pattern}\s*)?"
+        rf"{amount_pattern}"
+        rf"(?:\s*{monthly_pattern})?",
+        flags=re.IGNORECASE,
+    )
+
+    label_match = label_pattern.search(normalized)
+
+    if label_match:
+        return _parse_stipend_amount(
+            label_match.group("amount"),
+            label_match.group("k") or "",
+        )
+
+    # Examples:
+    # ₹15,000 / month
+    # INR 15000 monthly
+    monthly_currency_pattern = re.compile(
+        rf"{currency_pattern}"
+        r"\s*"
+        rf"{amount_pattern}"
+        r"\s*"
+        rf"{monthly_pattern}",
+        flags=re.IGNORECASE,
+    )
+
+    monthly_match = monthly_currency_pattern.search(
+        normalized
+    )
+
+    if monthly_match:
+        return _parse_stipend_amount(
+            monthly_match.group("amount"),
+            monthly_match.group("k") or "",
+        )
+
+    # Example:
+    # ₹8,000 - ₹12,000/month
+    # Use the lower bound conservatively.
+    range_pattern = re.compile(
+        rf"{currency_pattern}"
+        r"\s*"
+        rf"{amount_pattern}"
+        r"\s*-\s*"
+        rf"(?:{currency_pattern}\s*)?"
+        r"(?:"
+        r"(?:\d{1,3}(?:,\d{2,3})+|\d+)"
+        r"(?:\.\d+)?"
+        r")"
+        r"\s*[kK]?"
+        r"\s*"
+        rf"{monthly_pattern}",
+        flags=re.IGNORECASE,
+    )
+
+    range_match = range_pattern.search(normalized)
+
+    if range_match:
+        return _parse_stipend_amount(
+            range_match.group("amount"),
+            range_match.group("k") or "",
+        )
+
+    return None
+
+
 def calculate_hourly_stipend(
     stipend_monthly: Optional[float],
     hours_per_day: Optional[float],
@@ -389,6 +525,11 @@ def analyze_internship(
     days_per_week: Optional[int] = None,
 ) -> dict:
     normalized_text = normalize_text(text)
+
+    if stipend_monthly is None:
+        stipend_monthly = extract_monthly_stipend(
+            text
+        )
 
     verification_score = 60
     value_score = 50

@@ -18,7 +18,10 @@ from flask import (
 from flask_session import Session
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from services.analysis_engine import analyze_internship
+from services.analysis_engine import (
+    analyze_internship,
+    extract_monthly_stipend,
+)
 from services.application_tracker import (
     APPLICATION_STATUSES,
     application_statistics,
@@ -3219,6 +3222,15 @@ def analyze():
                 "danger",
             )
             return redirect(url_for("analyze"))
+
+        # If no stipend was entered manually, infer a
+        # monthly value from the supplied internship evidence.
+        if stipend_monthly is None:
+            stipend_monthly = (
+                extract_monthly_stipend(
+                    original_text
+                )
+            )
 
         schedule_type = request.form.get(
             "schedule_type",
