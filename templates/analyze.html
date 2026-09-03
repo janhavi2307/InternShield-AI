@@ -5,21 +5,434 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Analyze an internship with InternShield AI.">
     <title>New Assessment | InternShield AI</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
-        :root{--bg:#080912;--panel:rgba(24,26,45,.84);--panel2:rgba(12,15,29,.82);--input:rgba(6,8,18,.66);--line:rgba(255,255,255,.09);--text:#f8f8ff;--soft:#c4c5d4;--muted:#898ca0;--purple:#8067ff;--purple2:#aa99ff;--teal:#2dd4bf;--red:#ff7186;--amber:#ffc45f}
-        *{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;color:var(--text);background:radial-gradient(circle at 9% 4%,rgba(128,103,255,.16),transparent 27%),radial-gradient(circle at 96% 55%,rgba(45,212,191,.08),transparent 25%),var(--bg);font-family:"DM Sans",sans-serif}a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}.topbar{position:sticky;top:0;z-index:50;min-height:78px;padding:0 5%;display:flex;align-items:center;border-bottom:1px solid var(--line);background:rgba(8,9,18,.84);backdrop-filter:blur(18px)}.nav{width:min(1180px,100%);margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:11px;font:800 1.14rem Manrope,sans-serif}.logo{width:41px;height:41px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,#8e76ff,#6048df);box-shadow:0 12px 28px rgba(128,103,255,.28)}.brand em{color:var(--purple2);font-style:normal}.back{padding:11px 15px;border:1px solid var(--line);border-radius:11px;color:var(--soft);font-weight:800;font-size:.78rem;background:rgba(255,255,255,.025)}main{width:min(1180px,92%);margin:44px auto 72px}.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px;margin-bottom:25px}.eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:13px;padding:7px 11px;border:1px solid rgba(128,103,255,.26);border-radius:999px;color:#d6d0ff;background:rgba(128,103,255,.08);font-size:.68rem;font-weight:850;letter-spacing:.07em;text-transform:uppercase}.eyebrow:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px rgba(45,212,191,.08)}h1{margin:0 0 10px;font:800 clamp(2.25rem,5vw,3.9rem)/1.03 Manrope,sans-serif;letter-spacing:-.055em}.hero p{max-width:720px;color:var(--muted);line-height:1.7}.privacy{padding:11px 13px;border:1px solid rgba(45,212,191,.18);border-radius:12px;color:#87e5d4;background:rgba(45,212,191,.055);font-size:.72rem;font-weight:800}.flash{margin:0 0 18px;padding:14px 16px;border:1px solid rgba(255,113,134,.28);border-radius:12px;color:#ffb5c0;background:rgba(255,113,134,.07);font-size:.8rem}.form{display:grid;gap:18px}.section{padding:25px;border:1px solid var(--line);border-radius:20px;background:var(--panel);box-shadow:0 20px 60px rgba(0,0,0,.18)}.section-head{margin-bottom:20px;display:flex;align-items:flex-start;gap:12px}.num{width:38px;height:38px;display:grid;place-items:center;flex-shrink:0;border-radius:11px;color:#ddd7ff;background:rgba(128,103,255,.1);border:1px solid rgba(128,103,255,.22);font-weight:850}.section h2{margin:0 0 4px;font:800 1.06rem Manrope,sans-serif}.section-head p{color:var(--muted);font-size:.76rem;line-height:1.5}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}.field.full{grid-column:1/-1}.field label{display:block;margin-bottom:8px;color:var(--soft);font-size:.72rem;font-weight:750}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:12px;outline:none;color:var(--text);background:var(--input)}.field input,.field select{min-height:47px;padding:0 13px}.field textarea{min-height:190px;padding:13px;resize:vertical;line-height:1.6}.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(128,103,255,.5);box-shadow:0 0 0 4px rgba(128,103,255,.08)}option{background:#111426}.help{margin-top:6px;color:#6f7286;font-size:.64rem;line-height:1.45}.source-grid{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,.7fr));gap:14px;align-items:stretch}.upload{padding:14px;border:1px dashed rgba(128,103,255,.28);border-radius:13px;background:rgba(128,103,255,.035)}.upload strong{display:block;margin-bottom:9px;font-size:.72rem}.upload input{width:100%;color:var(--muted);font-size:.69rem}.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:14px}.check{padding:13px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.018)}.check label{display:flex;align-items:center;gap:9px;color:var(--soft);font-size:.73rem;font-weight:700}.check input{accent-color:var(--purple);width:17px;height:17px}.submit-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 23px;border:1px solid rgba(128,103,255,.18);border-radius:18px;background:linear-gradient(135deg,rgba(128,103,255,.075),rgba(45,212,191,.035))}.submit-row p{max-width:650px;color:var(--muted);font-size:.7rem;line-height:1.55}.submit{min-height:49px;padding:0 20px;border:0;border-radius:12px;color:#fff;background:linear-gradient(135deg,#856cff,#654ddd);box-shadow:0 13px 30px rgba(128,103,255,.23);font-weight:850;cursor:pointer}.submit:hover{transform:translateY(-1px)}@media(max-width:900px){.grid.four{grid-template-columns:repeat(2,1fr)}.source-grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.privacy{width:fit-content}}@media(max-width:650px){.grid,.grid.four,.checks{grid-template-columns:1fr}.field.full{grid-column:auto}.section{padding:20px}.submit-row{align-items:stretch;flex-direction:column}.submit{width:100%}.back{display:none}}
+        :root{
+            --bg:#080912;
+            --panel:rgba(24,26,45,.84);
+            --panel2:rgba(12,15,29,.82);
+            --input:rgba(6,8,18,.66);
+            --line:rgba(255,255,255,.09);
+            --text:#f8f8ff;
+            --soft:#c4c5d4;
+            --muted:#898ca0;
+            --purple:#8067ff;
+            --purple2:#aa99ff;
+            --teal:#2dd4bf;
+            --red:#ff7186;
+            --amber:#ffc45f
+        }
+
+        *{
+            box-sizing:border-box;
+            margin:0;
+            padding:0
+        }
+
+        body{
+            min-height:100vh;
+            color:var(--text);
+            background:
+                radial-gradient(circle at 9% 4%,rgba(128,103,255,.16),transparent 27%),
+                radial-gradient(circle at 96% 55%,rgba(45,212,191,.08),transparent 25%),
+                var(--bg);
+            font-family:"DM Sans",sans-serif
+        }
+
+        a{
+            color:inherit;
+            text-decoration:none
+        }
+
+        button,input,select,textarea{
+            font:inherit
+        }
+
+        .topbar{
+            position:sticky;
+            top:0;
+            z-index:50;
+            min-height:78px;
+            padding:0 5%;
+            display:flex;
+            align-items:center;
+            border-bottom:1px solid var(--line);
+            background:rgba(8,9,18,.84);
+            backdrop-filter:blur(18px)
+        }
+
+        .nav{
+            width:min(1180px,100%);
+            margin:auto;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:20px
+        }
+
+        .brand{
+            display:flex;
+            align-items:center;
+            gap:11px;
+            font:800 1.14rem Manrope,sans-serif
+        }
+
+        .logo{
+            width:41px;
+            height:41px;
+            display:grid;
+            place-items:center;
+            border-radius:12px;
+            background:linear-gradient(135deg,#8e76ff,#6048df);
+            box-shadow:0 12px 28px rgba(128,103,255,.28)
+        }
+
+        .brand em{
+            color:var(--purple2);
+            font-style:normal
+        }
+
+        .back{
+            padding:11px 15px;
+            border:1px solid var(--line);
+            border-radius:11px;
+            color:var(--soft);
+            font-weight:800;
+            font-size:.78rem;
+            background:rgba(255,255,255,.025)
+        }
+
+        main{
+            width:min(1180px,92%);
+            margin:44px auto 72px
+        }
+
+        .hero{
+            display:grid;
+            grid-template-columns:minmax(0,1fr) auto;
+            align-items:end;
+            gap:24px;
+            margin-bottom:25px
+        }
+
+        .eyebrow{
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            margin-bottom:13px;
+            padding:7px 11px;
+            border:1px solid rgba(128,103,255,.26);
+            border-radius:999px;
+            color:#d6d0ff;
+            background:rgba(128,103,255,.08);
+            font-size:.68rem;
+            font-weight:850;
+            letter-spacing:.07em;
+            text-transform:uppercase
+        }
+
+        .eyebrow:before{
+            content:"";
+            width:7px;
+            height:7px;
+            border-radius:50%;
+            background:var(--teal);
+            box-shadow:0 0 0 4px rgba(45,212,191,.08)
+        }
+
+        h1{
+            margin:0 0 10px;
+            font:800 clamp(2.25rem,5vw,3.9rem)/1.03 Manrope,sans-serif;
+            letter-spacing:-.055em
+        }
+
+        .hero p{
+            max-width:720px;
+            color:var(--muted);
+            line-height:1.7
+        }
+
+        .privacy{
+            padding:11px 13px;
+            border:1px solid rgba(45,212,191,.18);
+            border-radius:12px;
+            color:#87e5d4;
+            background:rgba(45,212,191,.055);
+            font-size:.72rem;
+            font-weight:800
+        }
+
+        .flash{
+            margin:0 0 18px;
+            padding:14px 16px;
+            border:1px solid rgba(255,113,134,.28);
+            border-radius:12px;
+            color:#ffb5c0;
+            background:rgba(255,113,134,.07);
+            font-size:.8rem
+        }
+
+        .form{
+            display:grid;
+            gap:18px
+        }
+
+        .section{
+            padding:25px;
+            border:1px solid var(--line);
+            border-radius:20px;
+            background:var(--panel);
+            box-shadow:0 20px 60px rgba(0,0,0,.18)
+        }
+
+        .section-head{
+            margin-bottom:20px;
+            display:flex;
+            align-items:flex-start;
+            gap:12px
+        }
+
+        .num{
+            width:38px;
+            height:38px;
+            display:grid;
+            place-items:center;
+            flex-shrink:0;
+            border-radius:11px;
+            color:#ddd7ff;
+            background:rgba(128,103,255,.1);
+            border:1px solid rgba(128,103,255,.22);
+            font-weight:850
+        }
+
+        .section h2{
+            margin:0 0 4px;
+            font:800 1.06rem Manrope,sans-serif
+        }
+
+        .section-head p{
+            color:var(--muted);
+            font-size:.76rem;
+            line-height:1.5
+        }
+
+        .grid{
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:15px
+        }
+
+        .grid.four{
+            grid-template-columns:repeat(4,minmax(0,1fr))
+        }
+
+        .field.full{
+            grid-column:1/-1
+        }
+
+        .field label{
+            display:block;
+            margin-bottom:8px;
+            color:var(--soft);
+            font-size:.72rem;
+            font-weight:750
+        }
+
+        .field input,
+        .field select,
+        .field textarea{
+            width:100%;
+            border:1px solid var(--line);
+            border-radius:12px;
+            outline:none;
+            color:var(--text);
+            background:var(--input)
+        }
+
+        .field input,
+        .field select{
+            min-height:47px;
+            padding:0 13px
+        }
+
+        .field textarea{
+            min-height:190px;
+            padding:13px;
+            resize:vertical;
+            line-height:1.6
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus{
+            border-color:rgba(128,103,255,.5);
+            box-shadow:0 0 0 4px rgba(128,103,255,.08)
+        }
+
+        option{
+            background:#111426
+        }
+
+        .help{
+            margin-top:6px;
+            color:#6f7286;
+            font-size:.64rem;
+            line-height:1.45
+        }
+
+        .source-grid{
+            display:grid;
+            grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,.7fr));
+            gap:14px;
+            align-items:stretch
+        }
+
+        .upload{
+            padding:14px;
+            border:1px dashed rgba(128,103,255,.28);
+            border-radius:13px;
+            background:rgba(128,103,255,.035)
+        }
+
+        .upload strong{
+            display:block;
+            margin-bottom:9px;
+            font-size:.72rem
+        }
+
+        .upload input{
+            width:100%;
+            color:var(--muted);
+            font-size:.69rem
+        }
+
+        .checks{
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:11px;
+            margin-top:14px
+        }
+
+        .check{
+            padding:13px;
+            border:1px solid var(--line);
+            border-radius:12px;
+            background:rgba(255,255,255,.018)
+        }
+
+        .check label{
+            display:flex;
+            align-items:center;
+            gap:9px;
+            color:var(--soft);
+            font-size:.73rem;
+            font-weight:700
+        }
+
+        .check input{
+            accent-color:var(--purple);
+            width:17px;
+            height:17px
+        }
+
+        .submit-row{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:18px;
+            padding:20px 23px;
+            border:1px solid rgba(128,103,255,.18);
+            border-radius:18px;
+            background:linear-gradient(
+                135deg,
+                rgba(128,103,255,.075),
+                rgba(45,212,191,.035)
+            )
+        }
+
+        .submit-row p{
+            max-width:650px;
+            color:var(--muted);
+            font-size:.7rem;
+            line-height:1.55
+        }
+
+        .submit{
+            min-height:49px;
+            padding:0 20px;
+            border:0;
+            border-radius:12px;
+            color:#fff;
+            background:linear-gradient(135deg,#856cff,#654ddd);
+            box-shadow:0 13px 30px rgba(128,103,255,.23);
+            font-weight:850;
+            cursor:pointer
+        }
+
+        .submit:hover{
+            transform:translateY(-1px)
+        }
+
+        @media(max-width:900px){
+            .grid.four{
+                grid-template-columns:repeat(2,1fr)
+            }
+
+            .source-grid{
+                grid-template-columns:1fr
+            }
+
+            .hero{
+                grid-template-columns:1fr
+            }
+
+            .privacy{
+                width:fit-content
+            }
+        }
+
+        @media(max-width:650px){
+            .grid,
+            .grid.four,
+            .checks{
+                grid-template-columns:1fr
+            }
+
+            .field.full{
+                grid-column:auto
+            }
+
+            .section{
+                padding:20px
+            }
+
+            .submit-row{
+                align-items:stretch;
+                flex-direction:column
+            }
+
+            .submit{
+                width:100%
+            }
+
+            .back{
+                display:none
+            }
+        }
     </style>
 
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/sidebar_shell.css') }}"
     >
-
 </head>
+
 <body class="has-unified-sidebar">
+
 <div class="is-workspace-shell">
 
     {% include "_app_sidebar.html" %}
@@ -31,31 +444,414 @@
 
     <section class="is-workspace-main">
 
-{% set page_heading = "New internship assessment" %}
-{% include "_page_topbar.html" %}
-<div class="is-workspace-content">
+        {% set page_heading = "New internship assessment" %}
+        {% include "_page_topbar.html" %}
+
+        <div class="is-workspace-content">
+
+            <main>
+
+                <section class="hero">
+                    <div>
+                        <span class="eyebrow">New assessment</span>
+
+                        <h1>Review an internship before you commit.</h1>
+
+                        <p>
+                            Paste the opportunity details or upload one PDF/image,
+                            then add compensation and academic availability so
+                            InternShield can explain verification, value and compatibility.
+                        </p>
+                    </div>
+
+                    <span class="privacy">
+                        Private to your signed-in account
+                    </span>
+                </section>
 
 
-<main>
-    <section class="hero"><div><span class="eyebrow">New assessment</span><h1>Review an internship before you commit.</h1><p>Paste the opportunity details or upload one PDF/image, then add compensation and academic availability so InternShield can explain verification, value and compatibility.</p></div><span class="privacy">Private to your signed-in account</span></section>
-    {% with messages=get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
-    <form class="form" method="post" action="{{ url_for('analyze') }}" enctype="multipart/form-data">
-        <section class="section"><div class="section-head"><span class="num">1</span><div><h2>Opportunity identity</h2><p>Add the basic role and recruiter details used by the verification checks.</p></div></div><div class="grid"><div class="field"><label for="company_name">Company name</label><input id="company_name" name="company_name" maxlength="160" placeholder="e.g. BrightPath Technologies"></div><div class="field"><label for="role_title">Internship role</label><input id="role_title" name="role_title" maxlength="160" placeholder="e.g. Data Analyst Intern"></div><div class="field"><label for="recruiter_email">Recruiter email</label><input id="recruiter_email" name="recruiter_email" type="email" placeholder="recruiter@company.com"><p class="help">Optional, but useful for domain verification.</p></div><div class="field"><label for="company_website">Company website</label><input id="company_website" name="company_website" type="url" placeholder="https://company.com"><p class="help">Optional. InternShield can attempt a live technical website check.</p></div></div></section>
-        <section class="section"><div class="section-head"><span class="num">2</span><div><h2>Internship evidence</h2><p>Use pasted text, one PDF, or one image. Do not upload PDF and image together.</p></div></div><div class="source-grid"><div class="field"><label for="original_text">Paste internship / recruiter text</label><textarea id="original_text" name="original_text" placeholder="Paste the internship description, offer message or recruiter communication here..."></textarea></div><div class="upload"><strong>Upload PDF</strong><input name="pdf_file" type="file" accept="application/pdf"><p class="help">One PDF only.</p></div><div class="upload"><strong>Upload image</strong><input name="image_file" type="file" accept="image/png,image/jpeg,image/webp"><p class="help">Screenshot or offer image.</p></div></div></section>
-        <section class="section"><div class="section-head"><span class="num">3</span><div><h2>Compensation & workload</h2><p>These values help InternShield calculate opportunity value and effective hourly stipend.</p></div></div><div class="grid four"><div class="field"><label for="stipend_monthly">Monthly stipend (₹)</label><input id="stipend_monthly" name="stipend_monthly" type="number" min="0" step="0.01" placeholder="8000"></div><div class="field"><label for="hours_per_day">Hours per day</label><input id="hours_per_day" name="hours_per_day" type="number" min="0.1" max="24" step="0.5" placeholder="6"></div><div class="field"><label for="days_per_week">Days per week</label><input id="days_per_week" name="days_per_week" type="number" min="1" max="7" step="1" placeholder="5"></div><div class="field"><label for="duration_months">Duration (months)</label><input id="duration_months" name="duration_months" type="number" min="0.1" step="0.5" placeholder="3"></div></div></section>
-        <section class="section"><div class="section-head"><span class="num">4</span><div><h2>Academic compatibility</h2><p>Tell InternShield how much time you can realistically give the internship.</p></div></div><div class="grid"><div class="field"><label for="available_hours_per_week">Available hours per week</label><input id="available_hours_per_week" name="available_hours_per_week" type="number" min="0" max="168" step="0.5" placeholder="25"></div><div class="field"><label for="schedule_type">Internship schedule</label><select id="schedule_type" name="schedule_type"><option value="not_specified">Not specified</option><option value="flexible">Flexible</option><option value="fixed">Fixed</option></select></div></div><div class="checks"><div class="check"><label><input name="exam_period" type="checkbox"> Internship overlaps with an exam period</label></div><div class="check"><label><input name="class_schedule_conflict" type="checkbox"> Timing conflicts with lectures / practicals</label></div></div></section>
-        <div class="submit-row"><p>InternShield provides decision support from the evidence you submit. Always verify important written terms directly with the organization before accepting.</p><button class="submit" type="submit">Analyze internship →</button></div>
-    </form>
-</main>
-{% include "_assistant_fab.html" %}
-
-<script
-    src="{{ url_for('static', filename='js/sidebar_shell.js') }}"
-    defer
-></script>
+                {% with messages=get_flashed_messages(with_categories=true) %}
+                    {% for category,message in messages %}
+                        <div class="flash {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endwith %}
 
 
-</div>
+                <form
+                    class="form"
+                    method="post"
+                    action="{{ url_for('analyze') }}"
+                    enctype="multipart/form-data"
+                >
+
+                    <!-- SECTION 1 -->
+                    <section class="section">
+
+                        <div class="section-head">
+                            <span class="num">1</span>
+
+                            <div>
+                                <h2>Opportunity identity</h2>
+                                <p>
+                                    Add the basic role and recruiter details used
+                                    by the verification checks.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="grid">
+
+                            <div class="field">
+                                <label for="company_name">
+                                    Company name
+                                </label>
+
+                                <input
+                                    id="company_name"
+                                    name="company_name"
+                                    maxlength="160"
+                                    placeholder="e.g. BrightPath Technologies"
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label for="role_title">
+                                    Internship role
+                                </label>
+
+                                <input
+                                    id="role_title"
+                                    name="role_title"
+                                    maxlength="160"
+                                    placeholder="e.g. Data Analyst Intern"
+                                >
+                            </div>
+
+                            <div class="field">
+                                <label for="recruiter_email">
+                                    Recruiter email
+                                </label>
+
+                                <input
+                                    id="recruiter_email"
+                                    name="recruiter_email"
+                                    type="email"
+                                    placeholder="recruiter@company.com"
+                                >
+
+                                <p class="help">
+                                    Optional, but useful for domain verification.
+                                </p>
+                            </div>
+
+                            <div class="field">
+                                <label for="company_website">
+                                    Company website
+                                </label>
+
+                                <input
+                                    id="company_website"
+                                    name="company_website"
+                                    type="url"
+                                    placeholder="https://company.com"
+                                >
+
+                                <p class="help">
+                                    Optional. InternShield can attempt a live
+                                    technical website check.
+                                </p>
+                            </div>
+
+                        </div>
+                    </section>
+
+
+                    <!-- SECTION 2 -->
+                    <section class="section">
+
+                        <div class="section-head">
+                            <span class="num">2</span>
+
+                            <div>
+                                <h2>Internship evidence</h2>
+
+                                <p>
+                                    Use pasted text, one PDF, or one image.
+                                    Do not upload PDF and image together.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="source-grid">
+
+                            <div class="field">
+
+                                <label for="original_text">
+                                    Paste internship / recruiter text
+                                </label>
+
+                                <textarea
+                                    id="original_text"
+                                    name="original_text"
+                                    placeholder="Paste the internship description, offer message or recruiter communication here..."
+                                ></textarea>
+
+                            </div>
+
+                            <div class="upload">
+                                <strong>Upload PDF</strong>
+
+                                <input
+                                    name="pdf_file"
+                                    type="file"
+                                    accept="application/pdf"
+                                >
+
+                                <p class="help">
+                                    One PDF only.
+                                </p>
+                            </div>
+
+                            <div class="upload">
+                                <strong>Upload image</strong>
+
+                                <input
+                                    name="image_file"
+                                    type="file"
+                                    accept="image/png,image/jpeg,image/webp"
+                                >
+
+                                <p class="help">
+                                    Screenshot or offer image.
+                                </p>
+                            </div>
+
+                        </div>
+                    </section>
+
+
+                    <!-- SECTION 3 -->
+                    <section class="section">
+
+                        <div class="section-head">
+                            <span class="num">3</span>
+
+                            <div>
+                                <h2>Compensation & workload</h2>
+
+                                <p>
+                                    These values help InternShield calculate
+                                    opportunity value and effective hourly stipend.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="grid four">
+
+                            <div class="field">
+
+                                <label for="stipend_monthly">
+                                    Monthly stipend (₹)
+                                </label>
+
+                                <input
+                                    id="stipend_monthly"
+                                    name="stipend_monthly"
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="8000"
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label for="hours_per_day">
+                                    Hours per day
+                                </label>
+
+                                <input
+                                    id="hours_per_day"
+                                    name="hours_per_day"
+                                    type="number"
+                                    min="0.5"
+                                    max="24"
+                                    step="0.5"
+                                    placeholder="6"
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label for="days_per_week">
+                                    Days per week
+                                </label>
+
+                                <input
+                                    id="days_per_week"
+                                    name="days_per_week"
+                                    type="number"
+                                    min="1"
+                                    max="7"
+                                    step="1"
+                                    placeholder="5"
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label for="duration_months">
+                                    Duration (months)
+                                </label>
+
+                                <input
+                                    id="duration_months"
+                                    name="duration_months"
+                                    type="number"
+                                    min="0.5"
+                                    step="0.5"
+                                    placeholder="3"
+                                >
+
+                            </div>
+
+                        </div>
+                    </section>
+
+
+                    <!-- SECTION 4 -->
+                    <section class="section">
+
+                        <div class="section-head">
+                            <span class="num">4</span>
+
+                            <div>
+                                <h2>Academic compatibility</h2>
+
+                                <p>
+                                    Tell InternShield how much time you can
+                                    realistically give the internship.
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div class="grid">
+
+                            <div class="field">
+
+                                <label for="available_hours_per_week">
+                                    Available hours per week
+                                </label>
+
+                                <input
+                                    id="available_hours_per_week"
+                                    name="available_hours_per_week"
+                                    type="number"
+                                    min="0"
+                                    max="168"
+                                    step="0.5"
+                                    placeholder="25"
+                                >
+
+                            </div>
+
+
+                            <div class="field">
+
+                                <label for="schedule_type">
+                                    Internship schedule
+                                </label>
+
+                                <select
+                                    id="schedule_type"
+                                    name="schedule_type"
+                                >
+                                    <option value="not_specified">
+                                        Not specified
+                                    </option>
+
+                                    <option value="flexible">
+                                        Flexible
+                                    </option>
+
+                                    <option value="fixed">
+                                        Fixed
+                                    </option>
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="checks">
+
+                            <div class="check">
+                                <label>
+                                    <input
+                                        name="exam_period"
+                                        type="checkbox"
+                                    >
+                                    Internship overlaps with an exam period
+                                </label>
+                            </div>
+
+
+                            <div class="check">
+                                <label>
+                                    <input
+                                        name="class_schedule_conflict"
+                                        type="checkbox"
+                                    >
+                                    Timing conflicts with lectures / practicals
+                                </label>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <div class="submit-row">
+
+                        <p>
+                            InternShield provides decision support from the evidence
+                            you submit. Always verify important written terms directly
+                            with the organization before accepting.
+                        </p>
+
+                        <button
+                            class="submit"
+                            type="submit"
+                        >
+                            Analyze internship →
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </main>
+
+
+            {% include "_assistant_fab.html" %}
+
+
+            <script
+                src="{{ url_for('static', filename='js/sidebar_shell.js') }}"
+                defer
+            ></script>
+
+        </div>
 
     </section>
 
