@@ -1552,6 +1552,147 @@ def register_support_routes(app):
         )
 
     @app.route(
+        "/admin/support/<request_id>/delete",
+        methods=["POST"],
+    )
+    @_admin_required
+    def admin_support_delete(
+        request_id,
+    ):
+        status_filter = (
+            request.form.get(
+                "status",
+                "all",
+            )
+            or "all"
+        ).strip().lower()
+
+        search_query = (
+            request.form.get(
+                "q",
+                "",
+            )
+            or ""
+        ).strip()
+
+        redirect_values = {}
+
+        if (
+            status_filter == "all"
+            or status_filter in VALID_STATUSES
+        ):
+            redirect_values["status"] = (
+                status_filter
+            )
+
+        if search_query:
+            redirect_values["q"] = (
+                search_query
+            )
+
+        try:
+            supabase = (
+                _service_supabase()
+            )
+
+            response = (
+                supabase
+                .table(
+                    "support_requests"
+                )
+                .select(
+                    "id, subject"
+                )
+                .eq(
+                    "id",
+                    request_id,
+                )
+                .limit(1)
+                .execute()
+            )
+
+            if not response.data:
+                flash(
+                    "Support request was already removed "
+                    "or could not be found.",
+                    "warning",
+                )
+
+                return redirect(
+                    url_for(
+                        "admin_support",
+                        **redirect_values,
+                    )
+                )
+
+            support_request = (
+                response.data[0]
+            )
+
+            (
+                supabase
+                .table(
+                    "support_requests"
+                )
+                .delete()
+                .eq(
+                    "id",
+                    request_id,
+                )
+                .execute()
+            )
+
+            verification = (
+                supabase
+                .table(
+                    "support_requests"
+                )
+                .select("id")
+                .eq(
+                    "id",
+                    request_id,
+                )
+                .limit(1)
+                .execute()
+            )
+
+            if verification.data:
+                raise ValueError(
+                    "Support request still exists "
+                    "after delete operation."
+                )
+
+            subject = (
+                support_request.get(
+                    "subject"
+                )
+                or "Support request"
+            )
+
+            flash(
+                f'"{subject}" was deleted permanently.',
+                "success",
+            )
+
+        except Exception:
+            app.logger.exception(
+                "Admin support request could not be deleted"
+            )
+
+            flash(
+                "The support request could not be deleted.",
+                "danger",
+            )
+
+        return redirect(
+            url_for(
+                "admin_support",
+                **redirect_values,
+            )
+        )
+
+
+    @app.route(
         "/admin/support/<request_id>",
         methods=["GET", "POST"],
     )
