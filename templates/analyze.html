@@ -2,13 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Analyze an internship with InternShield AI.">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Analyze an internship with InternShield AI."
+    >
+
     <title>New Assessment | InternShield AI</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
     <style>
         :root{
@@ -24,403 +45,938 @@
             --purple2:#aa99ff;
             --teal:#2dd4bf;
             --red:#ff7186;
-            --amber:#ffc45f
+            --amber:#ffc45f;
         }
 
         *{
             box-sizing:border-box;
             margin:0;
-            padding:0
+            padding:0;
         }
 
         body{
             min-height:100vh;
+
             color:var(--text);
+
             background:
-                radial-gradient(circle at 9% 4%,rgba(128,103,255,.16),transparent 27%),
-                radial-gradient(circle at 96% 55%,rgba(45,212,191,.08),transparent 25%),
+                radial-gradient(
+                    circle at 9% 4%,
+                    rgba(128,103,255,.16),
+                    transparent 27%
+                ),
+                radial-gradient(
+                    circle at 96% 55%,
+                    rgba(45,212,191,.08),
+                    transparent 25%
+                ),
                 var(--bg);
-            font-family:"DM Sans",sans-serif
+
+            font-family:"DM Sans",sans-serif;
         }
 
         a{
             color:inherit;
-            text-decoration:none
+            text-decoration:none;
         }
 
-        button,input,select,textarea{
-            font:inherit
+        button,
+        input,
+        select,
+        textarea{
+            font:inherit;
         }
 
         .topbar{
             position:sticky;
             top:0;
             z-index:50;
+
             min-height:78px;
             padding:0 5%;
+
             display:flex;
             align-items:center;
+
             border-bottom:1px solid var(--line);
+
             background:rgba(8,9,18,.84);
-            backdrop-filter:blur(18px)
+            backdrop-filter:blur(18px);
         }
 
         .nav{
             width:min(1180px,100%);
             margin:auto;
+
             display:flex;
             align-items:center;
             justify-content:space-between;
-            gap:20px
+            gap:20px;
         }
 
         .brand{
             display:flex;
             align-items:center;
             gap:11px;
-            font:800 1.14rem Manrope,sans-serif
+
+            font:800 1.14rem Manrope,sans-serif;
         }
 
         .logo{
             width:41px;
             height:41px;
+
             display:grid;
             place-items:center;
+
             border-radius:12px;
-            background:linear-gradient(135deg,#8e76ff,#6048df);
-            box-shadow:0 12px 28px rgba(128,103,255,.28)
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8e76ff,
+                    #6048df
+                );
+
+            box-shadow:
+                0 12px 28px
+                rgba(128,103,255,.28);
         }
 
         .brand em{
             color:var(--purple2);
-            font-style:normal
+            font-style:normal;
         }
 
         .back{
             padding:11px 15px;
+
             border:1px solid var(--line);
             border-radius:11px;
+
             color:var(--soft);
+
             font-weight:800;
             font-size:.78rem;
-            background:rgba(255,255,255,.025)
+
+            background:
+                rgba(255,255,255,.025);
         }
 
         main{
             width:min(1180px,92%);
-            margin:44px auto 72px
+            margin:44px auto 72px;
         }
 
         .hero{
             display:grid;
-            grid-template-columns:minmax(0,1fr) auto;
+
+            grid-template-columns:
+                minmax(0,1fr) auto;
+
             align-items:end;
+
             gap:24px;
-            margin-bottom:25px
+
+            margin-bottom:25px;
         }
 
         .eyebrow{
             display:inline-flex;
+
             align-items:center;
+
             gap:8px;
+
             margin-bottom:13px;
+
             padding:7px 11px;
-            border:1px solid rgba(128,103,255,.26);
+
+            border:
+                1px solid
+                rgba(128,103,255,.26);
+
             border-radius:999px;
+
             color:#d6d0ff;
-            background:rgba(128,103,255,.08);
+
+            background:
+                rgba(128,103,255,.08);
+
             font-size:.68rem;
             font-weight:850;
+
             letter-spacing:.07em;
-            text-transform:uppercase
+
+            text-transform:uppercase;
         }
 
         .eyebrow:before{
             content:"";
+
             width:7px;
             height:7px;
+
             border-radius:50%;
+
             background:var(--teal);
-            box-shadow:0 0 0 4px rgba(45,212,191,.08)
+
+            box-shadow:
+                0 0 0 4px
+                rgba(45,212,191,.08);
         }
 
         h1{
             margin:0 0 10px;
-            font:800 clamp(2.25rem,5vw,3.9rem)/1.03 Manrope,sans-serif;
-            letter-spacing:-.055em
+
+            font:
+                800
+                clamp(2.25rem,5vw,3.9rem)
+                /1.03
+                Manrope,
+                sans-serif;
+
+            letter-spacing:-.055em;
         }
 
         .hero p{
             max-width:720px;
+
             color:var(--muted);
-            line-height:1.7
+
+            line-height:1.7;
         }
 
         .privacy{
             padding:11px 13px;
-            border:1px solid rgba(45,212,191,.18);
+
+            border:
+                1px solid
+                rgba(45,212,191,.18);
+
             border-radius:12px;
+
             color:#87e5d4;
-            background:rgba(45,212,191,.055);
+
+            background:
+                rgba(45,212,191,.055);
+
             font-size:.72rem;
-            font-weight:800
+            font-weight:800;
         }
 
         .flash{
             margin:0 0 18px;
+
             padding:14px 16px;
-            border:1px solid rgba(255,113,134,.28);
+
+            border:
+                1px solid
+                rgba(255,113,134,.28);
+
             border-radius:12px;
+
             color:#ffb5c0;
-            background:rgba(255,113,134,.07);
-            font-size:.8rem
+
+            background:
+                rgba(255,113,134,.07);
+
+            font-size:.8rem;
         }
 
         .form{
             display:grid;
-            gap:18px
+            gap:18px;
         }
 
         .section{
             padding:25px;
+
             border:1px solid var(--line);
+
             border-radius:20px;
+
             background:var(--panel);
-            box-shadow:0 20px 60px rgba(0,0,0,.18)
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,.18);
         }
 
         .section-head{
             margin-bottom:20px;
+
             display:flex;
             align-items:flex-start;
-            gap:12px
+
+            gap:12px;
         }
 
         .num{
             width:38px;
             height:38px;
+
             display:grid;
             place-items:center;
+
             flex-shrink:0;
+
             border-radius:11px;
+
             color:#ddd7ff;
-            background:rgba(128,103,255,.1);
-            border:1px solid rgba(128,103,255,.22);
-            font-weight:850
+
+            background:
+                rgba(128,103,255,.1);
+
+            border:
+                1px solid
+                rgba(128,103,255,.22);
+
+            font-weight:850;
         }
 
         .section h2{
             margin:0 0 4px;
-            font:800 1.06rem Manrope,sans-serif
+
+            font:
+                800
+                1.06rem
+                Manrope,
+                sans-serif;
         }
 
         .section-head p{
             color:var(--muted);
+
             font-size:.76rem;
-            line-height:1.5
+
+            line-height:1.5;
         }
 
         .grid{
             display:grid;
-            grid-template-columns:repeat(2,minmax(0,1fr));
-            gap:15px
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(0,1fr)
+                );
+
+            gap:15px;
         }
 
         .grid.four{
-            grid-template-columns:repeat(4,minmax(0,1fr))
+            grid-template-columns:
+                repeat(
+                    4,
+                    minmax(0,1fr)
+                );
         }
 
         .field.full{
-            grid-column:1/-1
+            grid-column:1/-1;
         }
 
         .field label{
             display:block;
+
             margin-bottom:8px;
+
             color:var(--soft);
+
             font-size:.72rem;
-            font-weight:750
+            font-weight:750;
         }
 
         .field input,
         .field select,
         .field textarea{
             width:100%;
-            border:1px solid var(--line);
+
+            border:
+                1px solid
+                var(--line);
+
             border-radius:12px;
+
             outline:none;
+
             color:var(--text);
-            background:var(--input)
+
+            background:var(--input);
         }
 
         .field input,
         .field select{
             min-height:47px;
-            padding:0 13px
+
+            padding:0 13px;
         }
 
         .field textarea{
             min-height:190px;
+
             padding:13px;
+
             resize:vertical;
-            line-height:1.6
+
+            line-height:1.6;
+        }
+
+        #original_text{
+            min-height:270px;
         }
 
         .field input:focus,
         .field select:focus,
         .field textarea:focus{
-            border-color:rgba(128,103,255,.5);
-            box-shadow:0 0 0 4px rgba(128,103,255,.08)
+            border-color:
+                rgba(128,103,255,.5);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(128,103,255,.08);
         }
 
         option{
-            background:#111426
+            background:#111426;
         }
 
         .help{
             margin-top:6px;
+
             color:#6f7286;
+
             font-size:.64rem;
-            line-height:1.45
+
+            line-height:1.45;
+        }
+
+        .help.profile-loaded{
+            color:#76d9c8;
         }
 
         .source-grid{
             display:grid;
-            grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,.7fr));
+
+            grid-template-columns:
+                minmax(0,1.4fr)
+                repeat(
+                    2,
+                    minmax(0,.7fr)
+                );
+
             gap:14px;
-            align-items:stretch
+
+            align-items:stretch;
         }
 
         .upload{
-            padding:14px;
-            border:1px dashed rgba(128,103,255,.28);
-            border-radius:13px;
-            background:rgba(128,103,255,.035)
+            min-height:190px;
+            padding:16px;
+
+            display:flex;
+            flex-direction:column;
+
+            border:
+                1px dashed
+                rgba(128,103,255,.32);
+
+            border-radius:14px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(128,103,255,.055),
+                    rgba(255,255,255,.018)
+                );
+
+            transition:
+                border-color .2s ease,
+                background .2s ease,
+                transform .2s ease;
+        }
+
+        .upload:hover{
+            border-color:
+                rgba(128,103,255,.52);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(128,103,255,.085),
+                    rgba(45,212,191,.025)
+                );
+
+            transform:translateY(-1px);
+        }
+
+        .upload-title{
+            display:flex;
+            align-items:center;
+            gap:9px;
+
+            margin-bottom:7px;
+        }
+
+        .upload-icon{
+            width:32px;
+            height:32px;
+            flex-shrink:0;
+
+            display:grid;
+            place-items:center;
+
+            border-radius:10px;
+
+            color:#cfc7ff;
+
+            background:
+                rgba(128,103,255,.12);
+        }
+
+        .upload-icon svg{
+            width:16px;
+            height:16px;
         }
 
         .upload strong{
             display:block;
-            margin-bottom:9px;
-            font-size:.72rem
+
+            color:var(--soft);
+
+            font-size:.74rem;
+            font-weight:800;
         }
 
-        .upload input{
-            width:100%;
+        .upload-description{
+            margin-bottom:13px;
+
             color:var(--muted);
-            font-size:.69rem
+
+            font-size:.66rem;
+            line-height:1.45;
+        }
+
+        .file-input{
+            position:absolute;
+            width:1px;
+            height:1px;
+            padding:0;
+            margin:-1px;
+            overflow:hidden;
+            clip:rect(0,0,0,0);
+            white-space:nowrap;
+            border:0;
+        }
+
+        .file-picker{
+            min-height:44px;
+            padding:0 12px;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:8px;
+
+            border:
+                1px solid
+                rgba(128,103,255,.27);
+
+            border-radius:11px;
+
+            color:#ded9ff;
+
+            background:
+                rgba(128,103,255,.08);
+
+            font-size:.69rem;
+            font-weight:800;
+
+            cursor:pointer;
+
+            transition:
+                border-color .2s ease,
+                background .2s ease,
+                transform .2s ease;
+        }
+
+        .file-picker:hover{
+            border-color:
+                rgba(128,103,255,.5);
+
+            background:
+                rgba(128,103,255,.14);
+
+            transform:translateY(-1px);
+        }
+
+        .file-name{
+            min-height:36px;
+            margin-top:10px;
+            padding:9px 10px;
+
+            display:flex;
+            align-items:center;
+
+            border:
+                1px solid
+                rgba(255,255,255,.07);
+
+            border-radius:10px;
+
+            color:#7f8295;
+
+            background:
+                rgba(5,7,16,.35);
+
+            font-size:.64rem;
+            line-height:1.35;
+
+            overflow-wrap:anywhere;
+        }
+
+        .file-name.has-file{
+            color:#7be3d0;
+
+            border-color:
+                rgba(45,212,191,.18);
+
+            background:
+                rgba(45,212,191,.045);
+        }
+
+        .upload .help{
+            margin-top:auto;
+            padding-top:10px;
         }
 
         .checks{
             display:grid;
-            grid-template-columns:repeat(2,minmax(0,1fr));
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(0,1fr)
+                );
+
             gap:11px;
-            margin-top:14px
+
+            margin-top:14px;
         }
 
         .check{
             padding:13px;
-            border:1px solid var(--line);
+
+            border:
+                1px solid
+                var(--line);
+
             border-radius:12px;
-            background:rgba(255,255,255,.018)
+
+            background:
+                rgba(255,255,255,.018);
         }
 
         .check label{
             display:flex;
+
             align-items:center;
+
             gap:9px;
+
             color:var(--soft);
+
             font-size:.73rem;
-            font-weight:700
+
+            font-weight:700;
         }
 
         .check input{
             accent-color:var(--purple);
+
             width:17px;
-            height:17px
+            height:17px;
+        }
+
+        /* -----------------------------------------------
+           PROFILE AUTO-FILL CONTEXT
+        ------------------------------------------------ */
+
+        .profile-context{
+            margin-bottom:18px;
+
+            padding:15px 16px;
+
+            display:flex;
+
+            align-items:center;
+            justify-content:space-between;
+
+            gap:16px;
+
+            border:
+                1px solid
+                rgba(45,212,191,.18);
+
+            border-radius:14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(45,212,191,.06),
+                    rgba(128,103,255,.035)
+                );
+        }
+
+        .profile-context-copy{
+            min-width:0;
+        }
+
+        .profile-context-label{
+            display:flex;
+
+            align-items:center;
+
+            gap:7px;
+
+            margin-bottom:5px;
+
+            color:#71ddca;
+
+            font-size:.64rem;
+            font-weight:850;
+
+            letter-spacing:.07em;
+
+            text-transform:uppercase;
+        }
+
+        .profile-context-label:before{
+            content:"✓";
+
+            width:17px;
+            height:17px;
+
+            display:grid;
+            place-items:center;
+
+            border-radius:50%;
+
+            color:#9deadd;
+
+            background:
+                rgba(45,212,191,.12);
+
+            font-size:.61rem;
+        }
+
+        .profile-context-copy strong{
+            display:block;
+
+            color:var(--soft);
+
+            font-size:.79rem;
+
+            font-weight:700;
+
+            line-height:1.5;
+        }
+
+        .profile-edit-link{
+            flex-shrink:0;
+
+            padding:9px 12px;
+
+            border:
+                1px solid
+                rgba(128,103,255,.25);
+
+            border-radius:10px;
+
+            color:#c9c2ff;
+
+            background:
+                rgba(128,103,255,.07);
+
+            font-size:.67rem;
+            font-weight:800;
+
+            transition:
+                border-color .2s ease,
+                background .2s ease,
+                transform .2s ease;
+        }
+
+        .profile-edit-link:hover{
+            border-color:
+                rgba(128,103,255,.48);
+
+            background:
+                rgba(128,103,255,.12);
+
+            transform:translateY(-1px);
+        }
+
+        .profile-readonly{
+            opacity:1 !important;
+
+            color:var(--soft) !important;
+
+            cursor:not-allowed;
+
+            background:
+                rgba(6,8,18,.48)
+                !important;
+        }
+
+        .profile-readonly:disabled{
+            opacity:1;
+
+            -webkit-text-fill-color:
+                var(--soft);
+        }
+
+        .profile-grid{
+            display:grid;
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(0,1fr)
+                );
+
+            gap:15px;
         }
 
         .submit-row{
             display:flex;
+
             align-items:center;
             justify-content:space-between;
+
             gap:18px;
+
             padding:20px 23px;
-            border:1px solid rgba(128,103,255,.18);
+
+            border:
+                1px solid
+                rgba(128,103,255,.18);
+
             border-radius:18px;
-            background:linear-gradient(
-                135deg,
-                rgba(128,103,255,.075),
-                rgba(45,212,191,.035)
-            )
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(128,103,255,.075),
+                    rgba(45,212,191,.035)
+                );
         }
 
         .submit-row p{
             max-width:650px;
+
             color:var(--muted);
+
             font-size:.7rem;
-            line-height:1.55
+
+            line-height:1.55;
         }
 
         .submit{
             min-height:49px;
+
             padding:0 20px;
+
             border:0;
+
             border-radius:12px;
+
             color:#fff;
-            background:linear-gradient(135deg,#856cff,#654ddd);
-            box-shadow:0 13px 30px rgba(128,103,255,.23);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #856cff,
+                    #654ddd
+                );
+
+            box-shadow:
+                0 13px 30px
+                rgba(128,103,255,.23);
+
             font-weight:850;
-            cursor:pointer
+
+            cursor:pointer;
+
+            transition:
+                transform .2s ease;
         }
 
         .submit:hover{
-            transform:translateY(-1px)
+            transform:translateY(-1px);
         }
 
         @media(max-width:900px){
+
             .grid.four{
-                grid-template-columns:repeat(2,1fr)
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+
+            .profile-grid{
+                grid-template-columns:
+                    repeat(2,1fr);
             }
 
             .source-grid{
-                grid-template-columns:1fr
+                grid-template-columns:1fr;
             }
 
             .hero{
-                grid-template-columns:1fr
+                grid-template-columns:1fr;
             }
 
             .privacy{
-                width:fit-content
+                width:fit-content;
             }
         }
 
         @media(max-width:650px){
+
             .grid,
             .grid.four,
+            .profile-grid,
             .checks{
-                grid-template-columns:1fr
+                grid-template-columns:1fr;
             }
 
             .field.full{
-                grid-column:auto
+                grid-column:auto;
             }
 
             .section{
-                padding:20px
+                padding:20px;
+            }
+
+            .profile-context{
+                align-items:flex-start;
+
+                flex-direction:column;
             }
 
             .submit-row{
                 align-items:stretch;
-                flex-direction:column
+
+                flex-direction:column;
             }
 
             .submit{
-                width:100%
+                width:100%;
             }
 
             .back{
-                display:none
+                display:none;
             }
         }
     </style>
@@ -431,52 +987,117 @@
     >
 </head>
 
+
 <body class="has-unified-sidebar">
 
 <div class="is-workspace-shell">
 
+
     {% include "_app_sidebar.html" %}
+
 
     <div
         id="mobileOverlay"
         class="is-mobile-overlay"
     ></div>
 
+
     <section class="is-workspace-main">
 
+
         {% set page_heading = "New internship assessment" %}
+
         {% include "_page_topbar.html" %}
+
 
         <div class="is-workspace-content">
 
+
             <main>
 
-                <section class="hero">
-                    <div>
-                        <span class="eyebrow">New assessment</span>
 
-                        <h1>Review an internship before you commit.</h1>
+                <!-- ==========================================
+                     HERO
+                =========================================== -->
+
+                <section class="hero">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            New assessment
+                        </span>
+
+                        <h1>
+                            Review an internship before you commit.
+                        </h1>
 
                         <p>
-                            Paste the opportunity details or upload one PDF/image,
-                            then add compensation and academic availability so
-                            InternShield can explain verification, value and compatibility.
+                            Paste the opportunity details or upload
+                            one PDF/image, then add compensation and
+                            academic availability so InternShield can
+                            explain verification, value and compatibility.
                         </p>
+
                     </div>
+
 
                     <span class="privacy">
                         Private to your signed-in account
                     </span>
+
                 </section>
 
 
-                {% with messages=get_flashed_messages(with_categories=true) %}
+
+                <!-- ==========================================
+                     FLASH MESSAGES
+                =========================================== -->
+
+                {% with messages =
+                    get_flashed_messages(
+                        with_categories=true
+                    )
+                %}
+
                     {% for category,message in messages %}
-                        <div class="flash {{ category }}">
+
+                        <div
+                            class="flash {{ category }}"
+                        >
                             {{ message }}
                         </div>
+
                     {% endfor %}
+
                 {% endwith %}
+
+
+
+                <!-- ==========================================
+                     PROFILE DEFAULT VARIABLES
+                =========================================== -->
+
+                {% set saved_hours =
+                    profile_defaults.get(
+                        'available_hours_per_week'
+                    )
+                %}
+
+                {% set saved_work_mode =
+                    profile_defaults.get(
+                        'preferred_work_mode',
+                        'no_preference'
+                    )
+                %}
+
+                {% set saved_schedule =
+                    profile_defaults.get(
+                        'default_schedule_type',
+                        'not_specified'
+                    )
+                %}
+
 
 
                 <form
@@ -486,24 +1107,42 @@
                     enctype="multipart/form-data"
                 >
 
-                    <!-- SECTION 1 -->
+
+                    <!-- ======================================
+                         1. OPPORTUNITY IDENTITY
+                    ======================================= -->
+
                     <section class="section">
 
+
                         <div class="section-head">
-                            <span class="num">1</span>
+
+                            <span class="num">
+                                1
+                            </span>
 
                             <div>
-                                <h2>Opportunity identity</h2>
+
+                                <h2>
+                                    Opportunity identity
+                                </h2>
+
                                 <p>
-                                    Add the basic role and recruiter details used
-                                    by the verification checks.
+                                    Add the basic role and recruiter
+                                    details used by the verification
+                                    checks.
                                 </p>
+
                             </div>
+
                         </div>
+
 
                         <div class="grid">
 
+
                             <div class="field">
+
                                 <label for="company_name">
                                     Company name
                                 </label>
@@ -514,9 +1153,12 @@
                                     maxlength="160"
                                     placeholder="e.g. BrightPath Technologies"
                                 >
+
                             </div>
 
+
                             <div class="field">
+
                                 <label for="role_title">
                                     Internship role
                                 </label>
@@ -527,9 +1169,12 @@
                                     maxlength="160"
                                     placeholder="e.g. Data Analyst Intern"
                                 >
+
                             </div>
 
+
                             <div class="field">
+
                                 <label for="recruiter_email">
                                     Recruiter email
                                 </label>
@@ -542,11 +1187,15 @@
                                 >
 
                                 <p class="help">
-                                    Optional, but useful for domain verification.
+                                    Optional, but useful for
+                                    domain verification.
                                 </p>
+
                             </div>
 
+
                             <div class="field">
+
                                 <label for="company_website">
                                     Company website
                                 </label>
@@ -559,32 +1208,51 @@
                                 >
 
                                 <p class="help">
-                                    Optional. InternShield can attempt a live
-                                    technical website check.
+                                    Optional. InternShield can attempt
+                                    a live technical website check.
                                 </p>
+
                             </div>
 
+
                         </div>
+
                     </section>
 
 
-                    <!-- SECTION 2 -->
+
+                    <!-- ======================================
+                         2. INTERNSHIP EVIDENCE
+                    ======================================= -->
+
                     <section class="section">
 
+
                         <div class="section-head">
-                            <span class="num">2</span>
+
+                            <span class="num">
+                                2
+                            </span>
 
                             <div>
-                                <h2>Internship evidence</h2>
+
+                                <h2>
+                                    Internship evidence
+                                </h2>
 
                                 <p>
-                                    Use pasted text, one PDF, or one image.
-                                    Do not upload PDF and image together.
+                                    Use pasted text, one PDF, or one
+                                    image. Do not upload PDF and image
+                                    together.
                                 </p>
+
                             </div>
+
                         </div>
 
+
                         <div class="source-grid">
+
 
                             <div class="field">
 
@@ -600,55 +1268,183 @@
 
                             </div>
 
+
                             <div class="upload">
-                                <strong>Upload PDF</strong>
+
+                                <div class="upload-title">
+
+                                    <span class="upload-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                            <path
+                                                d="M7 3H14L19 8V21H7V3Z"
+                                                stroke="currentColor"
+                                                stroke-width="1.7"
+                                                stroke-linejoin="round"
+                                            />
+                                            <path
+                                                d="M14 3V8H19M9.5 13H16.5M9.5 16H15"
+                                                stroke="currentColor"
+                                                stroke-width="1.7"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                        </svg>
+                                    </span>
+
+                                    <strong>
+                                        Upload PDF
+                                    </strong>
+
+                                </div>
+
+                                <p class="upload-description">
+                                    Upload a recruiter message, job description
+                                    or offer letter in PDF format.
+                                </p>
 
                                 <input
+                                    id="pdf_file"
+                                    class="file-input"
                                     name="pdf_file"
                                     type="file"
                                     accept="application/pdf"
                                 >
 
+                                <label
+                                    class="file-picker"
+                                    for="pdf_file"
+                                >
+                                    Choose PDF
+                                </label>
+
+                                <div
+                                    id="pdf_file_name"
+                                    class="file-name"
+                                    aria-live="polite"
+                                >
+                                    No PDF selected
+                                </div>
+
                                 <p class="help">
-                                    One PDF only.
+                                    One PDF only. Selecting a PDF clears
+                                    any selected image.
                                 </p>
+
                             </div>
 
+
                             <div class="upload">
-                                <strong>Upload image</strong>
+
+                                <div class="upload-title">
+
+                                    <span class="upload-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                            <rect
+                                                x="3"
+                                                y="4"
+                                                width="18"
+                                                height="16"
+                                                rx="2"
+                                                stroke="currentColor"
+                                                stroke-width="1.7"
+                                            />
+                                            <circle
+                                                cx="9"
+                                                cy="9"
+                                                r="1.7"
+                                                stroke="currentColor"
+                                                stroke-width="1.5"
+                                            />
+                                            <path
+                                                d="M5.5 17L10 12.5L13 15.5L15.5 13L19 16.5"
+                                                stroke="currentColor"
+                                                stroke-width="1.7"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                        </svg>
+                                    </span>
+
+                                    <strong>
+                                        Upload image
+                                    </strong>
+
+                                </div>
+
+                                <p class="upload-description">
+                                    Upload a screenshot or image of the
+                                    internship or offer communication.
+                                </p>
 
                                 <input
+                                    id="image_file"
+                                    class="file-input"
                                     name="image_file"
                                     type="file"
                                     accept="image/png,image/jpeg,image/webp"
                                 >
 
+                                <label
+                                    class="file-picker"
+                                    for="image_file"
+                                >
+                                    Choose image
+                                </label>
+
+                                <div
+                                    id="image_file_name"
+                                    class="file-name"
+                                    aria-live="polite"
+                                >
+                                    No image selected
+                                </div>
+
                                 <p class="help">
-                                    Screenshot or offer image.
+                                    JPG, PNG or WEBP. Selecting an image
+                                    clears any selected PDF.
                                 </p>
+
                             </div>
 
+
                         </div>
+
                     </section>
 
 
-                    <!-- SECTION 3 -->
+
+                    <!-- ======================================
+                         3. COMPENSATION & WORKLOAD
+                    ======================================= -->
+
                     <section class="section">
 
+
                         <div class="section-head">
-                            <span class="num">3</span>
+
+                            <span class="num">
+                                3
+                            </span>
 
                             <div>
-                                <h2>Compensation & workload</h2>
+
+                                <h2>
+                                    Compensation & workload
+                                </h2>
 
                                 <p>
-                                    These values help InternShield calculate
-                                    opportunity value and effective hourly stipend.
+                                    These values help InternShield
+                                    calculate opportunity value and
+                                    effective hourly stipend.
                                 </p>
+
                             </div>
+
                         </div>
 
+
                         <div class="grid four">
+
 
                             <div class="field">
 
@@ -723,28 +1519,130 @@
 
                             </div>
 
+
                         </div>
+
                     </section>
 
 
-                    <!-- SECTION 4 -->
+
+                    <!-- ======================================
+                         4. ACADEMIC COMPATIBILITY
+                    ======================================= -->
+
                     <section class="section">
 
+
                         <div class="section-head">
-                            <span class="num">4</span>
+
+                            <span class="num">
+                                4
+                            </span>
 
                             <div>
-                                <h2>Academic compatibility</h2>
+
+                                <h2>
+                                    Academic compatibility
+                                </h2>
 
                                 <p>
-                                    Tell InternShield how much time you can
-                                    realistically give the internship.
+                                    Your saved profile preferences are
+                                    reused automatically, while the
+                                    internship's actual work mode is
+                                    compared with your preference.
                                 </p>
+
                             </div>
+
                         </div>
 
 
-                        <div class="grid">
+
+                        <!-- PROFILE CONTEXT -->
+
+                        <div class="profile-context">
+
+
+                            <div class="profile-context-copy">
+
+                                <span class="profile-context-label">
+                                    Loaded from profile
+                                </span>
+
+
+                                <strong>
+
+                                    {% if saved_hours is not none %}
+
+                                        {{ saved_hours }} hrs/week
+
+                                    {% else %}
+
+                                        Weekly availability not set
+
+                                    {% endif %}
+
+
+                                    &nbsp;·&nbsp;
+
+
+                                    {% if saved_work_mode == 'remote' %}
+
+                                        Remote preferred
+
+                                    {% elif saved_work_mode == 'hybrid' %}
+
+                                        Hybrid preferred
+
+                                    {% elif saved_work_mode == 'onsite' %}
+
+                                        On-site preferred
+
+                                    {% else %}
+
+                                        No work-mode preference
+
+                                    {% endif %}
+
+
+                                    &nbsp;·&nbsp;
+
+
+                                    {% if saved_schedule == 'flexible' %}
+
+                                        Flexible schedule
+
+                                    {% elif saved_schedule == 'fixed' %}
+
+                                        Fixed schedule
+
+                                    {% else %}
+
+                                        Schedule not specified
+
+                                    {% endif %}
+
+                                </strong>
+
+                            </div>
+
+
+                            <a
+                                class="profile-edit-link"
+                                href="{{ url_for('profile', edit=1) }}"
+                            >
+                                Edit profile
+                            </a>
+
+
+                        </div>
+
+
+
+                        <div class="profile-grid">
+
+
+                            <!-- AVAILABLE HOURS -->
 
                             <div class="field">
 
@@ -759,11 +1657,132 @@
                                     min="0"
                                     max="168"
                                     step="0.5"
+                                    value="{% if saved_hours is not none %}{{ saved_hours }}{% endif %}"
                                     placeholder="25"
                                 >
 
+
+                                {% if saved_hours is not none %}
+
+                                    <p class="help profile-loaded">
+                                        ✓ Automatically filled from
+                                        your profile.
+                                    </p>
+
+                                {% else %}
+
+                                    <p class="help">
+                                        Add weekly availability in
+                                        Profile to fill this automatically.
+                                    </p>
+
+                                {% endif %}
+
                             </div>
 
+
+
+                            <!-- PREFERRED WORK MODE -->
+
+                            <div class="field">
+
+                                <label for="profile_work_mode">
+                                    Preferred work mode
+                                </label>
+
+                                <select
+                                    id="profile_work_mode"
+                                    class="profile-readonly"
+                                    disabled
+                                >
+
+                                    <option
+                                        {% if saved_work_mode == 'no_preference' %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        No preference
+                                    </option>
+
+                                    <option
+                                        {% if saved_work_mode == 'remote' %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Remote
+                                    </option>
+
+                                    <option
+                                        {% if saved_work_mode == 'hybrid' %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Hybrid
+                                    </option>
+
+                                    <option
+                                        {% if saved_work_mode == 'onsite' %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        On-site
+                                    </option>
+
+                                </select>
+
+
+                                <p class="help profile-loaded">
+                                    ✓ Loaded from your profile.
+                                    Change this from Profile if needed.
+                                </p>
+
+                            </div>
+
+
+
+                            <!-- INTERNSHIP WORK MODE -->
+
+                            <div class="field">
+
+                                <label for="internship_work_mode">
+                                    Internship work mode
+                                </label>
+
+                                <select
+                                    id="internship_work_mode"
+                                    name="internship_work_mode"
+                                >
+
+                                    <option value="not_specified">
+                                        Not specified
+                                    </option>
+
+                                    <option value="remote">
+                                        Remote
+                                    </option>
+
+                                    <option value="hybrid">
+                                        Hybrid
+                                    </option>
+
+                                    <option value="onsite">
+                                        On-site
+                                    </option>
+
+                                </select>
+
+                                <p class="help">
+                                    Choose the work mode stated by the
+                                    internship. InternShield compares it
+                                    with your saved preference using a
+                                    small compatibility adjustment.
+                                </p>
+
+                            </div>
+
+
+
+                            <!-- DEFAULT SCHEDULE -->
 
                             <div class="field">
 
@@ -775,59 +1794,118 @@
                                     id="schedule_type"
                                     name="schedule_type"
                                 >
-                                    <option value="not_specified">
+
+                                    <option
+                                        value="not_specified"
+                                        {% if saved_schedule == 'not_specified' %}
+                                            selected
+                                        {% endif %}
+                                    >
                                         Not specified
                                     </option>
 
-                                    <option value="flexible">
+                                    <option
+                                        value="flexible"
+                                        {% if saved_schedule == 'flexible' %}
+                                            selected
+                                        {% endif %}
+                                    >
                                         Flexible
                                     </option>
 
-                                    <option value="fixed">
+                                    <option
+                                        value="fixed"
+                                        {% if saved_schedule == 'fixed' %}
+                                            selected
+                                        {% endif %}
+                                    >
                                         Fixed
                                     </option>
+
                                 </select>
+
+
+                                {% if saved_schedule != 'not_specified' %}
+
+                                    <p class="help profile-loaded">
+                                        ✓ Default loaded from
+                                        your profile.
+                                    </p>
+
+                                {% else %}
+
+                                    <p class="help">
+                                        Select the schedule stated
+                                        by the internship.
+                                    </p>
+
+                                {% endif %}
 
                             </div>
 
+
                         </div>
+
 
 
                         <div class="checks">
 
+
                             <div class="check">
+
                                 <label>
+
                                     <input
                                         name="exam_period"
                                         type="checkbox"
                                     >
-                                    Internship overlaps with an exam period
+
+                                    Internship overlaps with
+                                    an exam period
+
                                 </label>
+
                             </div>
 
 
                             <div class="check">
+
                                 <label>
+
                                     <input
                                         name="class_schedule_conflict"
                                         type="checkbox"
                                     >
-                                    Timing conflicts with lectures / practicals
+
+                                    Timing conflicts with
+                                    lectures / practicals
+
                                 </label>
+
                             </div>
 
+
                         </div>
+
 
                     </section>
 
 
+
+                    <!-- ======================================
+                         SUBMIT
+                    ======================================= -->
+
                     <div class="submit-row">
 
+
                         <p>
-                            InternShield provides decision support from the evidence
-                            you submit. Always verify important written terms directly
+                            InternShield provides decision support
+                            from the evidence you submit. Always
+                            verify important written terms directly
                             with the organization before accepting.
                         </p>
+
 
                         <button
                             class="submit"
@@ -836,14 +1914,113 @@
                             Analyze internship →
                         </button>
 
+
                     </div>
 
+
                 </form>
+
 
             </main>
 
 
+
             {% include "_assistant_fab.html" %}
+
+
+            <script>
+                const pdfInput =
+                    document.getElementById("pdf_file");
+
+                const imageInput =
+                    document.getElementById("image_file");
+
+                const pdfFileName =
+                    document.getElementById("pdf_file_name");
+
+                const imageFileName =
+                    document.getElementById("image_file_name");
+
+
+                function updateFileName(
+                    input,
+                    labelElement,
+                    emptyText
+                ){
+                    const file =
+                        input.files && input.files[0]
+                            ? input.files[0]
+                            : null;
+
+                    if(file){
+                        labelElement.textContent =
+                            file.name;
+
+                        labelElement.classList.add(
+                            "has-file"
+                        );
+                    }else{
+                        labelElement.textContent =
+                            emptyText;
+
+                        labelElement.classList.remove(
+                            "has-file"
+                        );
+                    }
+                }
+
+
+                pdfInput?.addEventListener(
+                    "change",
+                    function(){
+                        if(
+                            this.files
+                            && this.files.length
+                            && imageInput
+                        ){
+                            imageInput.value = "";
+
+                            updateFileName(
+                                imageInput,
+                                imageFileName,
+                                "No image selected"
+                            );
+                        }
+
+                        updateFileName(
+                            this,
+                            pdfFileName,
+                            "No PDF selected"
+                        );
+                    }
+                );
+
+
+                imageInput?.addEventListener(
+                    "change",
+                    function(){
+                        if(
+                            this.files
+                            && this.files.length
+                            && pdfInput
+                        ){
+                            pdfInput.value = "";
+
+                            updateFileName(
+                                pdfInput,
+                                pdfFileName,
+                                "No PDF selected"
+                            );
+                        }
+
+                        updateFileName(
+                            this,
+                            imageFileName,
+                            "No image selected"
+                        );
+                    }
+                );
+            </script>
 
 
             <script
@@ -851,9 +2028,12 @@
                 defer
             ></script>
 
+
         </div>
 
+
     </section>
+
 
 </div>
 

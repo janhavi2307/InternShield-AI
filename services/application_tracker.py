@@ -6,7 +6,9 @@ APPLICATION_STATUSES = (
     "applied",
     "interview",
     "offer",
+    "accepted",
     "rejected",
+    "withdrawn",
 )
 
 
@@ -376,7 +378,9 @@ def application_alerts(
         deadline
         and status not in {
             "offer",
+            "accepted",
             "rejected",
+            "withdrawn",
         }
     ):
 
@@ -509,7 +513,9 @@ def application_alerts(
         interview_date
         and status not in {
             "offer",
+            "accepted",
             "rejected",
+            "withdrawn",
         }
     ):
 

@@ -785,6 +785,185 @@
             letter-spacing: -0.04em;
         }
 
+
+        /* -------------------------------------------------------
+           Decision insights
+        ------------------------------------------------------- */
+
+        .insights-section {
+            margin: 0 0 22px;
+
+            padding: 24px;
+
+            border: 1px solid var(--border);
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(24, 26, 45, 0.86),
+                    rgba(13, 16, 32, 0.82)
+                );
+
+            animation: fadeUp 0.68s 0.34s ease both;
+        }
+
+        .insights-header {
+            margin-bottom: 18px;
+
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .insights-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            margin-bottom: 6px;
+
+            color: #8be8d5;
+
+            font-size: 0.66rem;
+            font-weight: 850;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .insights-kicker::before {
+            content: "";
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+            background: var(--secondary);
+
+            box-shadow:
+                0 0 0 4px rgba(45, 212, 191, 0.08);
+        }
+
+        .insights-header h3 {
+            margin: 0;
+
+            font-family: "Manrope", sans-serif;
+            font-size: 1.18rem;
+            letter-spacing: -0.03em;
+        }
+
+        .insights-header p {
+            margin-top: 5px;
+
+            max-width: 690px;
+
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            line-height: 1.55;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 13px;
+        }
+
+        .insight-card {
+            min-width: 0;
+            min-height: 150px;
+            padding: 17px;
+
+            display: flex;
+            flex-direction: column;
+
+            border: 1px solid var(--border);
+            border-radius: 15px;
+
+            background: rgba(8, 10, 22, 0.42);
+        }
+
+        .insight-card:hover {
+            border-color: rgba(128, 103, 255, 0.28);
+        }
+
+        .insight-label {
+            margin-bottom: 10px;
+
+            color: #7f8296;
+            font-size: 0.66rem;
+            font-weight: 850;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .insight-value {
+            color: var(--text);
+
+            font-family: "Manrope", sans-serif;
+            font-size: 1.04rem;
+            font-weight: 800;
+            line-height: 1.35;
+            letter-spacing: -0.025em;
+
+            overflow-wrap: anywhere;
+        }
+
+        .insight-card.metric .insight-value {
+            color: var(--primary-light);
+            font-size: 1.55rem;
+        }
+
+        .insight-card.fit .insight-value {
+            color: var(--secondary);
+        }
+
+        .insight-card.pipeline .insight-value {
+            color: #ffd480;
+        }
+
+        .insight-detail {
+            margin-top: 8px;
+
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            line-height: 1.55;
+        }
+
+        .insight-link {
+            width: fit-content;
+            margin-top: auto;
+            padding-top: 12px;
+
+            color: #b9adff;
+            font-size: 0.7rem;
+            font-weight: 800;
+        }
+
+        .insight-link:hover {
+            color: #ddd7ff;
+        }
+
+        @media (max-width: 1180px) {
+            .insights-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 620px) {
+            .insights-section {
+                padding: 20px;
+            }
+
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .insight-card {
+                min-height: 132px;
+            }
+        }
+
         /* -------------------------------------------------------
            History
         ------------------------------------------------------- */
@@ -1593,6 +1772,176 @@
                     </article>
                 </section>
 
+
+                {% set insights =
+                    dashboard_insights
+                    if dashboard_insights is defined
+                    and dashboard_insights is not none
+                    else {}
+                %}
+
+                <section class="insights-section">
+
+                    <div class="insights-header">
+
+                        <div>
+
+                            <span class="insights-kicker">
+                                Decision insights
+                            </span>
+
+                            <h3>
+                                Your internship snapshot
+                            </h3>
+
+                            <p>
+                                InternShield summarizes your saved assessments
+                                and application progress without changing any
+                                assessment scores.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="insights-grid">
+
+                        <article class="insight-card fit">
+
+                            <span class="insight-label">
+                                Top opportunity
+                            </span>
+
+                            <strong class="insight-value">
+                                {{
+                                    insights.get(
+                                        "top_opportunity_name",
+                                        "No assessment yet"
+                                    )
+                                }}
+                            </strong>
+
+                            <p class="insight-detail">
+                                {{
+                                    insights.get(
+                                        "top_opportunity_detail",
+                                        "Analyze internship opportunities to build a personalized comparison snapshot."
+                                    )
+                                }}
+                            </p>
+
+                            {% if insights.get("top_opportunity_id") %}
+
+                                <a
+                                    class="insight-link"
+                                    href="{{ url_for(
+                                        'analysis_result',
+                                        analysis_id=insights.get('top_opportunity_id')
+                                    ) }}"
+                                >
+                                    View assessment →
+                                </a>
+
+                            {% endif %}
+
+                        </article>
+
+
+                        <article class="insight-card metric">
+
+                            <span class="insight-label">
+                                Average verification
+                            </span>
+
+                            <strong class="insight-value">
+                                {% if insights.get("average_verification") is not none %}
+                                    {{ insights.get("average_verification") }}/100
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </strong>
+
+                            <p class="insight-detail">
+                                {{
+                                    insights.get(
+                                        "average_verification_detail",
+                                        "No verification scores are available yet."
+                                    )
+                                }}
+                            </p>
+
+                        </article>
+
+
+                        <article class="insight-card fit">
+
+                            <span class="insight-label">
+                                Workload fit
+                            </span>
+
+                            <strong class="insight-value">
+                                {{
+                                    insights.get(
+                                        "workload_fit_label",
+                                        "No workload data"
+                                    )
+                                }}
+                            </strong>
+
+                            <p class="insight-detail">
+                                {{
+                                    insights.get(
+                                        "workload_fit_detail",
+                                        "Add workload and weekly availability during analysis to calculate this insight."
+                                    )
+                                }}
+                            </p>
+
+                        </article>
+
+
+                        <article class="insight-card pipeline">
+
+                            <span class="insight-label">
+                                Application progress
+                            </span>
+
+                            <strong class="insight-value">
+                                {{
+                                    insights.get(
+                                        "pipeline_label",
+                                        "No tracked applications"
+                                    )
+                                }}
+                            </strong>
+
+                            <p class="insight-detail">
+                                {{
+                                    insights.get(
+                                        "pipeline_detail",
+                                        "Track internships to see interview, offer and accepted stages here."
+                                    )
+                                }}
+                            </p>
+
+                            {% if insights.get("application_total", 0) > 0 %}
+
+                                <a
+                                    class="insight-link"
+                                    href="{{ url_for('applications') }}"
+                                >
+                                    Open application tracker →
+                                </a>
+
+                            {% endif %}
+
+                        </article>
+
+                    </div>
+
+                </section>
+
                 <section class="history-card">
                     <div class="history-header">
                         <div class="history-heading">
@@ -1677,7 +2026,7 @@
                                             <td class="opportunity-cell">
                                                 <strong>
                                                     {{
-                                                        analysis.internship_role
+                                                        analysis.role_title
                                                         or "Internship"
                                                     }}
                                                 </strong>

@@ -1,0 +1,137 @@
+:root {
+    color-scheme: dark;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+::selection {
+    color: #ffffff;
+    background: rgba(128, 103, 255, 0.58);
+}
+
+:focus-visible {
+    outline: 3px solid rgba(45, 212, 191, 0.9);
+    outline-offset: 3px;
+}
+
+.skip-link {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 10000;
+    padding: 10px 15px;
+    border-radius: 10px;
+    color: #080912;
+    background: #5eead4;
+    font-weight: 800;
+    transform: translateY(-160%);
+    transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
+.global-flash-close {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    margin-left: auto;
+    border: 0;
+    border-radius: 8px;
+    color: inherit;
+    background: rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+}
+
+.is-dismissing {
+    opacity: 0 !important;
+    transform: translateY(-8px) !important;
+    transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+
+.is-submitting {
+    pointer-events: none;
+    opacity: 0.78;
+}
+
+.is-submitting::after {
+    width: 15px;
+    height: 15px;
+    margin-left: 10px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    content: "";
+    display: inline-block;
+    vertical-align: -2px;
+    animation: globalSpin 0.7s linear infinite;
+}
+
+.history-toolbar {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) repeat(2, minmax(150px, 190px));
+    gap: 11px;
+    padding: 16px 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.history-control {
+    width: 100%;
+    min-height: 43px;
+    padding: 0 13px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 11px;
+    color: #f8f8ff;
+    background: rgba(8, 9, 18, 0.64);
+    font: inherit;
+}
+
+.history-control::placeholder {
+    color: #77798d;
+}
+
+select.history-control {
+    cursor: pointer;
+}
+
+.history-results-summary {
+    padding: 0 25px 15px;
+    color: #85879b;
+    font-size: 0.75rem;
+}
+
+.history-empty-filter {
+    padding: 34px 25px;
+    color: #b7b8ca;
+    text-align: center;
+}
+
+@keyframes globalSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 760px) {
+    .history-toolbar {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

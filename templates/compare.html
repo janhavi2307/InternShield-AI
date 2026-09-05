@@ -1,18 +1,422 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Compare Internships | InternShield AI</title>
-<style>
-:root{--bg:#080912;--panel:#17192b;--panel2:#0d1020;--line:rgba(255,255,255,.09);--text:#f8f8ff;--muted:#9699ad;--purple:#8067ff;--purple2:#aa99ff;--teal:#31d7c4;--red:#ff7b91}*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);background:radial-gradient(circle at 0 65%,rgba(49,215,196,.1),transparent 25%),radial-gradient(circle at 100% 20%,rgba(128,103,255,.18),transparent 30%),var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}a{color:inherit;text-decoration:none}.topbar{height:92px;padding:0 max(5vw,25px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:rgba(8,9,18,.88);backdrop-filter:blur(18px)}.brand{display:flex;align-items:center;gap:12px;font-size:20px;font-weight:850}.logo{width:43px;height:43px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,#8f73ff,#6342e7);box-shadow:0 10px 30px rgba(118,87,246,.32)}.back{padding:12px 16px;border:1px solid var(--line);border-radius:12px;color:#ceccda;font-weight:750}main{width:min(1140px,92%);margin:48px auto 80px}.eyebrow{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border:1px solid rgba(128,103,255,.3);border-radius:999px;color:#cbbfff;background:rgba(128,103,255,.09);font-size:11px;font-weight:850;letter-spacing:.08em}.dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 12px var(--teal)}h1{margin:20px 0 11px;font-size:clamp(38px,6vw,64px);line-height:1;letter-spacing:-.05em}.lead{max-width:750px;color:var(--muted);font-size:16px;line-height:1.7}.flash{margin:23px 0;padding:14px 16px;border:1px solid rgba(255,123,145,.35);border-radius:12px;color:#ffb2bf;background:rgba(255,123,145,.08)}.card{margin-top:30px;padding:31px;border:1px solid var(--line);border-radius:23px;background:rgba(23,25,43,.93);box-shadow:0 25px 75px rgba(0,0,0,.22)}.card h2{margin:0 0 7px;font-size:24px}.hint{margin:0 0 26px;color:var(--muted)}.selectors{display:grid;grid-template-columns:1fr 64px 1fr;align-items:end;gap:18px}label{display:block;margin-bottom:9px;color:#d6d3e2;font-size:13px;font-weight:800}select{width:100%;min-height:56px;padding:0 16px;border:1px solid rgba(160,145,255,.23);border-radius:13px;color:var(--text);background:var(--panel2);font:inherit;outline:none}select:focus{border-color:var(--purple2);box-shadow:0 0 0 4px rgba(128,103,255,.1)}option{background:#111326}.vs{width:52px;height:52px;margin:0 auto 2px;display:grid;place-items:center;border-radius:50%;color:var(--purple2);background:rgba(128,103,255,.13);font-size:12px;font-weight:900}.submit{width:100%;margin-top:25px;min-height:56px;border:0;border-radius:13px;color:white;background:linear-gradient(135deg,#8468ff,#6545df);box-shadow:0 14px 34px rgba(101,69,223,.28);font-weight:850;cursor:pointer}.empty{text-align:center;padding:50px 24px;border:1px dashed rgba(160,145,255,.25);border-radius:18px;color:var(--muted)}.empty strong{display:block;margin-bottom:8px;color:var(--text);font-size:21px}.empty a{display:inline-block;margin-top:17px;padding:12px 17px;border-radius:11px;background:var(--purple);color:white;font-weight:800}.privacy{margin-top:16px;text-align:center;color:#74778b;font-size:12px}@media(max-width:760px){.topbar{height:80px;padding:0 16px}.selectors{grid-template-columns:1fr}.vs{margin:-3px auto}.card{padding:22px}}
-</style>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Compare saved internship assessments with InternShield AI."
+    >
+
+    <title>
+        Compare Internships | InternShield AI
+    </title>
+
+    <style>
+        :root{
+            --bg:#080912;
+            --panel:#17192b;
+            --panel2:#0d1020;
+            --line:rgba(255,255,255,.09);
+            --text:#f8f8ff;
+            --muted:#9699ad;
+            --purple:#8067ff;
+            --purple2:#aa99ff;
+            --teal:#31d7c4;
+            --red:#ff7b91;
+        }
+
+        *{
+            box-sizing:border-box;
+        }
+
+        body{
+            margin:0;
+            min-height:100vh;
+            color:var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 0 65%,
+                    rgba(49,215,196,.1),
+                    transparent 25%
+                ),
+                radial-gradient(
+                    circle at 100% 20%,
+                    rgba(128,103,255,.18),
+                    transparent 30%
+                ),
+                var(--bg);
+
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                "Segoe UI",
+                sans-serif;
+        }
+
+        a{
+            color:inherit;
+            text-decoration:none;
+        }
+
+        button,
+        select{
+            font:inherit;
+        }
+
+        main{
+            width:min(1140px,92%);
+            margin:48px auto 80px;
+        }
+
+        .eyebrow{
+            display:inline-flex;
+            gap:8px;
+            align-items:center;
+
+            padding:8px 12px;
+
+            border:
+                1px solid
+                rgba(128,103,255,.3);
+
+            border-radius:999px;
+
+            color:#cbbfff;
+
+            background:
+                rgba(128,103,255,.09);
+
+            font-size:11px;
+            font-weight:850;
+
+            letter-spacing:.08em;
+        }
+
+        .dot{
+            width:7px;
+            height:7px;
+
+            border-radius:50%;
+
+            background:var(--teal);
+
+            box-shadow:
+                0 0 12px
+                var(--teal);
+        }
+
+        h1{
+            margin:20px 0 11px;
+
+            font-size:
+                clamp(
+                    38px,
+                    6vw,
+                    64px
+                );
+
+            line-height:1;
+
+            letter-spacing:-.05em;
+        }
+
+        .lead{
+            max-width:750px;
+
+            color:var(--muted);
+
+            font-size:16px;
+
+            line-height:1.7;
+        }
+
+        .flash{
+            margin:23px 0;
+
+            padding:14px 16px;
+
+            border:
+                1px solid
+                rgba(255,123,145,.35);
+
+            border-radius:12px;
+
+            color:#ffb2bf;
+
+            background:
+                rgba(255,123,145,.08);
+        }
+
+        .card{
+            margin-top:30px;
+
+            padding:31px;
+
+            border:
+                1px solid
+                var(--line);
+
+            border-radius:23px;
+
+            background:
+                rgba(23,25,43,.93);
+
+            box-shadow:
+                0 25px 75px
+                rgba(0,0,0,.22);
+        }
+
+        .card h2{
+            margin:0 0 7px;
+
+            font-size:24px;
+        }
+
+        .hint{
+            margin:0 0 26px;
+
+            color:var(--muted);
+        }
+
+        .selectors{
+            display:grid;
+
+            grid-template-columns:
+                1fr
+                64px
+                1fr;
+
+            align-items:end;
+
+            gap:18px;
+        }
+
+        label{
+            display:block;
+
+            margin-bottom:9px;
+
+            color:#d6d3e2;
+
+            font-size:13px;
+            font-weight:800;
+        }
+
+        select{
+            width:100%;
+
+            min-height:56px;
+
+            padding:0 16px;
+
+            border:
+                1px solid
+                rgba(160,145,255,.23);
+
+            border-radius:13px;
+
+            color:var(--text);
+
+            background:var(--panel2);
+
+            outline:none;
+        }
+
+        select:focus{
+            border-color:var(--purple2);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(128,103,255,.1);
+        }
+
+        option{
+            background:#111326;
+        }
+
+        .vs{
+            width:52px;
+            height:52px;
+
+            margin:0 auto 2px;
+
+            display:grid;
+            place-items:center;
+
+            border-radius:50%;
+
+            color:var(--purple2);
+
+            background:
+                rgba(128,103,255,.13);
+
+            font-size:12px;
+            font-weight:900;
+        }
+
+        .submit{
+            width:100%;
+
+            margin-top:25px;
+
+            min-height:56px;
+
+            border:0;
+
+            border-radius:13px;
+
+            color:white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8468ff,
+                    #6545df
+                );
+
+            box-shadow:
+                0 14px 34px
+                rgba(101,69,223,.28);
+
+            font-weight:850;
+
+            cursor:pointer;
+        }
+
+        .compare-points{
+            margin-top:18px;
+
+            display:grid;
+
+            grid-template-columns:
+                repeat(
+                    4,
+                    minmax(0,1fr)
+                );
+
+            gap:10px;
+        }
+
+        .compare-point{
+            padding:13px;
+
+            border:
+                1px solid
+                var(--line);
+
+            border-radius:12px;
+
+            color:#aeb1c2;
+
+            background:
+                rgba(255,255,255,.02);
+
+            font-size:12px;
+            line-height:1.45;
+        }
+
+        .compare-point strong{
+            display:block;
+
+            margin-bottom:4px;
+
+            color:#e8e6f2;
+
+            font-size:12px;
+        }
+
+        .empty{
+            text-align:center;
+
+            padding:50px 24px;
+
+            border:
+                1px dashed
+                rgba(160,145,255,.25);
+
+            border-radius:18px;
+
+            color:var(--muted);
+        }
+
+        .empty strong{
+            display:block;
+
+            margin-bottom:8px;
+
+            color:var(--text);
+
+            font-size:21px;
+        }
+
+        .empty a{
+            display:inline-block;
+
+            margin-top:17px;
+
+            padding:12px 17px;
+
+            border-radius:11px;
+
+            background:var(--purple);
+
+            color:white;
+
+            font-weight:800;
+        }
+
+        .privacy{
+            margin-top:16px;
+
+            text-align:center;
+
+            color:#74778b;
+
+            font-size:12px;
+        }
+
+        @media(max-width:900px){
+            .compare-points{
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+        }
+
+        @media(max-width:760px){
+            .selectors{
+                grid-template-columns:1fr;
+            }
+
+            .vs{
+                margin:-3px auto;
+            }
+
+            .card{
+                padding:22px;
+            }
+
+            .compare-points{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
 
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/sidebar_shell.css') }}"
     >
-
 </head>
+
 <body class="has-unified-sidebar">
+
 <div class="is-workspace-shell">
 
     {% include "_app_sidebar.html" %}
@@ -24,27 +428,284 @@
 
     <section class="is-workspace-main">
 
-{% set page_heading = "Compare internships" %}
-{% include "_page_topbar.html" %}
-<div class="is-workspace-content">
+        {% set page_heading = "Compare internships" %}
+        {% include "_page_topbar.html" %}
+
+        <div class="is-workspace-content">
+
+            <main>
+
+                <span class="eyebrow">
+                    <span class="dot"></span>
+                    DECISION SUPPORT
+                </span>
+
+                <h1>
+                    Compare internships
+                </h1>
+
+                <p class="lead">
+                    Select two saved assessments and compare
+                    verification, opportunity value, compensation,
+                    warning indicators, workload and academic fit.
+                </p>
 
 
-<main><span class="eyebrow"><span class="dot"></span> DECISION SUPPORT</span><h1>Compare internships</h1><p class="lead">Select two saved assessments and compare verification, opportunity value, compensation, warning indicators and academic fit.</p>
-{% with messages=get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="flash">{{ message }}</div>{% endfor %}{% endwith %}
-<section class="card">{% if analyses|length < 2 %}<div class="empty"><strong>Two assessments are required</strong>You currently have {{ analyses|length }} saved assessment{% if analyses|length != 1 %}s{% endif %}. Create another assessment before comparing.<br><a href="{{ url_for('analyze') }}">Create an assessment</a></div>{% else %}<h2>Choose two opportunities</h2><p class="hint">Only assessments saved to your signed-in account are shown.</p><form method="post" action="{{ url_for('compare') }}"><div class="selectors"><div><label for="first_analysis_id">First internship</label><select id="first_analysis_id" name="first_analysis_id" required><option value="">Select an assessment</option>{% for item in analyses %}<option value="{{ item.id }}">{{ item.role_title or 'Internship' }} — {{ item.company_name or 'Company not provided' }}</option>{% endfor %}</select></div><div class="vs">VS</div><div><label for="second_analysis_id">Second internship</label><select id="second_analysis_id" name="second_analysis_id" required><option value="">Select an assessment</option>{% for item in analyses %}<option value="{{ item.id }}">{{ item.role_title or 'Internship' }} — {{ item.company_name or 'Company not provided' }}</option>{% endfor %}</select></div></div><button class="submit" type="submit">Compare selected internships →</button></form><p class="privacy">Your saved assessments stay private to your authenticated account.</p>{% endif %}</section></main>
-<script>const first=document.getElementById('first_analysis_id'),second=document.getElementById('second_analysis_id');function sync(){if(!first||!second)return;[...second.options].forEach(o=>o.disabled=o.value!==''&&o.value===first.value);[...first.options].forEach(o=>o.disabled=o.value!==''&&o.value===second.value)}first?.addEventListener('change',sync);second?.addEventListener('change',sync);</script>
-{% include "_assistant_fab.html" %}
+                {% with messages =
+                    get_flashed_messages(
+                        with_categories=true
+                    )
+                %}
 
-<script
-    src="{{ url_for('static', filename='js/sidebar_shell.js') }}"
-    defer
-></script>
+                    {% for category,message in messages %}
+
+                        <div class="flash">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                {% endwith %}
 
 
-</div>
+                <section class="card">
+
+                    {% if analyses|length < 2 %}
+
+                        <div class="empty">
+
+                            <strong>
+                                Two assessments are required
+                            </strong>
+
+                            You currently have
+                            {{ analyses|length }}
+                            saved assessment{% if analyses|length != 1 %}s{% endif %}.
+                            Create another assessment before comparing.
+
+                            <br>
+
+                            <a href="{{ url_for('analyze') }}">
+                                Create an assessment
+                            </a>
+
+                        </div>
+
+                    {% else %}
+
+                        <h2>
+                            Choose two opportunities
+                        </h2>
+
+                        <p class="hint">
+                            InternShield compares your saved assessment
+                            evidence and explains the trade-offs instead
+                            of choosing only by stipend.
+                        </p>
+
+
+                        <form
+                            method="post"
+                            action="{{ url_for('compare') }}"
+                        >
+
+                            <div class="selectors">
+
+                                <div>
+
+                                    <label for="first_analysis_id">
+                                        First internship
+                                    </label>
+
+                                    <select
+                                        id="first_analysis_id"
+                                        name="first_analysis_id"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            Select an assessment
+                                        </option>
+
+                                        {% for item in analyses %}
+
+                                            <option value="{{ item.id }}">
+                                                {{ item.role_title or 'Internship' }}
+                                                —
+                                                {{ item.company_name or 'Company not provided' }}
+                                            </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="vs">
+                                    VS
+                                </div>
+
+
+                                <div>
+
+                                    <label for="second_analysis_id">
+                                        Second internship
+                                    </label>
+
+                                    <select
+                                        id="second_analysis_id"
+                                        name="second_analysis_id"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            Select an assessment
+                                        </option>
+
+                                        {% for item in analyses %}
+
+                                            <option value="{{ item.id }}">
+                                                {{ item.role_title or 'Internship' }}
+                                                —
+                                                {{ item.company_name or 'Company not provided' }}
+                                            </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="compare-points">
+
+                                <div class="compare-point">
+                                    <strong>
+                                        Verification
+                                    </strong>
+                                    Compare evidence quality and
+                                    verification signals.
+                                </div>
+
+                                <div class="compare-point">
+                                    <strong>
+                                        Compensation
+                                    </strong>
+                                    Compare monthly and effective
+                                    hourly stipend.
+                                </div>
+
+                                <div class="compare-point">
+                                    <strong>
+                                        Academic fit
+                                    </strong>
+                                    Compare compatibility with
+                                    available study time.
+                                </div>
+
+                                <div class="compare-point">
+                                    <strong>
+                                        Workload
+                                    </strong>
+                                    Compare weekly commitment and
+                                    warning indicators.
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                class="submit"
+                                type="submit"
+                            >
+                                Compare selected internships →
+                            </button>
+
+                        </form>
+
+
+                        <p class="privacy">
+                            Your saved assessments stay private to
+                            your authenticated account.
+                        </p>
+
+                    {% endif %}
+
+                </section>
+
+            </main>
+
+
+            <script>
+
+                const first =
+                    document.getElementById(
+                        "first_analysis_id"
+                    );
+
+                const second =
+                    document.getElementById(
+                        "second_analysis_id"
+                    );
+
+
+                function syncSelections(){
+
+                    if(!first || !second){
+                        return;
+                    }
+
+                    [...second.options]
+                        .forEach(
+                            option => {
+                                option.disabled =
+                                    option.value !== ""
+                                    &&
+                                    option.value === first.value;
+                            }
+                        );
+
+                    [...first.options]
+                        .forEach(
+                            option => {
+                                option.disabled =
+                                    option.value !== ""
+                                    &&
+                                    option.value === second.value;
+                            }
+                        );
+
+                }
+
+
+                first?.addEventListener(
+                    "change",
+                    syncSelections
+                );
+
+                second?.addEventListener(
+                    "change",
+                    syncSelections
+                );
+
+            </script>
+
+
+            {% include "_assistant_fab.html" %}
+
+            <script
+                src="{{ url_for('static', filename='js/sidebar_shell.js') }}"
+                defer
+            ></script>
+
+        </div>
 
     </section>
 
 </div>
 
-</body></html>
+</body>
+</html>

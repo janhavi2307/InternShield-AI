@@ -16,6 +16,7 @@ from flask import (
     url_for,
 )
 from flask_session import Session
+from redis import Redis
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from services.analysis_engine import (
@@ -32,6 +33,9 @@ from services.application_tracker import (
 from services.comparison_engine import compare_internships
 from services.compatibility_engine import calculate_compatibility
 from services.domain_verification import analyze_recruiter_domain
+from services.evidence_quality import (
+    calculate_evidence_quality,
+)
 from services.document_extractor import (
     DocumentExtractionError,
     extract_pdf_text,
@@ -116,29 +120,61 @@ app.wsgi_app = ProxyFix(
     x_host=1,
 )
 
-app.config.update(
-    SECRET_KEY=flask_secret_key,
-    MAX_CONTENT_LENGTH=6 * 1024 * 1024,
-    SESSION_TYPE="filesystem",
-    SESSION_FILE_DIR=os.path.join(
-        app.root_path,
-        ".flask_session",
-    ),
-    SESSION_PERMANENT=True,
-    PERMANENT_SESSION_LIFETIME=timedelta(hours=2),
-    SESSION_USE_SIGNER=True,
-    SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE="Lax",
-    SESSION_COOKIE_SECURE=IS_PRODUCTION,
-    PREFERRED_URL_SCHEME=(
+redis_url = (
+    os.getenv("REDIS_URL")
+    or ""
+).strip()
+
+
+session_config = {
+    "SECRET_KEY": flask_secret_key,
+    "MAX_CONTENT_LENGTH": 4 * 1024 * 1024,
+    "SESSION_PERMANENT": True,
+    "PERMANENT_SESSION_LIFETIME": timedelta(hours=2),
+    "SESSION_USE_SIGNER": True,
+    "SESSION_COOKIE_HTTPONLY": True,
+    "SESSION_COOKIE_SAMESITE": "Lax",
+    "SESSION_COOKIE_SECURE": IS_PRODUCTION,
+    "PREFERRED_URL_SCHEME": (
         "https"
         if IS_PRODUCTION
         else "http"
     ),
+}
+
+
+if redis_url:
+    session_config.update({
+        "SESSION_TYPE": "redis",
+        "SESSION_REDIS": Redis.from_url(
+            redis_url,
+            decode_responses=False,
+            socket_connect_timeout=5,
+            socket_timeout=5,
+        ),
+        "SESSION_KEY_PREFIX": (
+            "internshield:session:"
+        ),
+    })
+
+else:
+    # Keep filesystem sessions as a fallback.
+    # This preserves the existing Render deployment
+    # until REDIS_URL is added there or Vercel.
+    session_config.update({
+        "SESSION_TYPE": "filesystem",
+        "SESSION_FILE_DIR": os.path.join(
+            app.root_path,
+            ".flask_session",
+        ),
+    })
+
+
+app.config.update(
+    **session_config
 )
 
 Session(app)
-
 
 @app.after_request
 def add_security_headers(response):
@@ -710,9 +746,14 @@ def reset_password():
 def dashboard():
     analyses = []
     dashboard_profile = {}
+    applications = []
 
     try:
         supabase = get_authenticated_supabase()
+
+        # -----------------------------------------------------
+        # ASSESSMENT HISTORY
+        # -----------------------------------------------------
 
         response = (
             supabase
@@ -720,15 +761,27 @@ def dashboard():
             .select(
                 "id, company_name, role_title, "
                 "verification_score, value_score, "
-                "assessment_status, created_at"
-                ", is_shortlisted"
+                "compatibility_score, weekly_workload, "
+                "available_hours_per_week, "
+                "assessment_status, created_at, "
+                "is_shortlisted"
             )
-            .eq("user_id", session["user_id"])
-            .order("created_at", desc=True)
+            .eq(
+                "user_id",
+                session["user_id"],
+            )
+            .order(
+                "created_at",
+                desc=True,
+            )
             .execute()
         )
 
         analyses = response.data or []
+
+        # -----------------------------------------------------
+        # PROFILE PREVIEW
+        # -----------------------------------------------------
 
         try:
             profile_response = (
@@ -754,34 +807,518 @@ def dashboard():
                 "Dashboard profile preview could not be loaded"
             )
 
+        # -----------------------------------------------------
+        # APPLICATION PIPELINE
+        # -----------------------------------------------------
+
+        try:
+            application_response = (
+                supabase
+                .table("internship_applications")
+                .select(
+                    "id, status"
+                )
+                .eq(
+                    "user_id",
+                    session["user_id"],
+                )
+                .execute()
+            )
+
+            applications = (
+                application_response.data
+                or []
+            )
+
+        except Exception:
+            app.logger.exception(
+                "Dashboard application progress could not be loaded"
+            )
+
     except Exception:
+        app.logger.exception(
+            "Dashboard assessment history could not be loaded"
+        )
+
         flash(
             "Your analysis history could not be loaded.",
             "warning",
         )
 
+    # ---------------------------------------------------------
+    # ASSESSMENT STATISTICS
+    # ---------------------------------------------------------
+
     statistics = {
         "total": len(analyses),
+
         "reasonable": sum(
-            item["assessment_status"] == "appears_reasonable"
+            item.get(
+                "assessment_status"
+            ) == "appears_reasonable"
             for item in analyses
         ),
+
         "verification": sum(
-            item["assessment_status"] == "verification_required"
+            item.get(
+                "assessment_status"
+            ) == "verification_required"
             for item in analyses
         ),
+
         "suspicious": sum(
-            item["assessment_status"] == "potentially_suspicious"
+            item.get(
+                "assessment_status"
+            ) == "potentially_suspicious"
             for item in analyses
         ),
     }
 
+    # ---------------------------------------------------------
+    # DASHBOARD INSIGHTS
+    # ---------------------------------------------------------
+
+    def safe_number(
+        value,
+    ):
+        try:
+            if value is None:
+                return None
+
+            return float(value)
+
+        except (
+            TypeError,
+            ValueError,
+        ):
+            return None
+
+
+    def dashboard_fit_score(
+        item,
+    ):
+        """
+        Create a lightweight dashboard snapshot using the
+        existing saved scores.
+
+        This does not modify any assessment score.
+        """
+
+        weighted_values = []
+
+        verification_score = safe_number(
+            item.get(
+                "verification_score"
+            )
+        )
+
+        value_score = safe_number(
+            item.get(
+                "value_score"
+            )
+        )
+
+        compatibility_score = safe_number(
+            item.get(
+                "compatibility_score"
+            )
+        )
+
+        if verification_score is not None:
+            weighted_values.append(
+                (
+                    verification_score,
+                    0.45,
+                )
+            )
+
+        if value_score is not None:
+            weighted_values.append(
+                (
+                    value_score,
+                    0.25,
+                )
+            )
+
+        if compatibility_score is not None:
+            weighted_values.append(
+                (
+                    compatibility_score,
+                    0.30,
+                )
+            )
+
+        if not weighted_values:
+            return None
+
+        total_weight = sum(
+            weight
+            for _, weight
+            in weighted_values
+        )
+
+        weighted_score = sum(
+            score * weight
+            for score, weight
+            in weighted_values
+        )
+
+        return round(
+            weighted_score
+            / total_weight,
+            1,
+        )
+
+
+    dashboard_insights = {
+        "top_opportunity_id": None,
+        "top_opportunity_name": (
+            "No assessment yet"
+        ),
+        "top_opportunity_detail": (
+            "Analyze internship opportunities to build "
+            "a personalized comparison snapshot."
+        ),
+
+        "average_verification": None,
+        "average_verification_detail": (
+            "No verification scores are available yet."
+        ),
+
+        "workload_fit_label": (
+            "No workload data"
+        ),
+        "workload_fit_detail": (
+            "Add workload and weekly availability during "
+            "analysis to calculate this insight."
+        ),
+
+        "application_total": len(
+            applications
+        ),
+        "pipeline_label": (
+            "No tracked applications"
+        ),
+        "pipeline_detail": (
+            "Track internships to see interview, offer "
+            "and accepted stages here."
+        ),
+    }
+
+    # ---------------------------------------------------------
+    # TOP OPPORTUNITY
+    # ---------------------------------------------------------
+
+    scored_analyses = []
+
+    for item in analyses:
+        score = dashboard_fit_score(
+            item
+        )
+
+        if score is not None:
+            scored_analyses.append(
+                (
+                    item,
+                    score,
+                )
+            )
+
+    if scored_analyses:
+
+        # Prefer a non-suspicious assessment when at least
+        # one is available.
+        safer_candidates = [
+            pair
+            for pair
+            in scored_analyses
+            if pair[0].get(
+                "assessment_status"
+            )
+            != "potentially_suspicious"
+        ]
+
+        candidate_pool = (
+            safer_candidates
+            or scored_analyses
+        )
+
+        top_analysis, top_score = max(
+            candidate_pool,
+            key=lambda pair: pair[1],
+        )
+
+        company_name = (
+            top_analysis.get(
+                "company_name"
+            )
+            or "Company not provided"
+        )
+
+        role_title = (
+            top_analysis.get(
+                "role_title"
+            )
+            or "Internship opportunity"
+        )
+
+        dashboard_insights[
+            "top_opportunity_id"
+        ] = top_analysis.get("id")
+
+        dashboard_insights[
+            "top_opportunity_name"
+        ] = (
+            f"{company_name} — "
+            f"{role_title}"
+        )
+
+        dashboard_insights[
+            "top_opportunity_detail"
+        ] = (
+            "Highest balanced dashboard fit snapshot: "
+            f"{top_score}/100 across available verification, "
+            "value and compatibility signals."
+        )
+
+    # ---------------------------------------------------------
+    # AVERAGE VERIFICATION
+    # ---------------------------------------------------------
+
+    verification_scores = [
+        score
+        for score in (
+            safe_number(
+                item.get(
+                    "verification_score"
+                )
+            )
+            for item in analyses
+        )
+        if score is not None
+    ]
+
+    if verification_scores:
+
+        average_verification = round(
+            sum(
+                verification_scores
+            )
+            / len(
+                verification_scores
+            ),
+            1,
+        )
+
+        dashboard_insights[
+            "average_verification"
+        ] = average_verification
+
+        dashboard_insights[
+            "average_verification_detail"
+        ] = (
+            f"Average across "
+            f"{len(verification_scores)} "
+            f"saved assessment"
+            f"{'' if len(verification_scores) == 1 else 's'}."
+        )
+
+    # ---------------------------------------------------------
+    # WORKLOAD FIT
+    # ---------------------------------------------------------
+
+    workload_pairs = []
+
+    for item in analyses:
+
+        weekly_workload = safe_number(
+            item.get(
+                "weekly_workload"
+            )
+        )
+
+        available_hours = safe_number(
+            item.get(
+                "available_hours_per_week"
+            )
+        )
+
+        if (
+            weekly_workload is not None
+            and available_hours is not None
+        ):
+            workload_pairs.append(
+                (
+                    weekly_workload,
+                    available_hours,
+                )
+            )
+
+    if workload_pairs:
+
+        workload_conflicts = sum(
+            weekly_workload
+            > available_hours
+            for (
+                weekly_workload,
+                available_hours,
+            )
+            in workload_pairs
+        )
+
+        measured_count = len(
+            workload_pairs
+        )
+
+        manageable_count = (
+            measured_count
+            - workload_conflicts
+        )
+
+        if workload_conflicts == 0:
+
+            dashboard_insights[
+                "workload_fit_label"
+            ] = "All measured workloads fit"
+
+            dashboard_insights[
+                "workload_fit_detail"
+            ] = (
+                f"{measured_count} assessed workload"
+                f"{'' if measured_count == 1 else 's'} "
+                "fit within the weekly availability "
+                "entered during analysis."
+            )
+
+        else:
+
+            dashboard_insights[
+                "workload_fit_label"
+            ] = (
+                f"{workload_conflicts} "
+                f"workload conflict"
+                f"{'' if workload_conflicts == 1 else 's'}"
+            )
+
+            dashboard_insights[
+                "workload_fit_detail"
+            ] = (
+                f"{manageable_count} of "
+                f"{measured_count} measured "
+                "opportunities fit within the weekly "
+                "availability entered during analysis."
+            )
+
+    # ---------------------------------------------------------
+    # APPLICATION PIPELINE
+    # ---------------------------------------------------------
+
+    application_counts = {
+        "saved": 0,
+        "applied": 0,
+        "interview": 0,
+        "offer": 0,
+        "accepted": 0,
+        "rejected": 0,
+        "withdrawn": 0,
+    }
+
+    for application in applications:
+
+        status = (
+            application.get(
+                "status"
+            )
+            or ""
+        ).lower()
+
+        if status in application_counts:
+            application_counts[
+                status
+            ] += 1
+
+    if applications:
+
+        pipeline_parts = []
+
+        if application_counts[
+            "accepted"
+        ]:
+            pipeline_parts.append(
+                f"{application_counts['accepted']} accepted"
+            )
+
+        if application_counts[
+            "offer"
+        ]:
+            pipeline_parts.append(
+                f"{application_counts['offer']} offer"
+                f"{'' if application_counts['offer'] == 1 else 's'}"
+            )
+
+        if application_counts[
+            "interview"
+        ]:
+            pipeline_parts.append(
+                f"{application_counts['interview']} interview"
+                f"{'' if application_counts['interview'] == 1 else 's'}"
+            )
+
+        if not pipeline_parts:
+
+            if application_counts[
+                "applied"
+            ]:
+                pipeline_parts.append(
+                    f"{application_counts['applied']} applied"
+                )
+
+            elif application_counts[
+                "saved"
+            ]:
+                pipeline_parts.append(
+                    f"{application_counts['saved']} saved"
+                )
+
+        dashboard_insights[
+            "pipeline_label"
+        ] = (
+            " · ".join(
+                pipeline_parts
+            )
+            if pipeline_parts
+            else "Tracker active"
+        )
+
+        dashboard_insights[
+            "pipeline_detail"
+        ] = (
+            f"{len(applications)} tracked "
+            f"application"
+            f"{'' if len(applications) == 1 else 's'} "
+            "in your current application workspace."
+        )
+
     return render_template(
         "dashboard.html",
-        full_name=session.get("full_name", "Student"),
-        email=session.get("user_email"),
+
+        full_name=session.get(
+            "full_name",
+            "Student",
+        ),
+
+        email=session.get(
+            "user_email"
+        ),
+
         analyses=analyses,
+
         statistics=statistics,
+
+        dashboard_insights=(
+            dashboard_insights
+        ),
+
         profile_image_path=(
             dashboard_profile.get(
                 "profile_image_path"
@@ -3051,6 +3588,66 @@ def compare():
 @app.route("/analyze", methods=["GET", "POST"])
 @login_required
 def analyze():
+
+    # ---------------------------------------------------------
+    # LOAD REUSABLE PROFILE DEFAULTS
+    # ---------------------------------------------------------
+
+    profile_defaults = {
+        "available_hours_per_week": None,
+        "preferred_work_mode": "no_preference",
+        "default_schedule_type": "not_specified",
+    }
+
+    try:
+        profile_supabase = get_authenticated_supabase()
+
+        profile_response = (
+            profile_supabase
+            .table("user_profiles")
+            .select(
+                "available_hours_per_week, "
+                "preferred_work_mode, "
+                "default_schedule_type"
+            )
+            .eq(
+                "user_id",
+                session["user_id"],
+            )
+            .execute()
+        )
+
+        if profile_response.data:
+            saved_profile = profile_response.data[0]
+
+            profile_defaults[
+                "available_hours_per_week"
+            ] = saved_profile.get(
+                "available_hours_per_week"
+            )
+
+            profile_defaults[
+                "preferred_work_mode"
+            ] = (
+                saved_profile.get(
+                    "preferred_work_mode"
+                )
+                or "no_preference"
+            )
+
+            profile_defaults[
+                "default_schedule_type"
+            ] = (
+                saved_profile.get(
+                    "default_schedule_type"
+                )
+                or "not_specified"
+            )
+
+    except Exception:
+        app.logger.exception(
+            "Profile defaults could not be loaded for analysis"
+        )
     if request.method == "POST":
         company_name = request.form.get(
             "company_name",
@@ -3246,6 +3843,44 @@ def analyze():
         if schedule_type not in valid_schedule_types:
             schedule_type = "not_specified"
 
+        internship_work_mode = request.form.get(
+            "internship_work_mode",
+            "not_specified",
+        ).strip().lower()
+
+        valid_internship_work_modes = {
+            "remote",
+            "hybrid",
+            "onsite",
+            "not_specified",
+        }
+
+        if (
+            internship_work_mode
+            not in valid_internship_work_modes
+        ):
+            internship_work_mode = "not_specified"
+
+        preferred_work_mode = (
+            profile_defaults.get(
+                "preferred_work_mode"
+            )
+            or "no_preference"
+        ).strip().lower()
+
+        valid_preferred_work_modes = {
+            "remote",
+            "hybrid",
+            "onsite",
+            "no_preference",
+        }
+
+        if (
+            preferred_work_mode
+            not in valid_preferred_work_modes
+        ):
+            preferred_work_mode = "no_preference"
+
         exam_period = (
             request.form.get("exam_period") == "on"
         )
@@ -3311,6 +3946,32 @@ def analyze():
             class_schedule_conflict=(
                 class_schedule_conflict
             ),
+            internship_work_mode=(
+                internship_work_mode
+            ),
+            preferred_work_mode=(
+                preferred_work_mode
+            ),
+        )
+
+        evidence_quality_result = calculate_evidence_quality(
+            text=original_text,
+            recruiter_email=(
+                recruiter_email
+                or None
+            ),
+            company_website=(
+                company_website
+                or None
+            ),
+            stipend_monthly=stipend_monthly,
+            hours_per_day=hours_per_day,
+            days_per_week=days_per_week,
+            input_type=input_type,
+            available_hours_per_week=(
+                available_hours_per_week
+            ),
+            schedule_type=schedule_type,
         )
 
         domain_result = analyze_recruiter_domain(
@@ -3476,10 +4137,50 @@ def analyze():
                 "value_factors",
                 [],
             ),
+            "evidence_quality_score": (
+                evidence_quality_result[
+                    "score"
+                ]
+            ),
+            "evidence_quality_level": (
+                evidence_quality_result[
+                    "level"
+                ]
+            ),
+            "evidence_quality_factors": (
+                evidence_quality_result[
+                    "factors"
+                ]
+            ),
+            "evidence_quality_summary": (
+                evidence_quality_result[
+                    "summary"
+                ]
+            ),
             "available_hours_per_week": (
                 available_hours_per_week
             ),
             "schedule_type": schedule_type,
+            "internship_work_mode": (
+                compatibility_result[
+                    "internship_work_mode"
+                ]
+            ),
+            "preferred_work_mode": (
+                compatibility_result[
+                    "preferred_work_mode"
+                ]
+            ),
+            "work_mode_match": (
+                compatibility_result[
+                    "work_mode_match"
+                ]
+            ),
+            "work_mode_adjustment": (
+                compatibility_result[
+                    "work_mode_adjustment"
+                ]
+            ),
             "exam_period": exam_period,
             "class_schedule_conflict": (
                 class_schedule_conflict
@@ -3531,6 +4232,31 @@ def analyze():
                         "value_score": assessment_result[
                             "value_score"
                         ],
+                        "compatibility_score": (
+                            compatibility_result[
+                                "compatibility_score"
+                            ]
+                        ),
+                        "evidence_quality_score": (
+                            evidence_quality_result[
+                                "score"
+                            ]
+                        ),
+                        "evidence_quality_level": (
+                            evidence_quality_result[
+                                "level"
+                            ]
+                        ),
+                        "internship_work_mode": (
+                            compatibility_result[
+                                "internship_work_mode"
+                            ]
+                        ),
+                        "preferred_work_mode": (
+                            compatibility_result[
+                                "preferred_work_mode"
+                            ]
+                        ),
                     },
                 )
 
@@ -3553,8 +4279,10 @@ def analyze():
                 "danger",
             )
 
-    return render_template("analyze.html")
-
+    return render_template(
+        "analyze.html",
+        profile_defaults=profile_defaults,
+    )
 
 @app.route("/analysis/<analysis_id>")
 @login_required

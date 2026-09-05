@@ -3,7 +3,7 @@ from pathlib import Path
 import fitz
 
 
-MAX_PDF_SIZE = 5 * 1024 * 1024
+MAX_PDF_SIZE = 4 * 1024 * 1024
 MAX_PDF_PAGES = 20
 MAX_EXTRACTED_CHARACTERS = 50_000
 
@@ -38,7 +38,7 @@ def extract_pdf_text(file_storage) -> str:
 
     if len(file_bytes) > MAX_PDF_SIZE:
         raise DocumentExtractionError(
-            "The PDF must be smaller than 5 MB."
+            "The PDF must be smaller than 4 MB."
         )
 
     if not file_bytes.startswith(b"%PDF"):

@@ -726,6 +726,421 @@
             line-height: 1.6;
         }
 
+
+        /* -------------------------------------------------------
+           Evidence quality
+        ------------------------------------------------------- */
+
+        .evidence-quality-card {
+            position: relative;
+            overflow: hidden;
+
+            margin-bottom: 21px;
+            padding: 27px;
+
+            border: 1px solid var(--border);
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    130deg,
+                    rgba(45, 212, 191, 0.075),
+                    rgba(128, 103, 255, 0.07),
+                    rgba(24, 26, 45, 0.82)
+                );
+
+            animation:
+                fadeUp 0.65s 0.27s ease both;
+        }
+
+        .evidence-quality-card::after {
+            content: "";
+
+            position: absolute;
+
+            width: 240px;
+            height: 240px;
+
+            top: -165px;
+            right: -85px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(45, 212, 191, 0.09);
+
+            pointer-events: none;
+        }
+
+        .evidence-quality-header {
+            position: relative;
+            z-index: 2;
+
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 22px;
+
+            margin-bottom: 18px;
+        }
+
+        .evidence-quality-heading {
+            min-width: 0;
+        }
+
+        .evidence-quality-label {
+            width: fit-content;
+
+            margin-bottom: 9px;
+            padding: 6px 10px;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            color: #84e8d5;
+
+            border:
+                1px solid
+                rgba(45, 212, 191, 0.22);
+
+            border-radius: 999px;
+
+            background:
+                rgba(45, 212, 191, 0.06);
+
+            font-size: 0.64rem;
+            font-weight: 850;
+            letter-spacing: 0.055em;
+            text-transform: uppercase;
+        }
+
+        .evidence-quality-label::before {
+            content: "";
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: var(--secondary);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(45, 212, 191, 0.08);
+        }
+
+        .evidence-quality-heading h2 {
+            margin-bottom: 6px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 1.22rem;
+            letter-spacing: -0.035em;
+        }
+
+        .evidence-quality-heading p {
+            max-width: 760px;
+
+            color: var(--text-muted);
+
+            font-size: 0.77rem;
+            line-height: 1.62;
+        }
+
+        .evidence-quality-score {
+            min-width: 145px;
+
+            padding: 16px;
+
+            flex-shrink: 0;
+
+            border:
+                1px solid
+                rgba(45, 212, 191, 0.22);
+
+            border-radius: 16px;
+
+            background:
+                rgba(7, 9, 20, 0.43);
+
+            text-align: center;
+        }
+
+        .evidence-quality-score span {
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: var(--text-muted);
+
+            font-size: 0.62rem;
+            font-weight: 800;
+
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .evidence-quality-score strong {
+            color: var(--secondary);
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 2rem;
+            line-height: 1;
+            letter-spacing: -0.055em;
+        }
+
+        .evidence-quality-score small {
+            margin-left: 3px;
+
+            color: var(--text-muted);
+
+            font-size: 0.64rem;
+        }
+
+        .evidence-quality-level {
+            display: inline-flex;
+
+            margin-top: 8px;
+            padding: 5px 8px;
+
+            border-radius: 999px;
+
+            font-size: 0.6rem;
+            font-weight: 900;
+
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .evidence-quality-level.high {
+            color: #74e6c9;
+
+            background:
+                var(--success-background);
+        }
+
+        .evidence-quality-level.moderate {
+            color: #ffd480;
+
+            background:
+                var(--warning-background);
+        }
+
+        .evidence-quality-level.limited {
+            color: #ff9bab;
+
+            background:
+                var(--danger-background);
+        }
+
+        .evidence-progress {
+            position: relative;
+            z-index: 2;
+
+            height: 8px;
+
+            overflow: hidden;
+
+            margin-bottom: 18px;
+
+            border-radius: 999px;
+
+            background:
+                rgba(255, 255, 255, 0.055);
+        }
+
+        .evidence-progress > span {
+            display: block;
+
+            height: 100%;
+
+            border-radius: inherit;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--secondary),
+                    var(--primary-light)
+                );
+        }
+
+        .evidence-summary {
+            position: relative;
+            z-index: 2;
+
+            margin-bottom: 17px;
+            padding: 15px 16px;
+
+            color: var(--text-soft);
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 13px;
+
+            background:
+                rgba(7, 9, 20, 0.37);
+
+            font-size: 0.78rem;
+            line-height: 1.62;
+        }
+
+        .evidence-factor-grid {
+            position: relative;
+            z-index: 2;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(0, 1fr)
+                );
+
+            gap: 11px;
+        }
+
+        .evidence-factor {
+            min-width: 0;
+
+            padding: 14px;
+
+            display: grid;
+
+            grid-template-columns:
+                53px
+                minmax(0, 1fr);
+
+            gap: 11px;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 13px;
+
+            background:
+                rgba(7, 9, 20, 0.34);
+        }
+
+        .evidence-factor-points {
+            height: fit-content;
+
+            padding: 7px 6px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 9px;
+
+            font-family:
+                "Manrope",
+                sans-serif;
+
+            font-size: 0.68rem;
+            font-weight: 850;
+        }
+
+        .evidence-factor.complete
+        .evidence-factor-points {
+            color: #74e6c9;
+
+            background:
+                var(--success-background);
+        }
+
+        .evidence-factor.partial
+        .evidence-factor-points {
+            color: #ffd480;
+
+            background:
+                var(--warning-background);
+        }
+
+        .evidence-factor.missing
+        .evidence-factor-points {
+            color: #ff9bab;
+
+            background:
+                var(--danger-background);
+        }
+
+        .evidence-factor-title {
+            margin-bottom: 4px;
+
+            color: var(--text-soft);
+
+            font-size: 0.74rem;
+            font-weight: 800;
+
+            line-height: 1.45;
+        }
+
+        .evidence-factor-detail {
+            color: var(--text-muted);
+
+            font-size: 0.67rem;
+            line-height: 1.5;
+        }
+
+        .evidence-quality-note {
+            position: relative;
+            z-index: 2;
+
+            margin-top: 15px;
+            padding: 13px 15px;
+
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+
+            color: var(--text-muted);
+
+            border-left:
+                3px solid
+                var(--secondary);
+
+            border-radius:
+                0 10px 10px 0;
+
+            background:
+                rgba(45, 212, 191, 0.04);
+
+            font-size: 0.69rem;
+            line-height: 1.55;
+        }
+
+        .evidence-quality-note svg {
+            width: 16px;
+            height: 16px;
+
+            flex-shrink: 0;
+            margin-top: 2px;
+
+            color: var(--secondary);
+        }
+
+        @media (max-width: 800px) {
+            .evidence-quality-header {
+                flex-direction: column;
+            }
+
+            .evidence-quality-score {
+                width: 100%;
+            }
+
+            .evidence-factor-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* -------------------------------------------------------
            Explainable score breakdown
         ------------------------------------------------------- */
@@ -2382,7 +2797,7 @@
             margin-bottom: 21px;
 
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 13px;
         }
 
@@ -2474,6 +2889,29 @@
             color: #ff9bab;
             border-color: rgba(255, 104, 124, 0.25);
             background: var(--danger-background);
+        }
+
+        .compatibility-stat.work-mode-fit strong {
+            font-size: 1.05rem;
+            line-height: 1.35;
+        }
+
+        .compatibility-stat.work-mode-fit.matched strong {
+            color: var(--success);
+        }
+
+        .compatibility-stat.work-mode-fit.different strong {
+            color: var(--warning);
+        }
+
+        .compatibility-stat.work-mode-fit.unknown strong {
+            color: var(--text-soft);
+        }
+
+        .compatibility-tag.success {
+            color: #74e6c9;
+            border-color: rgba(54, 214, 169, 0.25);
+            background: var(--success-background);
         }
 
         /* -------------------------------------------------------
@@ -3138,6 +3576,198 @@
                     </p>
                 </article>
             </section>
+
+
+
+            {% set evidence_quality_score =
+                record.get("evidence_quality_score")
+            %}
+
+            {% if evidence_quality_score is not none %}
+
+                {% set evidence_quality_level =
+                    record.get(
+                        "evidence_quality_level",
+                        "limited"
+                    )
+                    or "limited"
+                %}
+
+                {% set evidence_quality_factors =
+                    record.get(
+                        "evidence_quality_factors",
+                        []
+                    )
+                    or []
+                %}
+
+                <section class="evidence-quality-card">
+
+                    <div class="evidence-quality-header">
+
+                        <div class="evidence-quality-heading">
+
+                            <span class="evidence-quality-label">
+                                Evidence quality
+                            </span>
+
+                            <h2>
+                                How complete was this assessment input?
+                            </h2>
+
+                            <p>
+                                This score measures how much structured
+                                information InternShield had available
+                                to perform its checks. It is not a
+                                legitimacy or fraud-confidence score.
+                            </p>
+
+                        </div>
+
+
+                        <div class="evidence-quality-score">
+
+                            <span>
+                                Evidence score
+                            </span>
+
+                            <strong>
+                                {{ evidence_quality_score }}
+                            </strong>
+
+                            <small>
+                                /100
+                            </small>
+
+                            <div
+                                class="evidence-quality-level {{ evidence_quality_level }}"
+                            >
+                                {{ evidence_quality_level|title }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="evidence-progress">
+                        <span
+                            style="width: {{ evidence_quality_score }}%;"
+                        ></span>
+                    </div>
+
+
+                    <div class="evidence-summary">
+                        {{
+                            record.get(
+                                "evidence_quality_summary",
+                                "InternShield measured the completeness of the submitted assessment information."
+                            )
+                        }}
+                    </div>
+
+
+                    {% if evidence_quality_factors %}
+
+                        <div class="evidence-factor-grid">
+
+                            {% for factor in evidence_quality_factors %}
+
+                                {% if factor is mapping %}
+
+                                    {% set factor_status =
+                                        factor.get(
+                                            "status",
+                                            "missing"
+                                        )
+                                    %}
+
+                                    <article
+                                        class="evidence-factor {{ factor_status }}"
+                                    >
+
+                                        <span class="evidence-factor-points">
+
+                                            {{
+                                                factor.get(
+                                                    "points",
+                                                    0
+                                                )
+                                            }}
+
+                                            /
+
+                                            {{
+                                                factor.get(
+                                                    "max_points",
+                                                    0
+                                                )
+                                            }}
+
+                                        </span>
+
+
+                                        <div>
+
+                                            <p class="evidence-factor-title">
+                                                {{
+                                                    factor.get(
+                                                        "label",
+                                                        "Evidence factor"
+                                                    )
+                                                }}
+                                            </p>
+
+                                            <p class="evidence-factor-detail">
+                                                {{
+                                                    factor.get(
+                                                        "detail",
+                                                        "No additional explanation was recorded."
+                                                    )
+                                                }}
+                                            </p>
+
+                                        </div>
+
+                                    </article>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="evidence-quality-note">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                        >
+                            <path
+                                d="M12 9V13M12 17H12.01M10.3 4.7L2.7 18C2.3 18.7 2.8 19.5 3.6 19.5H20.4C21.2 19.5 21.7 18.7 21.3 18L13.7 4.7C13.3 4 12.7 4 12 4C11.3 4 10.7 4 10.3 4.7Z"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+
+                        <span>
+                            Evidence Quality measures completeness of
+                            the information submitted to InternShield.
+                            A high score does not prove that an
+                            internship, recruiter or company is
+                            legitimate.
+                        </span>
+
+                    </div>
+
+                </section>
+
+            {% endif %}
 
 
             {% set ai_data =
@@ -4212,25 +4842,29 @@
                             <span class="consistency-score-label">
                                 What this means
                             </span>
-
                             <p>
-                                {% if consistency_status == "Consistent" %}
-                                    The supplied company, role and
-                                    available recruiter information
-                                    appear consistent with the submitted
-                                    evidence. This does not independently
-                                    prove legitimacy.
+                                {% if consistency.get("interpretation") %}
+
+                                    {{ consistency.get("interpretation") }}
+
+                                {% elif consistency_status == "Consistent" %}
+
+                                    The supplied details appear internally consistent with
+                                    the submitted internship evidence. This does not
+                                    independently prove legitimacy.
+
                                 {% elif consistency_status == "Conflicting Evidence" %}
-                                    Significant differences were found
-                                    between the supplied information and
-                                    the submitted evidence. Verify the
-                                    company, recruiter and internship
-                                    details before proceeding.
+
+                                    One or more supplied details conflict with the submitted
+                                    internship evidence. Verify the company, recruiter and
+                                    internship information before relying on the assessment.
+
                                 {% else %}
-                                    Some information could not be fully
-                                    confirmed or showed differences.
-                                    Additional independent verification
-                                    is recommended.
+
+                                    The supplied details do not contradict each other, but
+                                    some information could not be independently cross-checked.
+                                    Additional verification is recommended.
+
                                 {% endif %}
                             </p>
                         </div>
@@ -4954,6 +5588,34 @@
 
                             <small>hours/week</small>
                         </div>
+
+
+                        {% set work_mode_match =
+                            record.get("work_mode_match")
+                        %}
+
+                        <div
+                            class="compatibility-stat work-mode-fit
+                            {% if work_mode_match is sameas true %}
+                                matched
+                            {% elif work_mode_match is sameas false %}
+                                different
+                            {% else %}
+                                unknown
+                            {% endif %}"
+                        >
+                            <span>Work mode fit</span>
+
+                            <strong>
+                                {% if work_mode_match is sameas true %}
+                                    Matches preference
+                                {% elif work_mode_match is sameas false %}
+                                    Different preference
+                                {% else %}
+                                    Not evaluated
+                                {% endif %}
+                            </strong>
+                        </div>
                     </div>
 
                     {% if compatibility_reasons_list %}
@@ -4979,6 +5641,72 @@
                                 | title
                             }}
                         </span>
+
+
+                        {% set preferred_mode =
+                            record.get(
+                                "preferred_work_mode",
+                                "no_preference"
+                            )
+                            or "no_preference"
+                        %}
+
+                        {% set internship_mode =
+                            record.get(
+                                "internship_work_mode",
+                                "not_specified"
+                            )
+                            or "not_specified"
+                        %}
+
+                        <span class="compatibility-tag">
+                            Preference:
+                            {% if preferred_mode == "remote" %}
+                                Remote
+                            {% elif preferred_mode == "hybrid" %}
+                                Hybrid
+                            {% elif preferred_mode == "onsite" %}
+                                On-site
+                            {% else %}
+                                No preference
+                            {% endif %}
+                        </span>
+
+                        <span
+                            class="compatibility-tag
+                            {% if work_mode_match is sameas true %}
+                                success
+                            {% elif work_mode_match is sameas false %}
+                                warning
+                            {% endif %}"
+                        >
+                            Internship:
+                            {% if internship_mode == "remote" %}
+                                Remote
+                            {% elif internship_mode == "hybrid" %}
+                                Hybrid
+                            {% elif internship_mode == "onsite" %}
+                                On-site
+                            {% else %}
+                                Not specified
+                            {% endif %}
+                        </span>
+
+
+                        {% set work_mode_adjustment =
+                            record.get(
+                                "work_mode_adjustment",
+                                0
+                            )
+                            or 0
+                        %}
+
+                        {% if work_mode_adjustment|int < 0 %}
+                            <span class="compatibility-tag warning">
+                                Work-mode adjustment:
+                                {{ work_mode_adjustment }} pts
+                            </span>
+                        {% endif %}
 
                         {% if record.get("exam_period") %}
                             <span class="compatibility-tag warning">

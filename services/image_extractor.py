@@ -26,7 +26,7 @@ except Exception:
     types = None
 
 
-MAX_IMAGE_SIZE = 5 * 1024 * 1024
+MAX_IMAGE_SIZE = 4 * 1024 * 1024
 MAX_IMAGE_PIXELS = 25_000_000
 MAX_IMAGE_WIDTH = 2400
 MAX_IMAGE_HEIGHT = 2400
@@ -298,7 +298,7 @@ def extract_image_text(
 
     if len(file_bytes) > MAX_IMAGE_SIZE:
         raise ImageExtractionError(
-            "The image must be smaller than 5 MB."
+            "The image must be smaller than 4 MB."
         )
 
     mime_type = _validate_image_bytes(

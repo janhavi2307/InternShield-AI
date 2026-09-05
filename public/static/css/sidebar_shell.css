@@ -1,0 +1,3587 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap");
+
+:root {
+    --workspace-bg: #080912;
+    --workspace-sidebar: #0d0e1a;
+
+    --workspace-surface: rgba(24, 26, 45, 0.82);
+    --workspace-soft: rgba(255, 255, 255, 0.035);
+
+    --workspace-border: rgba(255, 255, 255, 0.09);
+
+    --workspace-text: #f8f8ff;
+    --workspace-text-soft: #c9cbd7;
+    --workspace-muted: #9a9db0;
+
+    --workspace-primary: #8067ff;
+    --workspace-primary-light: #aa99ff;
+    --workspace-accent: #ff7a59;
+}
+
+
+/* =========================================================
+   PRODUCT TYPOGRAPHY
+========================================================= */
+
+body.has-unified-sidebar {
+    min-height: 100vh;
+    overflow-x: hidden;
+
+    color: var(--workspace-text);
+
+    background:
+        radial-gradient(
+            circle at 88% 5%,
+            rgba(128, 103, 255, 0.15),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 3% 78%,
+            rgba(45, 212, 191, 0.06),
+            transparent 24%
+        ),
+        var(--workspace-bg);
+
+    font-family:
+        "DM Sans",
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        sans-serif !important;
+
+    font-size: 16px;
+    line-height: 1.55;
+
+    /* Improve muted text contrast across pages that use
+       their own local variable names. */
+    --text-muted: #9a9db0;
+    --muted: #9a9db0;
+    --text-soft: #c8cad7;
+    --soft-text: #c8cad7;
+}
+
+body.has-unified-sidebar *,
+body.has-unified-sidebar *::before,
+body.has-unified-sidebar *::after {
+    box-sizing: border-box;
+}
+
+body.has-unified-sidebar button,
+body.has-unified-sidebar input,
+body.has-unified-sidebar select,
+body.has-unified-sidebar textarea {
+    font-family: inherit !important;
+}
+
+body.has-unified-sidebar h1,
+body.has-unified-sidebar h2,
+body.has-unified-sidebar h3,
+body.has-unified-sidebar h4,
+body.has-unified-sidebar h5,
+body.has-unified-sidebar h6 {
+    font-family:
+        "Manrope",
+        "DM Sans",
+        sans-serif !important;
+}
+
+
+/* =========================================================
+   SHARED WORKSPACE LAYOUT
+========================================================= */
+
+.is-workspace-shell {
+    min-height: 100vh;
+
+    display: grid;
+    grid-template-columns:
+        270px
+        minmax(0, 1fr);
+}
+
+.is-workspace-main {
+    grid-column: 2;
+    min-width: 0;
+}
+
+.is-workspace-content {
+    min-width: 0;
+}
+
+body.has-unified-sidebar .is-workspace-content > .shell {
+    display: block !important;
+    width: 100% !important;
+    min-height: auto !important;
+    grid-template-columns: 1fr !important;
+}
+
+body.has-unified-sidebar .is-workspace-content > .shell > .main {
+    width: 100% !important;
+    grid-column: auto !important;
+}
+
+
+/* =========================================================
+   SINGLE SHARED SIDEBAR
+========================================================= */
+
+.is-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 1200;
+
+    width: 270px;
+    height: 100vh;
+    height: 100dvh;
+
+    padding:
+        20px
+        17px
+        15px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    border-right:
+        1px solid
+        var(--workspace-border);
+
+    background:
+        var(--workspace-sidebar);
+
+    box-shadow:
+        16px 0 45px
+        rgba(0, 0, 0, 0.08);
+}
+
+.is-sidebar-brand {
+    min-height: 56px;
+
+    padding:
+        0
+        7px;
+
+    margin-bottom:
+        23px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    color:
+        var(--workspace-text);
+
+    text-decoration: none;
+
+    font-family:
+        "Manrope",
+        sans-serif;
+
+    font-size: 1.17rem;
+    font-weight: 800;
+
+    letter-spacing:
+        -0.04em;
+}
+
+.is-sidebar-brand-mark {
+    position: relative;
+
+    width: 42px;
+    height: 42px;
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+
+    display: grid;
+    place-items: center;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.13);
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--workspace-primary),
+            #6650db
+        );
+
+    box-shadow:
+        0 12px 28px
+        rgba(128, 103, 255, 0.28);
+}
+
+.is-sidebar-brand-mark::after {
+    content: "";
+
+    position: absolute;
+
+    width: 25px;
+    height: 60px;
+
+    top: -20px;
+    left: -12px;
+
+    transform:
+        rotate(35deg);
+
+    background:
+        rgba(255, 255, 255, 0.22);
+}
+
+.is-sidebar-brand-mark svg {
+    position: relative;
+    z-index: 2;
+
+    width: 22px;
+    height: 22px;
+}
+
+.is-sidebar-brand-name > span {
+    color:
+        var(--workspace-primary-light);
+}
+
+.is-sidebar-sections {
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 21px;
+}
+
+.is-sidebar-section {
+    flex-shrink: 0;
+}
+
+.is-sidebar-label {
+    margin:
+        0
+        9px
+        8px;
+
+    color: #777a8e;
+
+    font-size: 0.72rem;
+    font-weight: 800;
+
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+}
+
+.is-sidebar-nav {
+    display: grid;
+    gap: 6px;
+}
+
+.is-sidebar-link {
+    min-height: 47px;
+
+    padding:
+        0
+        11px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    color:
+        var(--workspace-muted);
+
+    border:
+        1px solid
+        transparent;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    font-size: 0.88rem;
+    font-weight: 700;
+
+    line-height: 1.25;
+
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.is-sidebar-link:hover {
+    color:
+        var(--workspace-text);
+
+    border-color:
+        var(--workspace-border);
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    transform:
+        translateX(2px);
+}
+
+.is-sidebar-link.active {
+    color: #ded8ff;
+
+    border-color:
+        rgba(128, 103, 255, 0.25);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(128, 103, 255, 0.16),
+            rgba(128, 103, 255, 0.05)
+        );
+}
+
+.is-sidebar-icon {
+    width: 34px;
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 10px;
+
+    color:
+        #9b9daf;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+}
+
+.is-sidebar-link.active .is-sidebar-icon {
+    color:
+        var(--workspace-primary-light);
+
+    background:
+        rgba(128, 103, 255, 0.13);
+}
+
+.is-sidebar-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+
+/* =========================================================
+   SIDEBAR FOOTER
+========================================================= */
+
+.is-sidebar-footer {
+    position: relative;
+
+    margin-top: auto;
+
+    padding-top:
+        15px;
+
+    flex-shrink: 0;
+
+    background:
+        var(--workspace-sidebar);
+}
+
+.is-sidebar-profile {
+    min-height: 62px;
+
+    margin-bottom:
+        9px;
+
+    padding:
+        10px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    border:
+        1px solid
+        var(--workspace-border);
+
+    border-radius: 14px;
+
+    background:
+        rgba(255, 255, 255, 0.022);
+
+    text-decoration: none;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.is-sidebar-profile:hover,
+.is-sidebar-profile.active {
+    transform:
+        translateY(-1px);
+
+    border-color:
+        rgba(128, 103, 255, 0.32);
+
+    background:
+        rgba(128, 103, 255, 0.055);
+}
+
+.is-sidebar-avatar {
+    width: 40px;
+    height: 40px;
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 11px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--workspace-primary),
+            var(--workspace-accent)
+        );
+
+    font-family:
+        "Manrope",
+        sans-serif;
+
+    font-size: 0.88rem;
+    font-weight: 800;
+}
+
+.is-sidebar-avatar img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.is-sidebar-profile-copy {
+    min-width: 0;
+}
+
+.is-sidebar-profile-copy strong,
+.is-sidebar-profile-copy span {
+    display: block;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.is-sidebar-profile-copy strong {
+    margin-bottom: 3px;
+
+    color:
+        var(--workspace-text-soft);
+
+    font-size: 0.80rem;
+}
+
+.is-sidebar-profile-copy span {
+    color:
+        var(--workspace-muted);
+
+    font-size: 0.70rem;
+}
+
+.is-sidebar-logout {
+    width: 100%;
+    min-height: 43px;
+
+    padding:
+        0
+        12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    color: #ffabb7;
+
+    border:
+        1px solid
+        rgba(255, 104, 124, 0.20);
+
+    border-radius: 11px;
+
+    background:
+        rgba(255, 104, 124, 0.055);
+
+    text-decoration: none;
+
+    font-size: 0.82rem;
+    font-weight: 800;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.is-sidebar-logout:hover {
+    transform:
+        translateY(-1px);
+
+    border-color:
+        rgba(255, 104, 124, 0.36);
+
+    background:
+        rgba(255, 104, 124, 0.10);
+}
+
+.is-sidebar-logout svg {
+    width: 17px;
+    height: 17px;
+}
+
+
+/* =========================================================
+   SHARED TOP BAR
+========================================================= */
+
+.is-page-topbar {
+    min-height: 86px;
+
+    padding:
+        0
+        4%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+
+    border-bottom:
+        1px solid
+        var(--workspace-border);
+
+    background:
+        rgba(8, 9, 18, 0.66);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+}
+
+.is-page-topbar-heading p {
+    margin:
+        0
+        0
+        4px;
+
+    color:
+        var(--workspace-muted);
+
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.is-page-topbar-heading h1 {
+    margin: 0;
+
+    color:
+        var(--workspace-text);
+
+    font-family:
+        "Manrope",
+        sans-serif;
+
+    font-size: 1.26rem;
+    line-height: 1.2;
+
+    letter-spacing:
+        -0.03em;
+}
+
+.is-mobile-menu {
+    width: 44px;
+    height: 44px;
+
+    display: none;
+    place-items: center;
+
+    color:
+        var(--workspace-text);
+
+    border:
+        1px solid
+        var(--workspace-border);
+
+    border-radius: 11px;
+
+    background:
+        var(--workspace-soft);
+
+    cursor: pointer;
+}
+
+.is-mobile-menu svg {
+    width: 20px;
+    height: 20px;
+}
+
+.is-mobile-overlay {
+    position: fixed;
+    inset: 0;
+
+    z-index: 1100;
+
+    display: none;
+
+    background:
+        rgba(0, 0, 0, 0.62);
+
+    backdrop-filter:
+        blur(4px);
+}
+
+.is-mobile-overlay.visible {
+    display: block;
+}
+
+
+/* =========================================================
+   SITE-WIDE READABILITY SYSTEM
+   Applies to every signed-in InternShield workspace page.
+========================================================= */
+
+body.has-unified-sidebar .is-workspace-content {
+    color: var(--workspace-text);
+}
+
+body.has-unified-sidebar .is-workspace-content p,
+body.has-unified-sidebar .is-workspace-content li {
+    font-size: 0.90rem;
+    line-height: 1.68;
+}
+
+body.has-unified-sidebar .is-workspace-content small {
+    font-size: 0.78rem;
+    line-height: 1.5;
+}
+
+body.has-unified-sidebar .is-workspace-content label {
+    font-size: 0.84rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+body.has-unified-sidebar .is-workspace-content input,
+body.has-unified-sidebar .is-workspace-content select,
+body.has-unified-sidebar .is-workspace-content textarea {
+    min-height: 46px;
+    font-size: 0.90rem;
+    line-height: 1.45;
+}
+
+body.has-unified-sidebar .is-workspace-content textarea {
+    min-height: 120px;
+}
+
+body.has-unified-sidebar .is-workspace-content button,
+body.has-unified-sidebar .is-workspace-content .btn,
+body.has-unified-sidebar .is-workspace-content .action,
+body.has-unified-sidebar .is-workspace-content .submit,
+body.has-unified-sidebar .is-workspace-content .compare,
+body.has-unified-sidebar .is-workspace-content .add-toggle,
+body.has-unified-sidebar .is-workspace-content .support-submit {
+    font-size: 0.86rem;
+    min-height: 44px;
+}
+
+body.has-unified-sidebar .is-workspace-content .eyebrow,
+body.has-unified-sidebar .is-workspace-content .input-badge,
+body.has-unified-sidebar .is-workspace-content .privacy,
+body.has-unified-sidebar .is-workspace-content .panel-kicker,
+body.has-unified-sidebar .is-workspace-content .support-kicker,
+body.has-unified-sidebar .is-workspace-content .support-card-kicker,
+body.has-unified-sidebar .is-workspace-content .thread-kicker,
+body.has-unified-sidebar .is-workspace-content .kicker,
+body.has-unified-sidebar .is-workspace-content .company,
+body.has-unified-sidebar .is-workspace-content .pro-eyebrow {
+    font-size: 0.74rem;
+    line-height: 1.35;
+}
+
+body.has-unified-sidebar .is-workspace-content .help,
+body.has-unified-sidebar .is-workspace-content .hint,
+body.has-unified-sidebar .is-workspace-content .meta,
+body.has-unified-sidebar .is-workspace-content .selection,
+body.has-unified-sidebar .is-workspace-content .thread-meta,
+body.has-unified-sidebar .is-workspace-content .student-meta {
+    font-size: 0.80rem;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   ASSESSMENT RESULT — CLEARER INFORMATION HIERARCHY
+========================================================= */
+
+body.has-unified-sidebar .main-container {
+    width: min(1320px, 94%);
+    padding: 38px 0 72px;
+}
+
+body.has-unified-sidebar .result-hero,
+body.has-unified-sidebar .content-card,
+body.has-unified-sidebar .compatibility-card,
+body.has-unified-sidebar .detail-card,
+body.has-unified-sidebar .offer-decision-card {
+    margin-bottom: 26px;
+}
+
+body.has-unified-sidebar .result-hero {
+    padding: 34px 36px;
+    gap: 34px;
+}
+
+body.has-unified-sidebar .result-hero h1 {
+    font-size: clamp(2.25rem, 4vw, 3.2rem);
+    line-height: 1.08;
+}
+
+body.has-unified-sidebar .company-name {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+body.has-unified-sidebar .status-badge {
+    min-width: 205px;
+    padding: 13px 18px;
+    font-size: 0.86rem;
+}
+
+body.has-unified-sidebar .score-grid {
+    gap: 18px;
+    margin-bottom: 26px;
+}
+
+body.has-unified-sidebar .score-card {
+    min-height: 178px;
+    padding: 25px;
+}
+
+body.has-unified-sidebar .score-label {
+    font-size: 0.86rem;
+}
+
+body.has-unified-sidebar .score-value {
+    font-size: 2.25rem;
+}
+
+body.has-unified-sidebar .score-value small {
+    font-size: 0.78rem;
+}
+
+body.has-unified-sidebar .score-description {
+    font-size: 0.84rem;
+    line-height: 1.62;
+}
+
+body.has-unified-sidebar .offer-decision-card {
+    padding: 30px;
+    border-radius: 22px;
+}
+
+body.has-unified-sidebar .offer-decision-heading h2 {
+    font-size: 1.45rem;
+}
+
+body.has-unified-sidebar .offer-decision-heading p {
+    font-size: 0.90rem;
+    line-height: 1.68;
+}
+
+body.has-unified-sidebar .offer-decision-eyebrow {
+    font-size: 0.72rem;
+}
+
+body.has-unified-sidebar .offer-decision-score {
+    min-width: 132px;
+    padding: 18px;
+}
+
+body.has-unified-sidebar .offer-decision-score span {
+    font-size: 0.72rem;
+}
+
+body.has-unified-sidebar .offer-decision-score strong {
+    font-size: 2.1rem;
+}
+
+body.has-unified-sidebar .offer-decision-score small {
+    font-size: 0.72rem;
+}
+
+body.has-unified-sidebar .offer-decision-verdict {
+    padding: 19px 20px;
+}
+
+body.has-unified-sidebar .offer-decision-label span {
+    font-size: 0.72rem;
+}
+
+body.has-unified-sidebar .offer-decision-label strong {
+    font-size: 1.08rem;
+}
+
+body.has-unified-sidebar .offer-decision-badge {
+    font-size: 0.74rem;
+    padding: 9px 14px;
+}
+
+body.has-unified-sidebar .offer-decision-summary {
+    padding: 17px 19px;
+    font-size: 0.90rem;
+    line-height: 1.7;
+}
+
+body.has-unified-sidebar .offer-signal-grid {
+    gap: 12px;
+}
+
+body.has-unified-sidebar .offer-signal {
+    padding: 15px;
+}
+
+body.has-unified-sidebar .offer-signal span {
+    font-size: 0.76rem;
+}
+
+body.has-unified-sidebar .offer-signal strong {
+    font-size: 1.08rem;
+}
+
+body.has-unified-sidebar .offer-signal small {
+    font-size: 0.68rem;
+}
+
+body.has-unified-sidebar .offer-change-impact {
+    padding: 17px 18px;
+}
+
+body.has-unified-sidebar .offer-change-impact-copy span {
+    font-size: 0.70rem;
+}
+
+body.has-unified-sidebar .offer-change-impact-copy strong {
+    font-size: 0.94rem;
+}
+
+body.has-unified-sidebar .offer-change-impact-copy p {
+    font-size: 0.82rem;
+    line-height: 1.6;
+}
+
+body.has-unified-sidebar .offer-change-impact-score strong {
+    font-size: 1.35rem;
+}
+
+body.has-unified-sidebar .offer-change-impact-score small,
+body.has-unified-sidebar .offer-change-impact-link {
+    font-size: 0.70rem;
+}
+
+/* The original three equal columns made the long "Concerns" panel
+   visually heavy. Two priority panels stay side by side, while
+   concerns receives the full width below them. */
+body.has-unified-sidebar .offer-decision-grid {
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+body.has-unified-sidebar .offer-decision-panel {
+    padding: 19px;
+}
+
+body.has-unified-sidebar .offer-decision-panel:nth-child(1) {
+    order: 1;
+}
+
+body.has-unified-sidebar .offer-decision-panel:nth-child(3) {
+    order: 2;
+}
+
+body.has-unified-sidebar .offer-decision-panel:nth-child(2) {
+    order: 3;
+    grid-column: 1 / -1;
+}
+
+body.has-unified-sidebar .offer-decision-panel:nth-child(2) .offer-decision-list {
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    column-gap: 22px;
+}
+
+body.has-unified-sidebar .offer-decision-panel h3 {
+    font-size: 0.94rem;
+}
+
+body.has-unified-sidebar .offer-decision-item,
+body.has-unified-sidebar .offer-decision-empty {
+    font-size: 0.83rem;
+    line-height: 1.62;
+}
+
+body.has-unified-sidebar .offer-decision-item-number {
+    width: 25px;
+    height: 25px;
+    font-size: 0.68rem;
+}
+
+body.has-unified-sidebar .offer-factor-section h3 {
+    font-size: 0.94rem;
+}
+
+body.has-unified-sidebar .offer-factor-list {
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    gap: 11px;
+}
+
+body.has-unified-sidebar .offer-factor {
+    padding: 13px;
+}
+
+body.has-unified-sidebar .offer-factor-impact {
+    font-size: 0.76rem;
+}
+
+body.has-unified-sidebar .offer-factor-title {
+    font-size: 0.84rem;
+}
+
+body.has-unified-sidebar .offer-factor-description {
+    font-size: 0.78rem;
+    line-height: 1.58;
+}
+
+body.has-unified-sidebar .offer-decision-disclaimer {
+    padding: 15px 17px;
+    font-size: 0.82rem;
+    line-height: 1.62;
+}
+
+
+/* Score explanation / evidence */
+
+body.has-unified-sidebar .content-card,
+body.has-unified-sidebar .compatibility-card {
+    padding: 29px;
+}
+
+body.has-unified-sidebar .card-title {
+    margin-bottom: 18px;
+    font-size: 1.28rem;
+}
+
+body.has-unified-sidebar .title-icon {
+    width: 39px;
+    height: 39px;
+}
+
+body.has-unified-sidebar .explanation-intro,
+body.has-unified-sidebar .assessment-summary {
+    font-size: 0.90rem;
+    line-height: 1.68;
+}
+
+body.has-unified-sidebar .factor-grid {
+    gap: 18px;
+}
+
+body.has-unified-sidebar .factor-column {
+    padding: 19px;
+}
+
+body.has-unified-sidebar .factor-heading {
+    font-size: 0.94rem;
+}
+
+body.has-unified-sidebar .factor-final-score {
+    font-size: 0.76rem;
+}
+
+body.has-unified-sidebar .factor-item {
+    padding: 13px;
+    grid-template-columns: 54px minmax(0, 1fr);
+}
+
+body.has-unified-sidebar .factor-points {
+    font-size: 0.80rem;
+}
+
+body.has-unified-sidebar .factor-label {
+    font-size: 0.84rem;
+}
+
+body.has-unified-sidebar .factor-evidence,
+body.has-unified-sidebar .factor-empty {
+    font-size: 0.78rem;
+    line-height: 1.55;
+}
+
+body.has-unified-sidebar .disclaimer {
+    padding: 16px 18px;
+    font-size: 0.84rem;
+    line-height: 1.62;
+}
+
+
+/* Evidence consistency / domain / website */
+
+body.has-unified-sidebar .domain-heading-copy .card-title {
+    margin-bottom: 9px;
+}
+
+body.has-unified-sidebar .domain-heading-copy p {
+    font-size: 0.86rem;
+    line-height: 1.65;
+}
+
+body.has-unified-sidebar .domain-status {
+    font-size: 0.75rem;
+    padding: 9px 14px;
+}
+
+body.has-unified-sidebar .domain-detail {
+    padding: 16px;
+}
+
+body.has-unified-sidebar .domain-detail span,
+body.has-unified-sidebar .consistency-score-label {
+    font-size: 0.75rem;
+}
+
+body.has-unified-sidebar .domain-detail strong {
+    font-size: 0.86rem;
+    line-height: 1.55;
+}
+
+body.has-unified-sidebar .domain-comparison {
+    font-size: 0.86rem;
+    line-height: 1.6;
+}
+
+body.has-unified-sidebar .domain-panel {
+    padding: 18px;
+}
+
+body.has-unified-sidebar .domain-panel h3 {
+    font-size: 0.94rem;
+}
+
+body.has-unified-sidebar .domain-factor {
+    padding: 12px;
+}
+
+body.has-unified-sidebar .domain-factor-type {
+    font-size: 0.67rem;
+}
+
+body.has-unified-sidebar .domain-factor-label {
+    font-size: 0.82rem;
+}
+
+body.has-unified-sidebar .domain-factor-evidence,
+body.has-unified-sidebar .domain-recommendation {
+    font-size: 0.78rem;
+    line-height: 1.58;
+}
+
+body.has-unified-sidebar .consistency-score-value {
+    font-size: 2.1rem;
+}
+
+body.has-unified-sidebar .consistency-summary-box p,
+body.has-unified-sidebar .consistency-check-message {
+    font-size: 0.82rem;
+    line-height: 1.6;
+}
+
+body.has-unified-sidebar .consistency-check-title {
+    font-size: 0.86rem;
+}
+
+body.has-unified-sidebar .consistency-check-badge {
+    font-size: 0.68rem;
+}
+
+
+/* Academic compatibility */
+
+body.has-unified-sidebar .compatibility-heading h2 {
+    font-size: 1.32rem;
+}
+
+body.has-unified-sidebar .compatibility-status {
+    font-size: 0.76rem;
+    padding: 9px 14px;
+}
+
+body.has-unified-sidebar .compatibility-stat {
+    padding: 18px;
+}
+
+body.has-unified-sidebar .compatibility-stat span {
+    font-size: 0.80rem;
+}
+
+body.has-unified-sidebar .compatibility-stat strong {
+    font-size: 1.55rem;
+}
+
+body.has-unified-sidebar .compatibility-stat small {
+    font-size: 0.72rem;
+}
+
+body.has-unified-sidebar .reason-item {
+    font-size: 0.86rem;
+    line-height: 1.62;
+}
+
+body.has-unified-sidebar .compatibility-tag {
+    font-size: 0.72rem;
+    padding: 7px 10px;
+}
+
+
+/* Detected indicators and recommendations */
+
+body.has-unified-sidebar .detail-card {
+    padding: 27px;
+}
+
+body.has-unified-sidebar .indicator-item {
+    padding: 16px;
+}
+
+body.has-unified-sidebar .severity {
+    font-size: 0.69rem;
+}
+
+body.has-unified-sidebar .indicator-title {
+    font-size: 0.88rem;
+}
+
+body.has-unified-sidebar .matched-phrase,
+body.has-unified-sidebar .recommendation-item {
+    font-size: 0.82rem;
+    line-height: 1.62;
+}
+
+body.has-unified-sidebar .recommendation-number {
+    width: 31px;
+    height: 31px;
+    font-size: 0.74rem;
+}
+
+body.has-unified-sidebar .empty-message {
+    font-size: 0.84rem;
+    line-height: 1.62;
+}
+
+
+/* Extracted source text */
+
+body.has-unified-sidebar .text-summary {
+    padding: 23px 26px;
+}
+
+body.has-unified-sidebar .summary-content h2 {
+    font-size: 1.18rem;
+}
+
+body.has-unified-sidebar .summary-content p {
+    font-size: 0.82rem;
+}
+
+body.has-unified-sidebar .extracted-text {
+    max-height: 520px;
+    padding: 20px;
+    font-size: 0.86rem;
+    line-height: 1.72;
+}
+
+
+/* =========================================================
+   NEW ASSESSMENT
+========================================================= */
+
+body.has-unified-sidebar .is-workspace-content > main,
+body.has-unified-sidebar .is-workspace-content .page,
+body.has-unified-sidebar .is-workspace-content .content {
+    line-height: 1.55;
+}
+
+body.has-unified-sidebar .is-workspace-content .hero h1 {
+    line-height: 1.08;
+}
+
+body.has-unified-sidebar .is-workspace-content .hero p {
+    font-size: 0.94rem;
+    line-height: 1.68;
+}
+
+body.has-unified-sidebar .is-workspace-content .section-head h2 {
+    font-size: 1.16rem;
+}
+
+body.has-unified-sidebar .is-workspace-content .section-head p {
+    font-size: 0.86rem;
+    line-height: 1.62;
+}
+
+body.has-unified-sidebar .is-workspace-content .field .help {
+    font-size: 0.78rem;
+}
+
+body.has-unified-sidebar .is-workspace-content .privacy {
+    font-size: 0.76rem;
+}
+
+
+/* =========================================================
+   DASHBOARD / SHORTLIST / APPLICATIONS / COMPARE
+========================================================= */
+
+body.has-unified-sidebar .is-workspace-content .stat span,
+body.has-unified-sidebar .is-workspace-content .score span {
+    font-size: 0.78rem;
+}
+
+body.has-unified-sidebar .is-workspace-content .stat strong {
+    font-size: 1.65rem;
+}
+
+body.has-unified-sidebar .is-workspace-content .card h2 {
+    font-size: 1.34rem;
+    line-height: 1.25;
+}
+
+body.has-unified-sidebar .is-workspace-content .score strong {
+    font-size: 1rem;
+}
+
+body.has-unified-sidebar .is-workspace-content .action {
+    font-size: 0.82rem;
+}
+
+body.has-unified-sidebar .is-workspace-content .timeline-heading p,
+body.has-unified-sidebar .is-workspace-content .timeline-item p {
+    font-size: 0.82rem;
+    line-height: 1.62;
+}
+
+
+/* =========================================================
+   ASSISTANT
+========================================================= */
+
+body.has-unified-sidebar .assistant-hero-copy h1 {
+    font-size: 1.50rem;
+}
+
+body.has-unified-sidebar .assistant-hero-copy p {
+    font-size: 0.90rem;
+    line-height: 1.65;
+}
+
+body.has-unified-sidebar .assistant-live {
+    font-size: 0.74rem;
+}
+
+body.has-unified-sidebar .quick-actions button,
+body.has-unified-sidebar .quick-actions a {
+    font-size: 0.80rem;
+}
+
+body.has-unified-sidebar .message-bubble {
+    font-size: 0.88rem;
+    line-height: 1.68;
+}
+
+body.has-unified-sidebar .latest-card span {
+    font-size: 0.72rem;
+}
+
+body.has-unified-sidebar .latest-card strong {
+    font-size: 0.84rem;
+    line-height: 1.52;
+}
+
+body.has-unified-sidebar .grounding-item {
+    font-size: 0.80rem;
+    line-height: 1.58;
+}
+
+body.has-unified-sidebar .grounding-number {
+    font-size: 0.68rem;
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+body.has-unified-sidebar .pro-hero-copy h1 {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+}
+
+body.has-unified-sidebar .pro-email {
+    font-size: 0.90rem;
+}
+
+body.has-unified-sidebar .hero-chip,
+body.has-unified-sidebar .account-state {
+    font-size: 0.76rem;
+}
+
+body.has-unified-sidebar .hero-edit-link {
+    font-size: 0.84rem;
+}
+
+body.has-unified-sidebar .account-panel h2,
+body.has-unified-sidebar .edit-card h2 {
+    font-size: 1.20rem;
+}
+
+body.has-unified-sidebar .account-panel p,
+body.has-unified-sidebar .edit-card p {
+    font-size: 0.84rem;
+    line-height: 1.62;
+}
+
+body.has-unified-sidebar .preference-item span,
+body.has-unified-sidebar .account-fact span,
+body.has-unified-sidebar .section-title {
+    font-size: 0.78rem;
+}
+
+body.has-unified-sidebar .preference-item strong,
+body.has-unified-sidebar .account-fact strong {
+    font-size: 0.90rem;
+}
+
+
+/* =========================================================
+   SUPPORT
+========================================================= */
+
+body.has-unified-sidebar .support-hero h2 {
+    font-size: 1.7rem;
+}
+
+body.has-unified-sidebar .support-hero p,
+body.has-unified-sidebar .support-card-header p {
+    font-size: 0.88rem;
+    line-height: 1.65;
+}
+
+body.has-unified-sidebar .support-card-header h3 {
+    font-size: 1.13rem;
+}
+
+body.has-unified-sidebar .support-status-chip {
+    font-size: 0.74rem;
+}
+
+
+/* =========================================================
+   SHORT VIEWPORTS
+========================================================= */
+
+@media (max-height: 720px) and (min-width: 851px) {
+    .is-sidebar {
+        padding-top: 12px;
+        padding-bottom: 10px;
+    }
+
+    .is-sidebar-brand {
+        min-height: 46px;
+        margin-bottom: 12px;
+    }
+
+    .is-sidebar-brand-mark {
+        width: 36px;
+        height: 36px;
+    }
+
+    .is-sidebar-sections {
+        gap: 11px;
+    }
+
+    .is-sidebar-label {
+        margin-bottom: 4px;
+    }
+
+    .is-sidebar-nav {
+        gap: 3px;
+    }
+
+    .is-sidebar-link {
+        min-height: 39px;
+        font-size: 0.80rem;
+    }
+
+    .is-sidebar-icon {
+        width: 29px;
+        height: 29px;
+    }
+
+    .is-sidebar-footer {
+        padding-top: 8px;
+    }
+
+    .is-sidebar-profile {
+        min-height: 50px;
+        margin-bottom: 6px;
+        padding: 7px;
+    }
+
+    .is-sidebar-avatar {
+        width: 34px;
+        height: 34px;
+    }
+
+    .is-sidebar-logout {
+        min-height: 36px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1050px) {
+    body.has-unified-sidebar .offer-factor-list {
+        grid-template-columns: 1fr;
+    }
+
+    body.has-unified-sidebar .offer-decision-panel:nth-child(2) .offer-decision-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    body.has-unified-sidebar .offer-decision-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body.has-unified-sidebar .offer-decision-panel:nth-child(1),
+    body.has-unified-sidebar .offer-decision-panel:nth-child(2),
+    body.has-unified-sidebar .offer-decision-panel:nth-child(3) {
+        order: initial;
+        grid-column: auto;
+    }
+
+    body.has-unified-sidebar .main-container {
+        width: 92%;
+    }
+}
+
+@media (max-width: 850px) {
+    .is-workspace-shell {
+        grid-template-columns:
+            1fr;
+    }
+
+    .is-sidebar {
+        width: 270px;
+
+        transform:
+            translateX(-105%);
+
+        box-shadow:
+            25px 0 60px
+            rgba(0, 0, 0, 0.36);
+
+        transition:
+            transform 0.3s ease;
+    }
+
+    .is-sidebar.open {
+        transform:
+            translateX(0);
+    }
+
+    .is-workspace-main {
+        grid-column: 1;
+    }
+
+    .is-mobile-menu {
+        display: grid;
+    }
+}
+
+@media (max-width: 700px) {
+    body.has-unified-sidebar {
+        font-size: 15px;
+    }
+
+    body.has-unified-sidebar .main-container {
+        padding-top: 28px;
+    }
+
+    body.has-unified-sidebar .result-hero {
+        padding: 24px 20px;
+    }
+
+    body.has-unified-sidebar .content-card,
+    body.has-unified-sidebar .compatibility-card,
+    body.has-unified-sidebar .detail-card,
+    body.has-unified-sidebar .offer-decision-card {
+        padding-left: 19px;
+        padding-right: 19px;
+    }
+
+    body.has-unified-sidebar .score-grid,
+    body.has-unified-sidebar .compatibility-grid,
+    body.has-unified-sidebar .factor-grid,
+    body.has-unified-sidebar .domain-grid,
+    body.has-unified-sidebar .domain-subgrid,
+    body.has-unified-sidebar .details-grid {
+        gap: 14px;
+    }
+}
+
+@media (max-width: 620px) {
+    .is-page-topbar {
+        min-height: 74px;
+    }
+
+    .is-page-topbar-heading p {
+        display: none;
+    }
+
+    .is-page-topbar-heading h1 {
+        font-size: 1.10rem;
+    }
+
+    body.has-unified-sidebar .is-workspace-content p,
+    body.has-unified-sidebar .is-workspace-content li {
+        font-size: 0.88rem;
+    }
+}
+
+/* =========================================================
+   SUPPORT CENTER + SUPPORT INBOX
+   Larger, clearer typography for all support workflows.
+========================================================= */
+
+/* ---------- Contact & Support page ---------- */
+
+body.has-unified-sidebar .support-page {
+    width: min(1160px, 92%);
+    padding-top: 34px;
+    padding-bottom: 64px;
+}
+
+body.has-unified-sidebar .support-hero {
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+body.has-unified-sidebar .support-kicker,
+body.has-unified-sidebar .support-card-kicker,
+body.has-unified-sidebar .support-side-kicker {
+    font-size: 0.73rem !important;
+    line-height: 1.35;
+    letter-spacing: 0.075em;
+}
+
+body.has-unified-sidebar .support-hero h2 {
+    font-size: 1.90rem !important;
+    line-height: 1.18;
+    letter-spacing: -0.035em;
+}
+
+body.has-unified-sidebar .support-hero p {
+    max-width: 760px;
+    font-size: 0.92rem !important;
+    line-height: 1.68 !important;
+}
+
+body.has-unified-sidebar .support-layout {
+    gap: 18px;
+}
+
+body.has-unified-sidebar .support-card-header {
+    padding: 22px 24px;
+}
+
+body.has-unified-sidebar .support-card-header h3,
+body.has-unified-sidebar .support-side-card h3 {
+    font-size: 1.10rem !important;
+    line-height: 1.35;
+}
+
+body.has-unified-sidebar .support-card-header p,
+body.has-unified-sidebar .support-side-card > p {
+    font-size: 0.82rem !important;
+    line-height: 1.62 !important;
+}
+
+body.has-unified-sidebar .support-status-chip {
+    font-size: 0.74rem !important;
+    line-height: 1.2;
+    padding: 8px 12px;
+}
+
+body.has-unified-sidebar .support-form {
+    font-size: 0.90rem;
+}
+
+body.has-unified-sidebar .support-form-grid {
+    gap: 18px;
+    padding: 22px 24px;
+}
+
+body.has-unified-sidebar .support-field label {
+    margin-bottom: 8px;
+    font-size: 0.82rem !important;
+    line-height: 1.35;
+}
+
+body.has-unified-sidebar .support-field input,
+body.has-unified-sidebar .support-field select,
+body.has-unified-sidebar .support-field textarea {
+    font-size: 0.88rem !important;
+}
+
+body.has-unified-sidebar .support-field input,
+body.has-unified-sidebar .support-field select {
+    min-height: 47px;
+}
+
+body.has-unified-sidebar .support-field textarea {
+    min-height: 165px;
+    padding: 14px;
+    line-height: 1.62;
+}
+
+body.has-unified-sidebar .support-message-meta,
+body.has-unified-sidebar .support-security-note,
+body.has-unified-sidebar #messageCount {
+    font-size: 0.72rem !important;
+    line-height: 1.5;
+}
+
+body.has-unified-sidebar .support-form-footer {
+    padding: 17px 24px;
+}
+
+body.has-unified-sidebar .support-form-footer p {
+    font-size: 0.76rem !important;
+    line-height: 1.58 !important;
+}
+
+body.has-unified-sidebar .support-submit {
+    min-height: 46px;
+    padding-inline: 19px;
+    font-size: 0.82rem !important;
+}
+
+body.has-unified-sidebar .support-side-card {
+    padding: 20px;
+}
+
+body.has-unified-sidebar .faq-list,
+body.has-unified-sidebar .recent-list {
+    margin-top: 16px;
+    gap: 10px;
+}
+
+body.has-unified-sidebar .faq-list details summary {
+    padding: 13px 14px;
+    font-size: 0.78rem !important;
+    line-height: 1.5 !important;
+}
+
+body.has-unified-sidebar .faq-list details p {
+    padding: 0 14px 14px;
+    font-size: 0.76rem !important;
+    line-height: 1.62 !important;
+}
+
+body.has-unified-sidebar .recent-item {
+    padding: 13px 14px;
+}
+
+body.has-unified-sidebar .recent-category {
+    font-size: 0.66rem !important;
+}
+
+body.has-unified-sidebar .recent-status {
+    font-size: 0.64rem !important;
+    padding: 5px 7px;
+}
+
+body.has-unified-sidebar .recent-item strong {
+    font-size: 0.80rem !important;
+    line-height: 1.5;
+}
+
+body.has-unified-sidebar .recent-item small {
+    font-size: 0.70rem !important;
+    line-height: 1.45;
+}
+
+
+/* ---------- Student support conversation ---------- */
+
+body.has-unified-sidebar .thread-page {
+    width: min(1120px, 92%);
+    padding-top: 34px;
+    padding-bottom: 64px;
+}
+
+body.has-unified-sidebar .thread-head {
+    padding: 25px;
+}
+
+body.has-unified-sidebar .thread-page .back-link {
+    font-size: 0.78rem !important;
+}
+
+body.has-unified-sidebar .thread-kicker {
+    font-size: 0.70rem !important;
+    letter-spacing: 0.075em;
+}
+
+body.has-unified-sidebar .thread-head h2 {
+    font-size: 1.55rem !important;
+    line-height: 1.25;
+}
+
+body.has-unified-sidebar .thread-meta {
+    font-size: 0.76rem !important;
+    line-height: 1.5;
+}
+
+body.has-unified-sidebar .thread-page .status-pill {
+    font-size: 0.70rem !important;
+    padding: 7px 10px;
+}
+
+body.has-unified-sidebar .conversation-card,
+body.has-unified-sidebar .follow-card {
+    padding: 23px;
+}
+
+body.has-unified-sidebar .conversation-card h3,
+body.has-unified-sidebar .follow-card h3 {
+    font-size: 1.08rem !important;
+}
+
+body.has-unified-sidebar .thread-page .message {
+    padding: 15px 16px;
+}
+
+body.has-unified-sidebar .thread-page .message-label {
+    font-size: 0.72rem !important;
+}
+
+body.has-unified-sidebar .thread-page .message p {
+    font-size: 0.86rem !important;
+    line-height: 1.66 !important;
+}
+
+body.has-unified-sidebar .thread-page .message small {
+    font-size: 0.70rem !important;
+}
+
+body.has-unified-sidebar .follow-card > p {
+    font-size: 0.80rem !important;
+    line-height: 1.58;
+}
+
+body.has-unified-sidebar .follow-card textarea {
+    min-height: 150px;
+    font-size: 0.87rem !important;
+}
+
+body.has-unified-sidebar .follow-button {
+    min-height: 45px;
+    font-size: 0.80rem !important;
+}
+
+
+/* ---------- Admin Support Inbox ---------- */
+
+body.has-unified-sidebar .inbox-page {
+    width: min(1260px, 93%);
+    padding-top: 34px;
+    padding-bottom: 64px;
+}
+
+body.has-unified-sidebar .inbox-hero {
+    padding: 27px;
+    margin-bottom: 19px;
+}
+
+body.has-unified-sidebar .inbox-kicker {
+    font-size: 0.70rem !important;
+    letter-spacing: 0.075em;
+}
+
+body.has-unified-sidebar .inbox-hero h2 {
+    font-size: 1.72rem !important;
+    line-height: 1.25;
+}
+
+body.has-unified-sidebar .inbox-hero p {
+    font-size: 0.83rem !important;
+    line-height: 1.6 !important;
+}
+
+body.has-unified-sidebar .inbox-page .stats {
+    gap: 12px;
+    margin-bottom: 19px;
+}
+
+body.has-unified-sidebar .inbox-page .stat {
+    padding: 18px;
+}
+
+body.has-unified-sidebar .inbox-page .stat span {
+    font-size: 0.74rem !important;
+}
+
+body.has-unified-sidebar .inbox-page .stat strong {
+    margin-top: 8px;
+    font-size: 1.48rem !important;
+}
+
+body.has-unified-sidebar .inbox-page .toolbar {
+    padding: 16px;
+}
+
+body.has-unified-sidebar .inbox-page .toolbar input,
+body.has-unified-sidebar .inbox-page .toolbar select {
+    min-height: 46px;
+    font-size: 0.84rem !important;
+}
+
+body.has-unified-sidebar .inbox-page .toolbar button {
+    min-height: 46px;
+    font-size: 0.80rem !important;
+}
+
+body.has-unified-sidebar .inbox-page .request-row {
+    padding: 18px 16px;
+    gap: 15px;
+}
+
+body.has-unified-sidebar .inbox-page .request-subject strong,
+body.has-unified-sidebar .inbox-page .request-user strong {
+    font-size: 0.82rem !important;
+    line-height: 1.4;
+}
+
+body.has-unified-sidebar .inbox-page .request-subject span,
+body.has-unified-sidebar .inbox-page .request-user span,
+body.has-unified-sidebar .inbox-page .request-date {
+    font-size: 0.72rem !important;
+    line-height: 1.45;
+}
+
+body.has-unified-sidebar .inbox-page .status {
+    font-size: 0.64rem !important;
+    padding: 6px 9px;
+}
+
+body.has-unified-sidebar .inbox-page .empty {
+    font-size: 0.82rem !important;
+}
+
+
+/* ---------- Admin support request detail ---------- */
+
+body.has-unified-sidebar .detail-page {
+    width: min(1200px, 93%);
+    padding-top: 34px;
+    padding-bottom: 64px;
+}
+
+body.has-unified-sidebar .detail-page .thread-card {
+    padding: 24px;
+}
+
+body.has-unified-sidebar .detail-page .back-link {
+    font-size: 0.78rem !important;
+}
+
+body.has-unified-sidebar .detail-page .kicker {
+    font-size: 0.70rem !important;
+    letter-spacing: 0.07em;
+}
+
+body.has-unified-sidebar .detail-page .thread-card h2 {
+    font-size: 1.55rem !important;
+    line-height: 1.25;
+}
+
+body.has-unified-sidebar .detail-page .student-meta {
+    font-size: 0.76rem !important;
+    line-height: 1.5;
+}
+
+body.has-unified-sidebar .detail-page .message {
+    padding: 15px 16px;
+}
+
+body.has-unified-sidebar .detail-page .message-label {
+    font-size: 0.72rem !important;
+}
+
+body.has-unified-sidebar .detail-page .message p {
+    font-size: 0.86rem !important;
+    line-height: 1.66 !important;
+}
+
+body.has-unified-sidebar .detail-page .message small {
+    font-size: 0.70rem !important;
+}
+
+body.has-unified-sidebar .detail-page .reply-card,
+body.has-unified-sidebar .detail-page .side-card {
+    padding: 20px;
+}
+
+body.has-unified-sidebar .detail-page .reply-form label {
+    font-size: 0.80rem !important;
+}
+
+body.has-unified-sidebar .detail-page .reply-form select,
+body.has-unified-sidebar .detail-page .reply-form textarea {
+    font-size: 0.86rem !important;
+}
+
+body.has-unified-sidebar .detail-page .reply-form select {
+    min-height: 46px;
+}
+
+body.has-unified-sidebar .detail-page .reply-form textarea {
+    min-height: 155px;
+}
+
+body.has-unified-sidebar .detail-page .reply-button {
+    min-height: 45px;
+    font-size: 0.80rem !important;
+}
+
+body.has-unified-sidebar .detail-page .reply-note {
+    font-size: 0.70rem !important;
+    line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+    body.has-unified-sidebar .support-hero {
+        padding: 24px 20px;
+    }
+
+    body.has-unified-sidebar .support-card-header,
+    body.has-unified-sidebar .support-form-grid,
+    body.has-unified-sidebar .support-form-footer {
+        padding-left: 19px;
+        padding-right: 19px;
+    }
+
+    body.has-unified-sidebar .support-hero h2 {
+        font-size: 1.65rem !important;
+    }
+
+    body.has-unified-sidebar .inbox-hero h2,
+    body.has-unified-sidebar .thread-head h2,
+    body.has-unified-sidebar .detail-page .thread-card h2 {
+        font-size: 1.40rem !important;
+    }
+}
+
+/* =========================================================
+   INTERNSHIELD PROFESSIONAL MOTION SYSTEM
+   Shared across every signed-in workspace page.
+   Motion is intentionally subtle: short entrances, controlled
+   hover feedback, focus transitions and small status pulses.
+========================================================= */
+
+:root {
+    --is-motion-fast: 180ms;
+    --is-motion-base: 320ms;
+    --is-motion-slow: 560ms;
+
+    --is-ease-standard: cubic-bezier(.22, .61, .36, 1);
+    --is-ease-emphasis: cubic-bezier(.16, 1, .3, 1);
+}
+
+
+/* ---------------------------------------------------------
+   Keyframes
+--------------------------------------------------------- */
+
+@keyframes isWorkspaceSidebarIn {
+    from {
+        opacity: 0;
+        transform: translateX(-18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes isWorkspaceTopbarIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes isWorkspaceReveal {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes isWorkspaceRevealSoft {
+    from {
+        opacity: 0;
+        transform: translateY(11px) scale(.992);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes isWorkspaceScaleIn {
+    from {
+        opacity: 0;
+        transform: scale(.965);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes isStatusPulse {
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 0
+            rgba(45, 212, 191, 0);
+    }
+
+    50% {
+        box-shadow:
+            0 0 0 5px
+            rgba(45, 212, 191, .08);
+    }
+}
+
+@keyframes isDangerPulse {
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 0
+            rgba(255, 104, 124, 0);
+    }
+
+    50% {
+        box-shadow:
+            0 0 0 5px
+            rgba(255, 104, 124, .07);
+    }
+}
+
+@keyframes isSubtleGlow {
+    0%,
+    100% {
+        filter:
+            drop-shadow(
+                0 0 0
+                rgba(128, 103, 255, 0)
+            );
+    }
+
+    50% {
+        filter:
+            drop-shadow(
+                0 0 8px
+                rgba(128, 103, 255, .18)
+            );
+    }
+}
+
+
+/* ---------------------------------------------------------
+   Workspace shell entrance
+--------------------------------------------------------- */
+
+body.has-unified-sidebar .is-sidebar {
+    animation:
+        isWorkspaceSidebarIn
+        var(--is-motion-slow)
+        var(--is-ease-emphasis)
+        both;
+}
+
+body.has-unified-sidebar .is-page-topbar {
+    animation:
+        isWorkspaceTopbarIn
+        480ms
+        var(--is-ease-emphasis)
+        both;
+}
+
+body.has-unified-sidebar .is-sidebar-brand {
+    animation:
+        isWorkspaceRevealSoft
+        520ms
+        80ms
+        var(--is-ease-emphasis)
+        both;
+}
+
+body.has-unified-sidebar .is-sidebar-section:nth-child(1) {
+    animation:
+        isWorkspaceReveal
+        500ms
+        130ms
+        var(--is-ease-emphasis)
+        both;
+}
+
+body.has-unified-sidebar .is-sidebar-section:nth-child(2) {
+    animation:
+        isWorkspaceReveal
+        500ms
+        190ms
+        var(--is-ease-emphasis)
+        both;
+}
+
+body.has-unified-sidebar .is-sidebar-footer {
+    animation:
+        isWorkspaceRevealSoft
+        520ms
+        250ms
+        var(--is-ease-emphasis)
+        both;
+}
+
+
+/* ---------------------------------------------------------
+   Main-page staggered entrance
+   Covers the common wrappers used throughout InternShield.
+--------------------------------------------------------- */
+
+body.has-unified-sidebar .main-container > *,
+body.has-unified-sidebar .content > *,
+body.has-unified-sidebar .support-page > *,
+body.has-unified-sidebar .inbox-page > *,
+body.has-unified-sidebar .detail-page > *,
+body.has-unified-sidebar .thread-page > * {
+    animation:
+        isWorkspaceRevealSoft
+        560ms
+        var(--is-ease-emphasis)
+        both;
+}
+
+body.has-unified-sidebar .main-container > *:nth-child(1),
+body.has-unified-sidebar .content > *:nth-child(1),
+body.has-unified-sidebar .support-page > *:nth-child(1),
+body.has-unified-sidebar .inbox-page > *:nth-child(1),
+body.has-unified-sidebar .detail-page > *:nth-child(1),
+body.has-unified-sidebar .thread-page > *:nth-child(1) {
+    animation-delay: 70ms;
+}
+
+body.has-unified-sidebar .main-container > *:nth-child(2),
+body.has-unified-sidebar .content > *:nth-child(2),
+body.has-unified-sidebar .support-page > *:nth-child(2),
+body.has-unified-sidebar .inbox-page > *:nth-child(2),
+body.has-unified-sidebar .detail-page > *:nth-child(2),
+body.has-unified-sidebar .thread-page > *:nth-child(2) {
+    animation-delay: 125ms;
+}
+
+body.has-unified-sidebar .main-container > *:nth-child(3),
+body.has-unified-sidebar .content > *:nth-child(3),
+body.has-unified-sidebar .support-page > *:nth-child(3),
+body.has-unified-sidebar .inbox-page > *:nth-child(3),
+body.has-unified-sidebar .detail-page > *:nth-child(3),
+body.has-unified-sidebar .thread-page > *:nth-child(3) {
+    animation-delay: 180ms;
+}
+
+body.has-unified-sidebar .main-container > *:nth-child(4),
+body.has-unified-sidebar .content > *:nth-child(4),
+body.has-unified-sidebar .support-page > *:nth-child(4),
+body.has-unified-sidebar .inbox-page > *:nth-child(4),
+body.has-unified-sidebar .detail-page > *:nth-child(4),
+body.has-unified-sidebar .thread-page > *:nth-child(4) {
+    animation-delay: 235ms;
+}
+
+body.has-unified-sidebar .main-container > *:nth-child(5),
+body.has-unified-sidebar .content > *:nth-child(5),
+body.has-unified-sidebar .support-page > *:nth-child(5),
+body.has-unified-sidebar .inbox-page > *:nth-child(5),
+body.has-unified-sidebar .detail-page > *:nth-child(5),
+body.has-unified-sidebar .thread-page > *:nth-child(5) {
+    animation-delay: 290ms;
+}
+
+body.has-unified-sidebar .main-container > *:nth-child(n+6),
+body.has-unified-sidebar .content > *:nth-child(n+6),
+body.has-unified-sidebar .support-page > *:nth-child(n+6),
+body.has-unified-sidebar .inbox-page > *:nth-child(n+6),
+body.has-unified-sidebar .detail-page > *:nth-child(n+6),
+body.has-unified-sidebar .thread-page > *:nth-child(n+6) {
+    animation-delay: 330ms;
+}
+
+
+/* ---------------------------------------------------------
+   Card micro-interactions
+--------------------------------------------------------- */
+
+body.has-unified-sidebar :is(
+    .score-card,
+    .content-card,
+    .compatibility-card,
+    .detail-card,
+    .offer-decision-card,
+    .factor-column,
+    .offer-decision-panel,
+    .offer-factor,
+    .domain-detail,
+    .domain-panel,
+    .consistency-score-box,
+    .consistency-summary-box,
+    .consistency-check,
+    .compatibility-stat,
+    .indicator-item,
+    .stat,
+    .card,
+    .support-card,
+    .support-side-card,
+    .inbox-card,
+    .thread-card,
+    .conversation-card,
+    .follow-card,
+    .reply-card,
+    .side-card,
+    .latest-card,
+    .grounding-note,
+    .pro-profile-hero,
+    .account-panel,
+    .edit-card,
+    .preference-item,
+    .account-fact
+) {
+    transition:
+        transform
+        var(--is-motion-base)
+        var(--is-ease-standard),
+        border-color
+        var(--is-motion-base)
+        ease,
+        box-shadow
+        var(--is-motion-base)
+        ease,
+        background-color
+        var(--is-motion-base)
+        ease;
+}
+
+body.has-unified-sidebar :is(
+    .score-card,
+    .factor-column,
+    .offer-decision-panel,
+    .offer-factor,
+    .domain-detail,
+    .domain-panel,
+    .consistency-check,
+    .compatibility-stat,
+    .indicator-item,
+    .stat,
+    .support-side-card,
+    .latest-card,
+    .preference-item,
+    .account-fact
+):hover {
+    transform:
+        translateY(-3px);
+
+    border-color:
+        rgba(128, 103, 255, .22);
+
+    box-shadow:
+        0 14px 34px
+        rgba(0, 0, 0, .16);
+}
+
+
+/* Large sections receive only a very small lift */
+body.has-unified-sidebar :is(
+    .content-card,
+    .compatibility-card,
+    .offer-decision-card,
+    .pro-profile-hero,
+    .support-card,
+    .inbox-card,
+    .thread-card
+):hover {
+    transform:
+        translateY(-1px);
+
+    border-color:
+        rgba(128, 103, 255, .17);
+}
+
+
+/* ---------------------------------------------------------
+   Buttons and action links
+--------------------------------------------------------- */
+
+body.has-unified-sidebar :is(
+    button,
+    .btn,
+    .action,
+    .submit,
+    .compare,
+    .add-toggle,
+    .support-submit,
+    .follow-button,
+    .reply-button,
+    .hero-edit-link,
+    .action-button,
+    .offer-change-impact-link
+) {
+    transition:
+        transform
+        var(--is-motion-fast)
+        var(--is-ease-standard),
+        box-shadow
+        var(--is-motion-base)
+        ease,
+        border-color
+        var(--is-motion-base)
+        ease,
+        background-color
+        var(--is-motion-base)
+        ease,
+        color
+        var(--is-motion-base)
+        ease,
+        opacity
+        var(--is-motion-fast)
+        ease;
+}
+
+body.has-unified-sidebar :is(
+    button,
+    .btn,
+    .action,
+    .submit,
+    .compare,
+    .add-toggle,
+    .support-submit,
+    .follow-button,
+    .reply-button,
+    .action-button
+):not(:disabled):hover {
+    transform:
+        translateY(-2px);
+}
+
+body.has-unified-sidebar :is(
+    button,
+    .btn,
+    .action,
+    .submit,
+    .compare,
+    .add-toggle,
+    .support-submit,
+    .follow-button,
+    .reply-button,
+    .action-button
+):not(:disabled):active {
+    transform:
+        translateY(0)
+        scale(.985);
+
+    transition-duration:
+        90ms;
+}
+
+
+/* ---------------------------------------------------------
+   Form controls
+--------------------------------------------------------- */
+
+body.has-unified-sidebar .is-workspace-content :is(
+    input,
+    select,
+    textarea
+) {
+    transition:
+        border-color
+        var(--is-motion-fast)
+        ease,
+        box-shadow
+        var(--is-motion-fast)
+        ease,
+        background-color
+        var(--is-motion-fast)
+        ease,
+        transform
+        var(--is-motion-fast)
+        ease;
+}
+
+body.has-unified-sidebar .is-workspace-content :is(
+    input,
+    select,
+    textarea
+):focus {
+    transform:
+        translateY(-1px);
+}
+
+body.has-unified-sidebar .is-workspace-content input[type="checkbox"],
+body.has-unified-sidebar .is-workspace-content input[type="radio"] {
+    transition:
+        transform
+        150ms
+        var(--is-ease-standard),
+        box-shadow
+        180ms
+        ease;
+}
+
+body.has-unified-sidebar .is-workspace-content input[type="checkbox"]:checked,
+body.has-unified-sidebar .is-workspace-content input[type="radio"]:checked {
+    transform:
+        scale(1.08);
+}
+
+
+/* ---------------------------------------------------------
+   Sidebar navigation interaction
+--------------------------------------------------------- */
+
+body.has-unified-sidebar .is-sidebar-link {
+    position: relative;
+    overflow: hidden;
+}
+
+body.has-unified-sidebar .is-sidebar-link::after {
+    content: "";
+
+    position: absolute;
+    inset:
+        auto
+        14px
+        6px
+        14px;
+
+    height: 1px;
+
+    transform:
+        scaleX(0);
+
+    transform-origin:
+        left center;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(128, 103, 255, .72),
+            rgba(45, 212, 191, .24)
+        );
+
+    transition:
+        transform
+        var(--is-motion-base)
+        var(--is-ease-standard);
+}
+
+body.has-unified-sidebar .is-sidebar-link:hover::after,
+body.has-unified-sidebar .is-sidebar-link.active::after {
+    transform:
+        scaleX(1);
+}
+
+body.has-unified-sidebar .is-sidebar-link:hover .is-sidebar-icon {
+    transform:
+        scale(1.06)
+        rotate(-2deg);
+}
+
+body.has-unified-sidebar .is-sidebar-icon {
+    transition:
+        transform
+        var(--is-motion-base)
+        var(--is-ease-emphasis),
+        background-color
+        var(--is-motion-base)
+        ease,
+        color
+        var(--is-motion-base)
+        ease;
+}
+
+
+/* ---------------------------------------------------------
+   Status / score motion
+--------------------------------------------------------- */
+
+body.has-unified-sidebar .status-dot,
+body.has-unified-sidebar .eyebrow-dot,
+body.has-unified-sidebar .offer-decision-eyebrow-dot {
+    animation:
+        isStatusPulse
+        2.8s
+        ease-in-out
+        infinite;
+}
+
+body.has-unified-sidebar :is(
+    .status-badge.potentially-suspicious,
+    .offer-decision-badge.danger,
+    .compatibility-status.conflict-risk,
+    .domain-status.high-concern
+) .status-dot {
+    animation:
+        isDangerPulse
+        2.7s
+        ease-in-out
+        infinite;
+}
+
+body.has-unified-sidebar .brand-mark,
+body.has-unified-sidebar .is-sidebar-brand-mark {
+    animation:
+        isSubtleGlow
+        4.8s
+        ease-in-out
+        infinite;
+}
+
+
+/* ---------------------------------------------------------
+   Tables, rows and list items
+--------------------------------------------------------- */
+
+body.has-unified-sidebar :is(
+    tbody tr,
+    .request-row,
+    .timeline-item,
+    .recent-item,
+    .indicator-item,
+    .recommendation-item,
+    .offer-decision-item,
+    .domain-recommendation
+) {
+    transition:
+        background-color
+        var(--is-motion-fast)
+        ease,
+        border-color
+        var(--is-motion-fast)
+        ease,
+        transform
+        var(--is-motion-fast)
+        var(--is-ease-standard);
+}
+
+body.has-unified-sidebar :is(
+    tbody tr,
+    .request-row,
+    .recent-item
+):hover {
+    background-color:
+        rgba(128, 103, 255, .025);
+}
+
+
+/* ---------------------------------------------------------
+   FAQ / expandable content
+--------------------------------------------------------- */
+
+body.has-unified-sidebar details {
+    transition:
+        border-color
+        var(--is-motion-base)
+        ease,
+        background-color
+        var(--is-motion-base)
+        ease;
+}
+
+body.has-unified-sidebar details[open] {
+    border-color:
+        rgba(128, 103, 255, .20);
+
+    background:
+        rgba(128, 103, 255, .025);
+}
+
+body.has-unified-sidebar details > summary {
+    transition:
+        color
+        var(--is-motion-fast)
+        ease,
+        transform
+        var(--is-motion-fast)
+        var(--is-ease-standard);
+}
+
+body.has-unified-sidebar details > summary:hover {
+    transform:
+        translateX(2px);
+}
+
+
+/* ---------------------------------------------------------
+   Assistant
+--------------------------------------------------------- */
+
+body.has-unified-sidebar .quick-actions :is(
+    button,
+    a
+) {
+    transition:
+        transform
+        var(--is-motion-fast)
+        var(--is-ease-standard),
+        border-color
+        var(--is-motion-base)
+        ease,
+        background-color
+        var(--is-motion-base)
+        ease,
+        box-shadow
+        var(--is-motion-base)
+        ease;
+}
+
+body.has-unified-sidebar .quick-actions :is(
+    button,
+    a
+):hover {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 9px 24px
+        rgba(0, 0, 0, .13);
+}
+
+body.has-unified-sidebar .message-bubble {
+    animation:
+        isWorkspaceRevealSoft
+        380ms
+        var(--is-ease-emphasis)
+        both;
+}
+
+
+/* ---------------------------------------------------------
+   Flash messages
+--------------------------------------------------------- */
+
+body.has-unified-sidebar .flash {
+    animation:
+        isWorkspaceRevealSoft
+        420ms
+        var(--is-ease-emphasis)
+        both;
+}
+
+
+/* ---------------------------------------------------------
+   Responsive adjustments
+--------------------------------------------------------- */
+
+@media (max-width: 850px) {
+    body.has-unified-sidebar .is-sidebar {
+        animation: none;
+    }
+
+    body.has-unified-sidebar .is-sidebar.open {
+        transition:
+            transform
+            320ms
+            var(--is-ease-emphasis);
+    }
+}
+
+
+/* ---------------------------------------------------------
+   Accessibility: honor reduced-motion preference
+--------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    body.has-unified-sidebar *,
+    body.has-unified-sidebar *::before,
+    body.has-unified-sidebar *::after {
+        animation:
+            none !important;
+
+        transition-duration:
+            0.01ms !important;
+
+        transition-delay:
+            0ms !important;
+
+        scroll-behavior:
+            auto !important;
+    }
+}
+
+/* =========================================================
+   V4 — COMPARE PAGE POLISH
+   Makes the two internship selectors feel like deliberate,
+   professional comparison inputs instead of plain wide fields.
+========================================================= */
+
+body.has-unified-sidebar .selectors {
+    align-items: stretch !important;
+    grid-template-columns:
+        minmax(0, 1fr)
+        72px
+        minmax(0, 1fr) !important;
+    gap: 18px !important;
+}
+
+body.has-unified-sidebar .selectors > div:not(.vs) {
+    min-width: 0;
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.085);
+    border-radius: 16px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(11, 14, 28, 0.72),
+            rgba(17, 19, 36, 0.72)
+        );
+    transition:
+        transform var(--is-motion-base) var(--is-ease-standard),
+        border-color var(--is-motion-base) ease,
+        background-color var(--is-motion-base) ease,
+        box-shadow var(--is-motion-base) ease;
+}
+
+body.has-unified-sidebar .selectors > div:not(.vs):focus-within {
+    transform: translateY(-2px);
+    border-color: rgba(128, 103, 255, 0.38);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(16, 18, 36, 0.86),
+            rgba(22, 23, 43, 0.84)
+        );
+    box-shadow:
+        0 14px 35px
+        rgba(0, 0, 0, 0.17);
+}
+
+body.has-unified-sidebar .selectors label {
+    position: relative;
+    margin-bottom: 10px !important;
+    padding-left: 22px;
+    color: #d8d9e7 !important;
+    font-size: 0.86rem !important;
+    font-weight: 800 !important;
+}
+
+body.has-unified-sidebar .selectors > div:first-child label::before,
+body.has-unified-sidebar .selectors > div:last-child label::before {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    display: grid;
+    place-items: center;
+    transform: translateY(-50%);
+    border-radius: 5px;
+    color: #cfc6ff;
+    background: rgba(128, 103, 255, 0.13);
+    font-size: 0.62rem;
+    line-height: 1;
+}
+
+body.has-unified-sidebar .selectors > div:first-child label::before {
+    content: "A";
+}
+
+body.has-unified-sidebar .selectors > div:last-child label::before {
+    content: "B";
+}
+
+body.has-unified-sidebar .selectors select {
+    min-height: 54px !important;
+    padding: 0 46px 0 15px !important;
+    border-radius: 12px !important;
+    border-color: rgba(255, 255, 255, 0.11) !important;
+    background-color: rgba(7, 9, 20, 0.78) !important;
+    font-size: 0.88rem !important;
+    font-weight: 650;
+}
+
+body.has-unified-sidebar .selectors select:hover {
+    border-color: rgba(128, 103, 255, 0.28) !important;
+}
+
+body.has-unified-sidebar .selectors .vs {
+    width: 54px !important;
+    height: 54px !important;
+    align-self: center;
+    margin: 27px auto 0 !important;
+    border: 1px solid rgba(128, 103, 255, 0.20);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(128, 103, 255, 0.15),
+            rgba(128, 103, 255, 0.08)
+        ) !important;
+    box-shadow:
+        0 10px 28px
+        rgba(0, 0, 0, 0.15);
+}
+
+body.has-unified-sidebar .selectors + .submit {
+    min-height: 52px !important;
+    margin-top: 20px !important;
+    border-radius: 12px !important;
+}
+
+body.has-unified-sidebar .privacy {
+    margin-top: 15px !important;
+    font-size: 0.78rem !important;
+}
+
+body.has-unified-sidebar main:has(.selectors) > .card {
+    padding: 27px !important;
+}
+
+body.has-unified-sidebar main:has(.selectors) > .card h2 {
+    font-size: 1.30rem !important;
+}
+
+body.has-unified-sidebar main:has(.selectors) > .card .hint {
+    margin-bottom: 18px !important;
+    font-size: 0.84rem !important;
+}
+
+@media (max-width: 800px) {
+    body.has-unified-sidebar .selectors {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    body.has-unified-sidebar .selectors .vs {
+        width: 46px !important;
+        height: 46px !important;
+        margin: 0 auto !important;
+    }
+}
+
+
+/* =========================================================
+   V4 — APPLICATION ADD FORM DISCOVERABILITY
+   The existing form remains in the page, but the shared JS
+   scrolls to it automatically. These styles make the opened
+   form visually obvious once it arrives in view.
+========================================================= */
+
+body.has-unified-sidebar #addPanel {
+    scroll-margin-top: 108px;
+}
+
+body.has-unified-sidebar #addPanel.open {
+    border-color: rgba(128, 103, 255, 0.26);
+}
+
+body.has-unified-sidebar #addPanel.is-revealed {
+    animation:
+        isAddPanelReveal
+        620ms
+        var(--is-ease-emphasis)
+        both;
+}
+
+@keyframes isAddPanelReveal {
+    0% {
+        transform: translateY(10px);
+        border-color: rgba(128, 103, 255, 0.55);
+        box-shadow:
+            0 0 0 1px rgba(128, 103, 255, 0.08),
+            0 22px 70px rgba(0, 0, 0, 0.22);
+    }
+
+    100% {
+        transform: translateY(0);
+        border-color: rgba(148, 163, 184, 0.16);
+        box-shadow:
+            0 25px 70px rgba(0, 0, 0, 0.20);
+    }
+}
+
+body.has-unified-sidebar #addToggle[aria-expanded="true"] {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(128, 103, 255, 0.90),
+            rgba(91, 71, 221, 0.92)
+        ) !important;
+}
+
+body.has-unified-sidebar #addPanel .panel-heading {
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.065);
+}
+
+body.has-unified-sidebar #addPanel .panel-heading h2 {
+    font-size: 1.34rem !important;
+}
+
+body.has-unified-sidebar #addPanel .panel-heading p {
+    font-size: 0.86rem !important;
+    line-height: 1.55;
+}
+
+body.has-unified-sidebar #addPanel .grid {
+    gap: 17px !important;
+}
+
+body.has-unified-sidebar #addPanel .field label {
+    font-size: 0.84rem !important;
+}
+
+body.has-unified-sidebar #addPanel .field input,
+body.has-unified-sidebar #addPanel .field select {
+    min-height: 48px !important;
+}
+
+body.has-unified-sidebar #addPanel .field textarea {
+    min-height: 125px !important;
+}
+
+body.has-unified-sidebar #addPanel .form-actions {
+    padding-top: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.has-unified-sidebar #addPanel.is-revealed {
+        animation: none !important;
+    }
+}
+
+/* =========================================================
+   V5 — DASHBOARD POLISH
+   Cleaner hierarchy, tighter metrics and a more useful first
+   screen without changing dashboard functionality.
+========================================================= */
+
+body.has-unified-sidebar .dashboard-shell {
+    grid-template-columns:
+        270px
+        minmax(0, 1fr) !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .main-area {
+    min-width: 0;
+}
+
+body.has-unified-sidebar .dashboard-shell .content {
+    width: min(1320px, 94%) !important;
+    padding:
+        32px
+        0
+        64px !important;
+}
+
+
+/* ---------------------------------------------------------
+   Dashboard topbar
+--------------------------------------------------------- */
+
+body.has-unified-sidebar .dashboard-shell .topbar {
+    min-height: 86px !important;
+    padding:
+        0
+        4% !important;
+
+    border-bottom:
+        1px solid
+        var(--workspace-border) !important;
+
+    background:
+        rgba(8, 9, 18, 0.66) !important;
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+}
+
+body.has-unified-sidebar .dashboard-shell .topbar-heading p {
+    margin-bottom: 4px !important;
+
+    color:
+        var(--workspace-muted) !important;
+
+    font-size: 0.82rem !important;
+    font-weight: 600;
+}
+
+body.has-unified-sidebar .dashboard-shell .topbar-heading h1 {
+    color:
+        var(--workspace-text) !important;
+
+    font-family:
+        "Manrope",
+        sans-serif !important;
+
+    font-size: 1.26rem !important;
+    line-height: 1.2;
+
+    letter-spacing:
+        -0.03em !important;
+}
+
+
+/* ---------------------------------------------------------
+   Welcome hero
+--------------------------------------------------------- */
+
+body.has-unified-sidebar .dashboard-shell .welcome-section {
+    min-height: 0 !important;
+
+    padding:
+        29px
+        31px !important;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        auto !important;
+
+    gap: 28px !important;
+
+    border-radius:
+        21px !important;
+
+    background:
+        linear-gradient(
+            125deg,
+            rgba(29, 31, 53, 0.94),
+            rgba(16, 18, 33, 0.88)
+        ) !important;
+
+    box-shadow:
+        0 20px 56px
+        rgba(0, 0, 0, 0.22) !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .welcome-section::before {
+    width: 270px !important;
+    height: 270px !important;
+
+    top: -175px !important;
+    right: -74px !important;
+
+    background:
+        rgba(128, 103, 255, 0.16) !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .welcome-section::after {
+    width: 175px !important;
+    height: 175px !important;
+
+    right: 14% !important;
+    bottom: -150px !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .welcome-label {
+    margin-bottom:
+        14px !important;
+
+    padding:
+        7px
+        11px !important;
+
+    font-size:
+        0.72rem !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .welcome-section h2 {
+    max-width:
+        700px !important;
+
+    margin-bottom:
+        8px !important;
+
+    font-size:
+        clamp(
+            2.05rem,
+            3.2vw,
+            2.75rem
+        ) !important;
+
+    line-height:
+        1.08 !important;
+
+    letter-spacing:
+        -0.048em !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .welcome-section p {
+    width: fit-content;
+
+    margin-top:
+        3px !important;
+
+    padding:
+        6px
+        10px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.065);
+
+    border-radius:
+        9px;
+
+    color:
+        #a8aabc !important;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    font-size:
+        0.80rem !important;
+
+    line-height:
+        1.35 !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .welcome-action {
+    min-width:
+        205px !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .primary-button {
+    min-height:
+        50px !important;
+
+    padding:
+        0
+        19px !important;
+
+    border-radius:
+        12px !important;
+
+    font-size:
+        0.84rem !important;
+}
+
+
+/* ---------------------------------------------------------
+   Statistics — denser and more informative visually
+--------------------------------------------------------- */
+
+body.has-unified-sidebar .dashboard-shell .statistics-grid {
+    margin:
+        18px
+        0
+        20px !important;
+
+    grid-template-columns:
+        repeat(
+            4,
+            minmax(0, 1fr)
+        ) !important;
+
+    gap:
+        13px !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .stat-card {
+    min-height:
+        130px !important;
+
+    padding:
+        18px
+        19px !important;
+
+    border-radius:
+        16px !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(24, 26, 45, 0.86),
+            rgba(18, 20, 36, 0.82)
+        ) !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .stat-card:hover {
+    transform:
+        translateY(-3px) !important;
+
+    border-color:
+        rgba(128, 103, 255, 0.28) !important;
+
+    box-shadow:
+        0 14px 34px
+        rgba(0, 0, 0, 0.16);
+}
+
+body.has-unified-sidebar .dashboard-shell .stat-header {
+    margin-bottom:
+        14px !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .stat-label {
+    font-size:
+        0.78rem !important;
+
+    line-height:
+        1.35;
+}
+
+body.has-unified-sidebar .dashboard-shell .stat-icon {
+    width:
+        34px !important;
+
+    height:
+        34px !important;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.05);
+}
+
+body.has-unified-sidebar .dashboard-shell .stat-value {
+    font-size:
+        1.92rem !important;
+
+    line-height:
+        1 !important;
+}
+
+
+/* Small bottom rule gives each metric card a finished feel. */
+body.has-unified-sidebar .dashboard-shell .stat-card::before {
+    content: "";
+
+    position: absolute;
+
+    left:
+        19px;
+
+    right:
+        19px;
+
+    bottom:
+        0;
+
+    height:
+        2px;
+
+    border-radius:
+        999px;
+
+    background:
+        currentColor;
+
+    opacity:
+        0.22;
+
+    transform:
+        scaleX(0.34);
+
+    transform-origin:
+        left center;
+
+    transition:
+        transform
+        var(--is-motion-base)
+        var(--is-ease-standard),
+        opacity
+        var(--is-motion-base)
+        ease;
+}
+
+body.has-unified-sidebar .dashboard-shell .stat-card:hover::before {
+    opacity:
+        0.44;
+
+    transform:
+        scaleX(1);
+}
+
+
+/* ---------------------------------------------------------
+   Assessment history
+--------------------------------------------------------- */
+
+body.has-unified-sidebar .dashboard-shell .history-card {
+    border-radius:
+        18px !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(24, 26, 45, 0.86),
+            rgba(18, 20, 36, 0.84)
+        ) !important;
+
+    box-shadow:
+        0 18px 48px
+        rgba(0, 0, 0, 0.13);
+}
+
+body.has-unified-sidebar .dashboard-shell .history-header {
+    padding:
+        20px
+        22px !important;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        18px;
+}
+
+body.has-unified-sidebar .dashboard-shell .history-heading h3 {
+    margin-bottom:
+        4px !important;
+
+    font-size:
+        1.18rem !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .history-heading p {
+    font-size:
+        0.80rem !important;
+
+    line-height:
+        1.5 !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .history-toolbar {
+    padding:
+        17px
+        22px !important;
+
+    gap:
+        13px !important;
+
+    background:
+        rgba(8, 10, 22, 0.22);
+}
+
+body.has-unified-sidebar .dashboard-shell .history-field {
+    gap:
+        7px !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .history-field label {
+    font-size:
+        0.75rem !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .history-control {
+    min-height:
+        44px !important;
+
+    font-size:
+        0.84rem !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .history-table th,
+body.has-unified-sidebar .dashboard-shell .history-table td {
+    padding:
+        14px
+        15px !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .history-table th:first-child,
+body.has-unified-sidebar .dashboard-shell .history-table td:first-child {
+    padding-left:
+        22px !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .history-table th:last-child,
+body.has-unified-sidebar .dashboard-shell .history-table td:last-child {
+    padding-right:
+        22px !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .history-table th {
+    font-size:
+        0.69rem !important;
+
+    letter-spacing:
+        0.07em !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .history-table td {
+    font-size:
+        0.82rem !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .status-badge {
+    padding:
+        7px
+        11px !important;
+
+    font-size:
+        0.69rem !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .view-button,
+body.has-unified-sidebar .dashboard-shell .delete-assessment-button {
+    min-height:
+        38px !important;
+
+    font-size:
+        0.72rem !important;
+}
+
+body.has-unified-sidebar .dashboard-shell .shortlist-button {
+    width:
+        38px !important;
+
+    height:
+        38px !important;
+}
+
+
+/* ---------------------------------------------------------
+   Responsive dashboard
+--------------------------------------------------------- */
+
+@media (max-width: 1150px) {
+    body.has-unified-sidebar .dashboard-shell .statistics-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            ) !important;
+    }
+}
+
+@media (max-width: 850px) {
+    body.has-unified-sidebar .dashboard-shell {
+        grid-template-columns:
+            1fr !important;
+    }
+
+    body.has-unified-sidebar .dashboard-shell .welcome-section {
+        grid-template-columns:
+            1fr !important;
+    }
+
+    body.has-unified-sidebar .dashboard-shell .welcome-action {
+        width:
+            fit-content;
+    }
+}
+
+@media (max-width: 620px) {
+    body.has-unified-sidebar .dashboard-shell .content {
+        width:
+            92% !important;
+
+        padding-top:
+            24px !important;
+    }
+
+    body.has-unified-sidebar .dashboard-shell .welcome-section {
+        padding:
+            23px
+            20px !important;
+    }
+
+    body.has-unified-sidebar .dashboard-shell .welcome-section h2 {
+        font-size:
+            1.92rem !important;
+    }
+
+    body.has-unified-sidebar .dashboard-shell .welcome-action,
+    body.has-unified-sidebar .dashboard-shell .welcome-action .primary-button {
+        width:
+            100% !important;
+    }
+
+    body.has-unified-sidebar .dashboard-shell .statistics-grid {
+        grid-template-columns:
+            1fr !important;
+    }
+
+    body.has-unified-sidebar .dashboard-shell .stat-card {
+        min-height:
+            116px !important;
+    }
+}

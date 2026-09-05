@@ -430,6 +430,12 @@ def analyze_consistency(
     if score < 60:
         status = "Conflicting Evidence"
 
+        interpretation = (
+            "One or more supplied details conflict with the submitted "
+            "internship evidence. Verify the company, role and recruiter "
+            "information before relying on the assessment."
+        )
+
     elif (
         score < 85
         or warning_count > 0
@@ -437,14 +443,47 @@ def analyze_consistency(
     ):
         status = "Review Recommended"
 
+        if (
+            warning_count == 0
+            and unknown_count > 0
+        ):
+            interpretation = (
+                "The supplied details do not contradict each other, "
+                "but some information could not be independently "
+                "cross-checked. Additional verification is recommended."
+            )
+
+        elif warning_count > 0:
+            interpretation = (
+                "Most supplied details may be consistent, but one or "
+                "more checks identified information that should be "
+                "reviewed independently."
+            )
+
+        else:
+            interpretation = (
+                "The submitted information is partly consistent, but "
+                "additional verification is recommended before relying "
+                "on it."
+            )
+
     else:
         status = "Consistent"
+
+        interpretation = (
+            "The supplied company, role and recruiter details appear "
+            "internally consistent with the submitted evidence. This "
+            "does not independently prove legitimacy."
+        )
 
     return {
         "consistency_score": score,
         "consistency_status": status,
+        "interpretation": interpretation,
         "checks": checks,
         "warnings": warnings,
+        "warning_count": warning_count,
+        "unknown_count": unknown_count,
         "recruiter_domain": email_domain,
         "website_domain": website_domain,
     }

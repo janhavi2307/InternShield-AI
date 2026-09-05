@@ -46,6 +46,160 @@ def _number(value: Any) -> int | float | None:
     return int(number) if number.is_integer() else round(number, 2)
 
 
+STATUS_LABELS = {
+    "appears_reasonable": "Appears Reasonable",
+    "verification_required": "Verification Required",
+    "potentially_suspicious": "Potentially Suspicious",
+    "manageable": "Manageable",
+    "demanding": "Demanding",
+    "conflict_risk": "Conflict Risk",
+    "consistent": "Consistent",
+    "review_recommended": "Review Recommended",
+    "conflicting_evidence": "Conflicting Evidence",
+}
+
+
+def _humanize_status(
+    value: Any,
+    fallback: str = "",
+) -> str:
+    """Convert internal enum-style values into user-facing labels."""
+
+    text = _text(
+        value,
+        fallback,
+    )
+
+    if not text:
+        return fallback
+
+    normalized = (
+        text.strip()
+        .lower()
+        .replace("-", "_")
+        .replace(" ", "_")
+    )
+
+    if normalized in STATUS_LABELS:
+        return STATUS_LABELS[
+            normalized
+        ]
+
+    return " ".join(
+        part.capitalize()
+        for part in normalized.split("_")
+        if part
+    )
+
+
+def _consistency_interpretation(
+    analysis: dict[str, Any],
+) -> str:
+    """
+    Explain why a high consistency score can still require review.
+
+    Consistency measures contradictions among submitted details.
+    It is separate from whether all details could be independently
+    cross-checked.
+    """
+
+    consistency = (
+        analysis.get(
+            "consistency_verification"
+        )
+        or {}
+    )
+
+    stored_interpretation = _text(
+        consistency.get(
+            "interpretation"
+        )
+    )
+
+    if stored_interpretation:
+        return stored_interpretation
+
+    score = _number(
+        analysis.get(
+            "consistency_score"
+        )
+    )
+
+    status = _humanize_status(
+        analysis.get(
+            "consistency_status"
+        )
+    )
+
+    checks = (
+        consistency.get(
+            "checks"
+        )
+        or []
+    )
+
+    warning_count = sum(
+        1
+        for item in checks
+        if isinstance(
+            item,
+            dict,
+        )
+        and item.get(
+            "status"
+        ) == "warning"
+    )
+
+    unknown_count = sum(
+        1
+        for item in checks
+        if isinstance(
+            item,
+            dict,
+        )
+        and item.get(
+            "status"
+        ) == "unknown"
+    )
+
+    if (
+        status == "Review Recommended"
+        and warning_count == 0
+        and unknown_count > 0
+    ):
+        return (
+            "The supplied details do not contradict each other, "
+            "but some information could not be independently "
+            "cross-checked, so additional verification is recommended."
+        )
+
+    if status == "Review Recommended":
+        return (
+            "The submitted details are partly consistent, but one or "
+            "more checks still require independent review."
+        )
+
+    if status == "Conflicting Evidence":
+        return (
+            "One or more submitted details conflict with the supplied "
+            "internship evidence and should be verified."
+        )
+
+    if status == "Consistent":
+        return (
+            "The submitted details appear internally consistent. "
+            "This does not independently prove legitimacy."
+        )
+
+    if score is not None:
+        return (
+            f"The evidence consistency score is {score}/100. "
+            "Review the available checks before making a decision."
+        )
+
+    return ""
+
+
 def _enabled() -> bool:
     value = (os.getenv("GEMINI_AI_ENABLED", "true") or "true").strip().lower()
     return value not in {"0", "false", "no", "off", "disabled"}
@@ -151,13 +305,22 @@ def _assessment_context(
     context: dict[str, Any] = {
         "company_name": _text(analysis.get("company_name"), "Not provided"),
         "role_title": _text(analysis.get("role_title"), "Internship opportunity"),
-        "assessment_status": _text(analysis.get("assessment_status")),
+        "assessment_status": _humanize_status(
+            analysis.get("assessment_status")
+        ),
         "verification_score": _number(analysis.get("verification_score")),
         "value_score": _number(analysis.get("value_score")),
         "compatibility_score": _number(analysis.get("compatibility_score")),
-        "compatibility_status": _text(analysis.get("compatibility_status")),
+        "compatibility_status": _humanize_status(
+            analysis.get("compatibility_status")
+        ),
         "consistency_score": _number(analysis.get("consistency_score")),
-        "consistency_status": _text(analysis.get("consistency_status")),
+        "consistency_status": _humanize_status(
+            analysis.get("consistency_status")
+        ),
+        "consistency_interpretation": _consistency_interpretation(
+            analysis
+        ),
         "effective_hourly_stipend": _number(analysis.get("effective_hourly_stipend")),
         "weekly_workload": _number(analysis.get("weekly_workload")),
         "available_hours_per_week": _number(analysis.get("available_hours_per_week")),
@@ -242,11 +405,35 @@ def _fallback_explanation(
     for label, key in (
         ("Verification", "verification_score"),
         ("Academic compatibility", "compatibility_score"),
-        ("Evidence consistency", "consistency_score"),
     ):
         value = _number(analysis.get(key))
         if value is not None:
             points.append(f"{label}: {value}/100.")
+
+    consistency_value = _number(
+        analysis.get(
+            "consistency_score"
+        )
+    )
+
+    consistency_explanation = (
+        _consistency_interpretation(
+            analysis
+        )
+    )
+
+    if consistency_value is not None:
+        if consistency_explanation:
+            points.append(
+                f"Evidence consistency is "
+                f"{consistency_value}/100. "
+                f"{consistency_explanation}"
+            )
+        else:
+            points.append(
+                f"Evidence consistency: "
+                f"{consistency_value}/100."
+            )
 
     flags = analysis.get("detected_flags") or []
     if flags:
@@ -295,6 +482,14 @@ def generate_assessment_explanation(
         "- Do not add external company or recruiter facts.\n"
         "- Explain uncertainty and recommend independent verification when relevant.\n"
         "- Keep the wording concise and professional.\n"
+        "- Never expose internal enum or database tokens such as "
+        "verification_required, appears_reasonable, conflict_risk or "
+        "review_recommended. Use natural human-readable labels.\n"
+        "- Treat evidence consistency and verification completeness as "
+        "different concepts. A high consistency score can coexist with "
+        "Review Recommended when information could not be independently "
+        "cross-checked. Explain that distinction clearly instead of "
+        "presenting the two values as contradictory.\n"
         "- Return JSON only, with exactly: summary, key_points, next_step.\n\n"
         "STRUCTURED RESULT:\n"
         + json.dumps(context, ensure_ascii=False, default=str)
@@ -369,14 +564,25 @@ def _assistant_context(
         recent_assessments.append({
             "company_name": _text(item.get("company_name")),
             "role_title": _text(item.get("role_title")),
-            "assessment_status": _text(item.get("assessment_status")),
+            "assessment_status": _humanize_status(
+                item.get("assessment_status")
+            ),
             "verification_score": _number(item.get("verification_score")),
             "value_score": _number(item.get("value_score")),
             "compatibility_score": _number(item.get("compatibility_score")),
-            "compatibility_status": _text(item.get("compatibility_status")),
+            "compatibility_status": _humanize_status(
+                item.get("compatibility_status")
+            ),
             "compatibility_reasons": (item.get("compatibility_reasons") or [])[:5],
             "consistency_score": _number(item.get("consistency_score")),
-            "consistency_status": _text(item.get("consistency_status")),
+            "consistency_status": _humanize_status(
+                item.get("consistency_status")
+            ),
+            "consistency_interpretation": (
+                _consistency_interpretation(
+                    item
+                )
+            ),
             "weekly_workload": _number(item.get("weekly_workload")),
             "available_hours_per_week": _number(item.get("available_hours_per_week")),
             "schedule_type": _text(item.get("schedule_type")),
@@ -483,6 +689,13 @@ def generate_grounded_assistant_response(
         "- Never claim that InternShield or the AI has proven an opportunity legitimate, "
         "fraudulent, safe or unsafe.\n"
         "- Do not mention API keys, Gemini, model names or implementation details.\n"
+        "- Never expose internal enum or database tokens such as "
+        "verification_required, appears_reasonable, conflict_risk or "
+        "review_recommended. Use natural user-facing labels.\n"
+        "- When a high consistency score is paired with Review Recommended, "
+        "explain that the submitted details may be internally consistent "
+        "while some information still could not be independently "
+        "cross-checked.\n"
         "- Keep answers professional, student-friendly and reasonably concise.\n\n"
         f"USER QUESTION:\n{message}\n\n"
         "SAVED INTERNSHIELD CONTEXT:\n"
